@@ -7,3 +7,5 @@ const client = net.createConnection({ host: 'localhost', port: 50000 }, () => {
 client.on('data', (data) => {
     console.log(`server send data : ${data}`);
 });
+
+client.write('test data');
