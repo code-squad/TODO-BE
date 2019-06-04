@@ -1,3 +1,6 @@
+const readLine = require('readline');
+const rl = readLine.createInterface({ input:process.stdin });
+
 const net = require('net');
 const client = net.createConnection({ host: 'localhost', port: 50000 }, () => {
     console.log(`local address : ${client.localAddress}, local port : ${client.localPort}`);
@@ -9,7 +12,10 @@ client.on('data', (data) => {
 });
 
 client.on('close', () => {
-    console.log(`The connection with the server has been terminated. Please close the program.`);
+    console.log(`The connection with the server has been terminated. Please close the program`);
 });
 
-client.write('test data');
+rl.on('line', (input) => {
+    if (input == 'exit') rl.close();
+    client.write(input);
+}).on('close', () => { process.exit(); });
