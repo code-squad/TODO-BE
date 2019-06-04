@@ -8,4 +8,8 @@ client.on('data', (data) => {
     console.log(`server send data : ${data}`);
 });
 
+client.on('close', () => {
+    console.log(`The connection with the server has been terminated. Please close the program.`);
+});
+
 client.write('test data');
