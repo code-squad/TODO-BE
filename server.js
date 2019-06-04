@@ -8,6 +8,7 @@ server.on('connection', (socket) => {
 
     socket.on('data', (data) => {
         console.log(`Client send data : ${data}`);
+        socket.write(data);
     });
 });
 
