@@ -26,7 +26,7 @@ Slack, KakaoTalk 대표적인 회사를 비롯하여 실시간 채팅서비스�
 
 
 
-![image-20190531165212354](/Users/janghyoseog/Library/Application Support/typora-user-images/image-20190531165212354.png)
+![image-20190531165212354](https://github.com/bestdevhyo1225/image_repository/blob/master/image-20190531165212354.png?raw=true)
 
 
 
@@ -34,7 +34,7 @@ Slack, KakaoTalk 대표적인 회사를 비롯하여 실시간 채팅서비스�
 
 
 
-![image-20190531203714826](/Users/janghyoseog/Library/Application Support/typora-user-images/image-20190531215806176.png)
+![image-20190531203714826](https://github.com/bestdevhyo1225/image_repository/blob/master/image-20190531215806176.png?raw=true)
 
 * Client        : 사용자를 의미한다.
 * Room          : 채팅방을 의미한다.
