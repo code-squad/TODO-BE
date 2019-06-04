@@ -14,6 +14,8 @@ server.on('connection', (socket) => {
 
 server.on('error', (error) => { console.error(JSON.stringify(error)); });
 
+server.on('close', () => { console.log(`Server socket is closed.`); });
+
 server.listen(50000, () => {
     console.log(`TCP Server listen on address ${JSON.stringify(server.address())}`);
 });
