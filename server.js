@@ -1,14 +1,25 @@
 const net = require('net');
 const server = net.createServer();
+const clientSockets = [];
 
-server.on('connection', (socket) => {
+server.on('connection', (client) => {
     console.log(`Client Connect!`);
-    console.log(`Client local address : ${socket.localAddress}, local port : ${socket.localPort}`);
-    console.log(`Client remote address : ${socket.remoteAddress}, remote port : ${socket.remotePort}`);
+    console.log(`Client local address : ${client.localAddress}, local port : ${client.localPort}`);
+    console.log(`Client remote address : ${client.remoteAddress}, remote port : ${client.remotePort}`);
 
-    socket.on('data', (data) => {
+    clientSockets.push(client);
+
+    client.on('data', (data) => {
         console.log(`Client send data : ${data}`);
-        socket.write(data);
+        clientSockets.forEach((otherClient) => {
+            if (otherClient !== client) otherClient.write(data);
+        });
+    });
+
+    client.on('close', () => {
+        const index = clientSockets.indexOf(client);
+        if (index !== -1) clientSockets.splice(index, 1);
+        console.log(`There are ${clientSockets.length} connections now.`);
     });
 });
 
