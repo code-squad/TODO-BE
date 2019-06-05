@@ -1,11 +1,17 @@
 const utility = require('./utility');
 
-const executeUserPage = async (id) => {
-    let subSelected;
+const executeSignPage = async (subText) => {
+    console.log(`--- [ Sign ${subText} ] ---`);
+    const id = await utility.input(`ID >> `);
+    const pw = await utility.input(`PW >> `);
+    return [id, pw];
+}
+
+const executeUserPage = async (userID) => {
     let isSignOut = false;
     while(!isSignOut) {
-        console.log(`--- My ID : ${id} ---`)
-        subSelected = await utility.input(`1.Create a chat room\n2.Entry to chat room\n3.Sign out\n>> `);
+        console.log(`--- [ User ID : ${userID} ] ---`);
+        const subSelected = await utility.input(`1.Create a chat room\n2.Entry to chat room\n3.Sign out\n>> `);
         switch (subSelected) {
             case '1':
                 console.log(`Create a chat room`);
@@ -20,23 +26,19 @@ const executeUserPage = async (id) => {
 }
 
 const executeMainPage = async () => {
-    let id, pw;
-    let mainSelected;
     let isProgramExit = false;
     while (!isProgramExit) {
-        console.log(`--- Welcome to Hyodol's Chat Service! ---`);
-        mainSelected = await utility.input(`1.Sign in\n2.Sign up\n3.Exit\n>> `);
+        console.log(`--- [ Welcome to Hyodol's Chat Service! ] ---`);
+        const mainSelected = await utility.input(`1.Sign in\n2.Sign up\n3.Exit\n>> `);
         switch (mainSelected) {
             case '1':
-                id = await utility.input(`Enter your ID >> `);
-                pw = await utility.input(`Enter your PW >> `);
+                const [userID, userPW] = await executeSignPage('in');
                 // 존재하는 회원이면? -> 1. 채팅 관련 2. 로그아웃
-                await executeUserPage(id);
+                await executeUserPage(userID);
                 // 존재하지 않다면?
                 break;
             case '2':
-                id = await utility.input(`Please enter the ID to use >> `);
-                pw = await utility.input(`Please enter the PW to use >> `);
+                const [newID, newPW] = await executeSignPage('up');
                 // id, pw 저장 (중복되는 id인지 체크 필요)
                 break;
             case '3': isProgramExit = true; break;
