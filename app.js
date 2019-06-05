@@ -1,5 +1,6 @@
 const utility = require('./utility');
 
+////////////// Sign //////////////
 const executeSignPage = async (subText) => {
     console.log(`--- [ Sign ${subText} ] ---`);
     const id = await utility.input(`ID >> `);
@@ -7,44 +8,53 @@ const executeSignPage = async (subText) => {
     return [id, pw];
 }
 
-const executeUserPage = async (userID) => {
+////////////// User //////////////
+const handleUserTask = async (select) => {
     let isSignOut = false;
+    switch (select) {
+        case '1': break;
+        case '2': break;
+        case '3': isSignOut = true; break;
+    }
+    return isSignOut;
+}
+
+const executeUserPage = async (userID) => {
+    let select, isSignOut = false;
     while(!isSignOut) {
         console.log(`--- [ User ID : ${userID} ] ---`);
-        const subSelected = await utility.input(`1.Create a chat room\n2.Entry to chat room\n3.Sign out\n>> `);
-        switch (subSelected) {
-            case '1':
-                console.log(`Create a chat room`);
-                break;
-            case '2':
-                console.log(`Entry to chat room`);
-                break;
-            case '3': isSignOut = true; break;
-        }
-        if (isSignOut) break;
+        select = await utility.input(`1.Create a chat room\n2.Entry to chat room\n3.Sign out\n>> `);
+        isSignOut = await handleUserTask(select);
     }
+}
+
+////////////// Main //////////////
+const handleMainTask = async (select) => {
+    let isExit = false;
+    switch (select) {
+        case '1':
+            const [userID, userPW] = await executeSignPage('in');
+            await executeUserPage(userID);
+            break;
+        case '2':
+            const [newID, newPW] = await executeSignPage('up');
+            break;
+        case '3': isExit = true; break;
+    }
+    return isExit;
 }
 
 const executeMainPage = async () => {
-    let isProgramExit = false;
-    while (!isProgramExit) {
+    let select, isExit = false;
+    while (!isExit) {
         console.log(`--- [ Welcome to Hyodol's Chat Service! ] ---`);
-        const mainSelected = await utility.input(`1.Sign in\n2.Sign up\n3.Exit\n>> `);
-        switch (mainSelected) {
-            case '1':
-                const [userID, userPW] = await executeSignPage('in');
-                // 존재하는 회원이면? -> 1. 채팅 관련 2. 로그아웃
-                await executeUserPage(userID);
-                // 존재하지 않다면?
-                break;
-            case '2':
-                const [newID, newPW] = await executeSignPage('up');
-                // id, pw 저장 (중복되는 id인지 체크 필요)
-                break;
-            case '3': isProgramExit = true; break;
-        }
+        select = await utility.input(`1.Sign in\n2.Sign up\n3.Exit\n>> `);
+        isExit = await handleMainTask(select);
     }
-    await utility.close();
 }
 
-(async () => { await executeMainPage(); })();
+////////////// App //////////////
+(async () => { 
+    await executeMainPage();
+    await utility.close();
+})();
