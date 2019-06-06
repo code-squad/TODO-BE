@@ -16,6 +16,74 @@ const inputReadline = rl.createInterface({
 });
 
 class TodoApp{
+
+    init() {
+        return new Promise(resolve => {
+            inputReadline.question('회원인가요? (yes/no)', answer => {
+                if (answer === 'no') {
+                    resolve(this.register());
+                } else if (answer === 'yes') {
+                    resolve(this.login());
+                }
+            });
+        });
+    }
+
+    register() {
+        return new Promise(resolve => {
+            inputReadline.question('아이디를 입력하세요', (id) => {
+                if (this.checkDuplicatedID(id)) {
+                    this.errorLog('이미 사용중인 아이디 입니다.');
+                    resolve(this.register());
+                } else {
+                    return inputReadline.question('비밀번호를 입력하세요', (pw) => {
+                        db.get('users').push({'id': id, 'info': {id: id, pw: pw}}).write();
+                        if (this.checkID_PW(id, pw)) {
+                            console.log('회원가입이 완료됐습니다.');
+                            resolve(true);
+                        } else {
+                            this.errorLog('입력한 정보가 올바르지 않습니다.');
+                            resolve(this.register());
+                        }
+                        ;
+                    });
+                }
+            })
+        })
+    }
+
+    login() {
+        return new Promise(resolve => {
+            inputReadline.question('아이디를 입력하세요', (id) => {
+                console.log(id);
+                return inputReadline.question('비밀번호를 입력하세요', (pw) => {
+                    console.log(pw);
+                    if (this.checkID_PW(id, pw)) {
+                        resolve(true);
+                    } else {
+                        this.errorLog('입력한 정보가 올바르지 않습니다.');
+                        resolve(this.login());
+                    }
+                    ;
+                });
+            });
+        })
+    }
+
+    checkDuplicatedID(id) {
+        const ID_fromDB = db.get('users').find({'id': id}).value();
+        console.log(ID_fromDB);
+        if (ID_fromDB !== undefined) return true;
+        else return false;
+    }
+
+    checkID_PW(id, pw) {
+        const ID_fromDB = db.get('users').find({'id': id}).value();
+        if (ID_fromDB.info.id !== id) return false;
+        else if (ID_fromDB.info.pw !== pw) return false;
+        else return true;
+    }
+
     mainExecutor() {
         inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
         inputReadline.prompt();
@@ -184,4 +252,11 @@ class TodoApp{
 }
 
 const todoList = new TodoApp();
-todoList.mainExecutor();
+
+async function asyncTest() {
+    await todoList.init();
+    console.log('TODO APP에 오신 걸 환경합니다!');
+    todoList.mainExecutor();
+}
+
+asyncTest();
