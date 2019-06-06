@@ -110,6 +110,27 @@ class TodoApp{
         });
     }
 
+    completeTodo(itemToComplete) {
+        const n = Number(itemToComplete);
+        // check if the value is a number
+        if (isNaN(n)) {
+            errorLog("please provide a valid number for complete command");
+            return
+        }
+
+        // check if correct length of values has been passed
+        let todosLength = db.get('todos').value().length;
+        if (n > todosLength) {
+            errorLog("invalid number passed for complete command.");
+            return
+        }
+
+        // update the todo item marked as complete
+        db.set(`todos[${n - 1}].complete`, true).write();
+        const complete_todo = db.get(`todos[${n - 1}].title`).value();
+        console.log(`${complete_todo} is checked as complete`)
+    }
+
 }
 
 const todoList = new TodoApp();
