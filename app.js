@@ -1,4 +1,14 @@
 const rl = require('readline');
+const chalk = require('chalk');
+
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+
+const adapter = new FileSync('db.json');
+const db = low(adapter);
+
+// json 파일 db 데이터 초기화
+db.defaults({todos: [], users: []}).write();
 
 const inputReadline = rl.createInterface({
     input : process.stdin,
