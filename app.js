@@ -45,7 +45,6 @@ class TodoApp{
                             this.errorLog('입력한 정보가 올바르지 않습니다.');
                             resolve(this.register());
                         }
-                        ;
                     });
                 }
             })
@@ -64,7 +63,6 @@ class TodoApp{
                         this.errorLog('입력한 정보가 올바르지 않습니다.');
                         resolve(this.login());
                     }
-                    ;
                 });
             });
         })
@@ -177,12 +175,18 @@ class TodoApp{
     getTodos() {
         const todos = db.get('todos').value();
         let index = 1;
+        if(todos.length===0){
+            return this.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
+        }
         todos.forEach(todo => {
-            let todoText = `${index++}. ${todo.title}`
+            let todoText = `${index++}. ${todo.title}`;
             if (todo.complete) {
-                todoText += ' ✔ ️'
+                todoText += ' ✔ ️';
+                console.log(chalk.green(todoText))
             }
-            console.log(chalk.strikethrough(todoText))
+            else {
+            console.log(chalk.yellow(todoText))
+            }
         });
     }
 
