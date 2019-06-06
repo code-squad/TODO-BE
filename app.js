@@ -83,6 +83,20 @@ class TodoApp{
   `;
         console.log(usageText)
     }
+
+    newTodo() {
+        const q = chalk.blue('Type in your todo\n');
+        this.prompt(q).then(todo => {
+            const newID = Math.floor(Math.random() * 10000) + 1;
+            db.get('todos')
+                .push({
+                    id      : newID,
+                    title   : todo,
+                    complete: false,
+                })
+                .write();
+        });
+    }
 }
 
 const todoList = new TodoApp();
