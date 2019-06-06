@@ -131,6 +131,27 @@ class TodoApp{
         console.log(`${complete_todo} is checked as complete`)
     }
 
+    deleteTodo(itemToDelete) {
+        const n = Number(itemToDelete);
+        if (isNaN(n)) {
+            errorLog("please provide a valid number for complete command");
+            return
+        }
+
+        // check if correct length of values has been passed
+        let todosLength = db.get('todos').value().length;
+        if (n > todosLength) {
+            errorLog("invalid number passed for complete command.");
+            return
+        }
+
+        // delete the item
+        const deletedItem = db.get(`todos[${n - 1}].title`).value();
+        const deletedItemID = db.get(`todos[${n - 1}].id`).value();
+        db.get(`todos`).remove({id: deletedItemID}).write();
+        console.log(`${deletedItem} is deleted`)
+    }
+
 }
 
 const todoList = new TodoApp();
