@@ -1,13 +1,11 @@
 const rl = require('readline');
 const chalk = require('chalk');
-
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-
 const Utils = require('./utils');
+const User = require('./user_manager');
 
 // json 파일 db 데이터 초기화
 db.defaults({todos: [], users: []}).write();
@@ -17,9 +15,9 @@ const inputReadline = rl.createInterface({
     output: process.stdout,
 });
 
-const utils = new Utils(db,inputReadline);
+const utils = new Utils(db, inputReadline);
 
-class TodoApp{
+class TodoApp {
 
     init() {
         return new Promise(resolve => {
@@ -62,7 +60,8 @@ class TodoApp{
                 return inputReadline.question('비밀번호를 입력하세요', (pw) => {
                     console.log(pw);
                     if (utils.checkID_PW(id, pw)) {
-                        resolve(true);
+                        const user = new User(db,id);
+                        resolve(user);
                     } else {
                         utils.errorLog('입력한 정보가 올바르지 않습니다.');
                         resolve(this.login());
@@ -125,6 +124,7 @@ class TodoApp{
                 this.usage();
         }
     }
+
     // usage represents the help guide
     usage() {
         const usageText = `
@@ -157,7 +157,7 @@ class TodoApp{
     getTodos() {
         const todos = db.get('todos').value();
         let index = 1;
-        if(todos.length===0){
+        if (todos.length === 0) {
             return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
         }
         todos.forEach(todo => {
@@ -165,9 +165,8 @@ class TodoApp{
             if (todo.complete) {
                 todoText += ' ✔ ️';
                 console.log(chalk.green(todoText))
-            }
-            else {
-            console.log(chalk.yellow(todoText))
+            } else {
+                console.log(chalk.yellow(todoText))
             }
         });
     }
@@ -236,14 +235,14 @@ class TodoApp{
             console.log(db.get('todos').find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write());
         });
     }
-
 }
 
 const todoList = new TodoApp();
 
 async function asyncTest() {
-    await todoList.init();
-    console.log('TODO APP에 오신 걸 환경합니다!');
+    const login_user = await todoList.init();
+    console.log(`------------- 로그인 되었습니다. -------------`);
+    console.log(`<<< ${login_user.id}님, TODO APP에 오신 걸 환경합니다! >>>`);
     todoList.mainExecutor();
 }
 
