@@ -69,6 +69,20 @@ class TodoApp{
                 this.usage();
         }
     }
+    // usage represents the help guide
+    usage() {
+        const usageText = `
+    TODO helps you manage you todo tasks.
+    usage: type 'command'
+    commands can be:
+    new:                   used to create a new todo
+    get:                   used to retrieve your todos
+    complete + item No.:   used to mark a todo as complete
+    update + item No.:     used to update the todo title
+    help:                  used to print the usage guide
+  `;
+        console.log(usageText)
+    }
 }
 
 const todoList = new TodoApp();
