@@ -103,6 +103,14 @@ class TodoApp{
             });
     }
 
+    prompt(question) {
+        return new Promise((resolve, error) => {
+            inputReadline.question(question, answer => {
+                resolve(answer)
+            });
+        })
+    }
+
     checkCommands(userInput) {
         const splitUserInput = userInput.split(' ');
         if (userInput.split(' ').length < 1 || userInput.split(' ').length > 2) {
