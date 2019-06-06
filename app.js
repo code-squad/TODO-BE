@@ -152,6 +152,29 @@ class TodoApp{
         console.log(`${deletedItem} is deleted`)
     }
 
+    updateTodo(itemToUpdate) {
+        const n = Number(itemToUpdate);
+
+        if (isNaN(n)) {
+            errorLog("please provide a valid number for complete command");
+            return
+        }
+
+        // check if correct length of values has been passed
+        let todosLength = db.get('todos').value().length;
+        if (n > todosLength) {
+            errorLog("invalid number passed for complete command.");
+            return
+        }
+
+        // update the item
+        const updatedItemTitle = db.get(`todos[${n - 1}.title]`).value();
+        const q = chalk.blue('Type the title to update\n');
+        this.prompt(q).then(UpdatedTitle => {
+            console.log(db.get('todos').find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write());
+        });
+    }
+
 }
 
 const todoList = new TodoApp();
