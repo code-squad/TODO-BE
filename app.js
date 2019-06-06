@@ -175,6 +175,12 @@ class TodoApp{
         });
     }
 
+    // used to log errors to the console in red color
+    errorLog(error) {
+        const eLog = chalk.red(error);
+        console.log(eLog)
+    }
+
 }
 
 const todoList = new TodoApp();
