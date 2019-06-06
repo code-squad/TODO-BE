@@ -34,6 +34,41 @@ class TodoApp{
                 process.exit();
             });
     }
+
+    checkCommands(userInput) {
+        const splitUserInput = userInput.split(' ');
+        if (userInput.split(' ').length < 1 || userInput.split(' ').length > 2) {
+            console.log("입력값을 확인해주세요");
+            inputReadline.setPrompt('명령어를 입력하세요(종료하려면 q를 누르세요): ');
+            inputReadline.prompt();
+            return;
+        }
+
+        const [command, commandElement] = splitUserInput;
+        switch (command) {
+            case 'help':
+                this.usage();
+                break;
+            case 'new':
+                this.newTodo();
+                break;
+            case 'get':
+                this.getTodos();
+                break;
+            case 'complete':
+                this.completeTodo(commandElement);
+                break;
+            case 'delete':
+                this.deleteTodo(commandElement);
+                break;
+            case 'update':
+                this.updateTodo(commandElement);
+                break;
+            default:
+                this.errorLog('invalid command passed');
+                this.usage();
+        }
+    }
 }
 
 const todoList = new TodoApp();
