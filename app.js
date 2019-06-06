@@ -7,6 +7,8 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 
+const Utils = require('./utils');
+
 // json 파일 db 데이터 초기화
 db.defaults({todos: [], users: []}).write();
 
@@ -14,6 +16,8 @@ const inputReadline = rl.createInterface({
     input : process.stdin,
     output: process.stdout,
 });
+
+const utils = new Utils(db,inputReadline);
 
 class TodoApp{
 
@@ -32,17 +36,17 @@ class TodoApp{
     register() {
         return new Promise(resolve => {
             inputReadline.question('아이디를 입력하세요', (id) => {
-                if (this.checkDuplicatedID(id)) {
-                    this.errorLog('이미 사용중인 아이디 입니다.');
+                if (utils.checkDuplicatedID(id)) {
+                    utils.errorLog('이미 사용중인 아이디 입니다.');
                     resolve(this.register());
                 } else {
                     return inputReadline.question('비밀번호를 입력하세요', (pw) => {
                         db.get('users').push({'id': id, 'info': {id: id, pw: pw}}).write();
-                        if (this.checkID_PW(id, pw)) {
+                        if (utils.checkID_PW(id, pw)) {
                             console.log('회원가입이 완료됐습니다.');
                             resolve(true);
                         } else {
-                            this.errorLog('입력한 정보가 올바르지 않습니다.');
+                            utils.errorLog('입력한 정보가 올바르지 않습니다.');
                             resolve(this.register());
                         }
                     });
@@ -57,29 +61,15 @@ class TodoApp{
                 console.log(id);
                 return inputReadline.question('비밀번호를 입력하세요', (pw) => {
                     console.log(pw);
-                    if (this.checkID_PW(id, pw)) {
+                    if (utils.checkID_PW(id, pw)) {
                         resolve(true);
                     } else {
-                        this.errorLog('입력한 정보가 올바르지 않습니다.');
+                        utils.errorLog('입력한 정보가 올바르지 않습니다.');
                         resolve(this.login());
                     }
                 });
             });
         })
-    }
-
-    checkDuplicatedID(id) {
-        const ID_fromDB = db.get('users').find({'id': id}).value();
-        console.log(ID_fromDB);
-        if (ID_fromDB !== undefined) return true;
-        else return false;
-    }
-
-    checkID_PW(id, pw) {
-        const ID_fromDB = db.get('users').find({'id': id}).value();
-        if (ID_fromDB.info.id !== id) return false;
-        else if (ID_fromDB.info.pw !== pw) return false;
-        else return true;
     }
 
     mainExecutor() {
@@ -99,14 +89,6 @@ class TodoApp{
                 console.log('프로그램이 종료되었습니다.');
                 process.exit();
             });
-    }
-
-    prompt(question) {
-        return new Promise((resolve, error) => {
-            inputReadline.question(question, answer => {
-                resolve(answer)
-            });
-        })
     }
 
     checkCommands(userInput) {
@@ -139,7 +121,7 @@ class TodoApp{
                 this.updateTodo(commandElement);
                 break;
             default:
-                this.errorLog('invalid command passed');
+                utils.errorLog('invalid command passed');
                 this.usage();
         }
     }
@@ -160,7 +142,7 @@ class TodoApp{
 
     newTodo() {
         const q = chalk.blue('Type in your todo\n');
-        this.prompt(q).then(todo => {
+        utils.prompt(q).then(todo => {
             const newID = Math.floor(Math.random() * 10000) + 1;
             db.get('todos')
                 .push({
@@ -176,7 +158,7 @@ class TodoApp{
         const todos = db.get('todos').value();
         let index = 1;
         if(todos.length===0){
-            return this.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
+            return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
         }
         todos.forEach(todo => {
             let todoText = `${index++}. ${todo.title}`;
@@ -194,14 +176,14 @@ class TodoApp{
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
-            errorLog("please provide a valid number for complete command");
+            utils.errorLog("please provide a valid number for complete command");
             return
         }
 
         // check if correct length of values has been passed
         let todosLength = db.get('todos').value().length;
         if (n > todosLength) {
-            errorLog("invalid number passed for complete command.");
+            utils.errorLog("invalid number passed for complete command.");
             return
         }
 
@@ -214,14 +196,14 @@ class TodoApp{
     deleteTodo(itemToDelete) {
         const n = Number(itemToDelete);
         if (isNaN(n)) {
-            errorLog("please provide a valid number for complete command");
+            utils.errorLog("please provide a valid number for complete command");
             return
         }
 
         // check if correct length of values has been passed
         let todosLength = db.get('todos').value().length;
         if (n > todosLength) {
-            errorLog("invalid number passed for complete command.");
+            utils.errorLog("invalid number passed for complete command.");
             return
         }
 
@@ -236,29 +218,23 @@ class TodoApp{
         const n = Number(itemToUpdate);
 
         if (isNaN(n)) {
-            errorLog("please provide a valid number for complete command");
+            utils.errorLog("please provide a valid number for complete command");
             return
         }
 
         // check if correct length of values has been passed
         let todosLength = db.get('todos').value().length;
         if (n > todosLength) {
-            errorLog("invalid number passed for complete command.");
+            utils.errorLog("invalid number passed for complete command.");
             return
         }
 
         // update the item
         const updatedItemTitle = db.get(`todos[${n - 1}.title]`).value();
         const q = chalk.blue('Type the title to update\n');
-        this.prompt(q).then(UpdatedTitle => {
+        utils.prompt(q).then(UpdatedTitle => {
             console.log(db.get('todos').find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write());
         });
-    }
-
-    // used to log errors to the console in red color
-    errorLog(error) {
-        const eLog = chalk.red(error);
-        console.log(eLog)
     }
 
 }
