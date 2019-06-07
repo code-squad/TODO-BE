@@ -1,24 +1,24 @@
 const net = require('net');
 const memberClient = net.createConnection({ host: 'localhost', port:60000 });
 
-const send = (data) => { memberClient.write(data); }
+memberClient.on('close', () => { console.log(`The connection with the server has been terminated. Please close the program`); });
 
-const receive = () => {
+const confirm = (data) => { memberClient.write(data); }
+
+const isPossible = () => {
     return new Promise((resolve) => { 
-        memberClient.on('data', (data) => { resolve(Boolean(JSON.stringify(data))); }); 
+        memberClient.on('data', (data) => { resolve((String(data) === 'true') ? true : false); }); 
     });
 }
 
 const signIn = async (userID, userPW) => {
-    send(userID + '#' + userPW);
-    if (!await receive()) return false;
-    return true;
+    confirm(`SignIn#${userID}#${userPW}`);
+    return (await isPossible()) ? true : false;
 }
 
 const signUp = async (newID, newPW) => {
-    send(newID + '#' + newPW);
-    if (!await receive()) return false;
-    return true;
+    confirm(`SignUp#${newID}#${newPW}`);
+    return (await isPossible()) ? true : false;
 }
 
 module.exports = { signIn, signUp };
