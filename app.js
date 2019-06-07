@@ -221,7 +221,7 @@ class TodoApp {
         console.log(`${deletedItem} is deleted`)
     }
 
-    updateTodo(itemToUpdate) {
+    updateTodo(itemToUpdate,login_user) {
         const n = Number(itemToUpdate);
 
         if (isNaN(n)) {
@@ -229,18 +229,22 @@ class TodoApp {
             return
         }
 
+        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
+        const idx = db.get('users').value().indexOf(ID_fromDB);
+
         // check if correct length of values has been passed
-        let todosLength = db.get('todos').value().length;
+        let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
             utils.errorLog("invalid number passed for complete command.");
             return
         }
 
         // update the item
-        const updatedItemTitle = db.get(`todos[${n - 1}.title]`).value();
+        const updatedItemTitle = db.get(`users[${idx}].todos[${n - 1}.title]`).value();
         const q = chalk.blue('Type the title to update\n');
         utils.prompt(q).then(UpdatedTitle => {
-            console.log(db.get('todos').find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write());
+             db.get(`users[${idx}].todos`).find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write();
+             console.log(chalk.magenta(`Title is updated: ${updatedItemTitle} => ${UpdatedTitle}`));
         });
     }
 }
