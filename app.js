@@ -18,7 +18,6 @@ const inputReadline = rl.createInterface({
 const utils = new Utils(db, inputReadline);
 
 class TodoApp {
-
     init() {
         return new Promise(resolve => {
             inputReadline.question('회원인가요? (yes/no)', answer => {
@@ -26,6 +25,9 @@ class TodoApp {
                     resolve(this.register());
                 } else if (answer === 'yes') {
                     resolve(this.login());
+                } else {
+                    utils.errorLog('입력값이 올바르지 않습니다. yes / no 중 하나를 입력해주세요');
+                    resolve(this.init());
                 }
             });
         });
@@ -41,8 +43,9 @@ class TodoApp {
                     return inputReadline.question('비밀번호를 입력하세요', (pw) => {
                         db.get('users').push({'id': id, 'info': {id: id, pw: pw}}).write();
                         if (utils.checkID_PW(id, pw)) {
-                            console.log('회원가입이 완료됐습니다.');
-                            resolve(true);
+                            console.log('------------- 회원가입이 완료됐습니다. -------------');
+                            console.log('------------- 로그인 창으로 이동합니다. ------------');
+                            resolve(this.login());
                         } else {
                             utils.errorLog('입력한 정보가 올바르지 않습니다.');
                             resolve(this.register());
@@ -60,7 +63,7 @@ class TodoApp {
                 return inputReadline.question('비밀번호를 입력하세요', (pw) => {
                     console.log(pw);
                     if (utils.checkID_PW(id, pw)) {
-                        const user = new User(db,id);
+                        const user = new User(db, id);
                         resolve(user);
                     } else {
                         utils.errorLog('입력한 정보가 올바르지 않습니다.');
@@ -71,17 +74,14 @@ class TodoApp {
         })
     }
 
-    mainExecutor() {
+    mainExecutor(login_user) {
         inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
         inputReadline.prompt();
         inputReadline.on('line', function (line) {
 
             if (line === "q") inputReadline.close();
-            todoList.checkCommands(line);
+            todoList.checkCommands(line, login_user);
 
-            if (line === 'no') {
-                todoList.register()
-            }
         })
 
             .on('close', function () {
@@ -90,7 +90,7 @@ class TodoApp {
             });
     }
 
-    checkCommands(userInput) {
+    checkCommands(userInput, login_user) {
         const splitUserInput = userInput.split(' ');
         if (userInput.split(' ').length < 1 || userInput.split(' ').length > 2) {
             console.log("입력값을 확인해주세요");
@@ -105,19 +105,19 @@ class TodoApp {
                 this.usage();
                 break;
             case 'new':
-                this.newTodo();
+                this.newTodo(login_user);
                 break;
             case 'get':
-                this.getTodos();
+                this.getTodos(login_user);
                 break;
             case 'complete':
-                this.completeTodo(commandElement);
+                this.completeTodo(commandElement, login_user);
                 break;
             case 'delete':
-                this.deleteTodo(commandElement);
+                this.deleteTodo(commandElement, login_user);
                 break;
             case 'update':
-                this.updateTodo(commandElement);
+                this.updateTodo(commandElement, login_user);
                 break;
             default:
                 utils.errorLog('invalid command passed');
@@ -140,10 +140,25 @@ class TodoApp {
         console.log(usageText)
     }
 
-    newTodo() {
+    newTodo(login_user) {
         const q = chalk.blue('Type in your todo\n');
         utils.prompt(q).then(todo => {
             const newID = Math.floor(Math.random() * 10000) + 1;
+            const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
+            console.log(ID_fromDB);
+            console.log(ID_fromDB.todos);
+            console.log(db.get('todos').value());
+
+            console.log(db.get('users').find({'id': login_user.id}).value());
+            db.get('users').find({'id': login_user.id}).assign({
+                todos: [{
+                    todo_id : newID,
+                    title   : todo,
+                    complete: false,
+                }]
+
+            }).write();
+
             db.get('todos')
                 .push({
                     id      : newID,
@@ -243,7 +258,7 @@ async function asyncTest() {
     const login_user = await todoList.init();
     console.log(`------------- 로그인 되었습니다. -------------`);
     console.log(`<<< ${login_user.id}님, TODO APP에 오신 걸 환경합니다! >>>`);
-    todoList.mainExecutor();
+    todoList.mainExecutor(login_user);
 }
 
 asyncTest();
