@@ -40,8 +40,8 @@ const handleMainTask = async (select) => {
             break;
         case '2':
             const [newID, newPW] = await executeSignPage('up');
-            // if (memberClient.signUp(newID, newPW)) console.log(`Completed sign up!`);
-            // else console.log(`It is member information already existing.`);
+            if (memberClient.signUp(newID, newPW)) console.log(`Completed sign up!`);
+            else console.log(`It is member information already existing.`);
             break;
         case '3': isExit = true; break;
     }
