@@ -197,24 +197,27 @@ class TodoApp {
         console.log(`${complete_todo} is checked as complete`)
     }
 
-    deleteTodo(itemToDelete) {
+    deleteTodo(itemToDelete,login_user) {
         const n = Number(itemToDelete);
         if (isNaN(n)) {
             utils.errorLog("please provide a valid number for complete command");
             return
         }
 
+        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
+        const idx = db.get('users').value().indexOf(ID_fromDB);
+
         // check if correct length of values has been passed
-        let todosLength = db.get('todos').value().length;
+        let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
             utils.errorLog("invalid number passed for complete command.");
             return
         }
 
         // delete the item
-        const deletedItem = db.get(`todos[${n - 1}].title`).value();
-        const deletedItemID = db.get(`todos[${n - 1}].id`).value();
-        db.get(`todos`).remove({id: deletedItemID}).write();
+        const deletedItem = db.get(`users[${idx}].todos[${n-1}].title`).value();
+        const deletedItemID = db.get(`users[${idx}].todos[${n-1}].todo_id`).value();
+        db.get(`users[${idx}].todos`).remove({todo_id: deletedItemID}).write();
         console.log(`${deletedItem} is deleted`)
     }
 
