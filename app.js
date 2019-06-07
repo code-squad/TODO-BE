@@ -41,7 +41,7 @@ class TodoApp {
                     resolve(this.register());
                 } else {
                     return inputReadline.question('비밀번호를 입력하세요', (pw) => {
-                        db.get('users').push({'id': id, 'info': {id: id, pw: pw}}).write();
+                        db.get('users').push({'id': id, 'info': {id: id, pw: pw}, todos: []}).write();
                         if (utils.checkID_PW(id, pw)) {
                             console.log('------------- 회원가입이 완료됐습니다. -------------');
                             console.log('------------- 로그인 창으로 이동합니다. ------------');
@@ -145,19 +145,23 @@ class TodoApp {
         utils.prompt(q).then(todo => {
             const newID = Math.floor(Math.random() * 10000) + 1;
             const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
-            console.log(ID_fromDB);
-            console.log(ID_fromDB.todos);
-            console.log(db.get('todos').value());
+            const idx = db.get('users').value().indexOf(ID_fromDB);
+            console.log((db.get(`users[${idx}]`).value()));
 
-            console.log(db.get('users').find({'id': login_user.id}).value());
-            db.get('users').find({'id': login_user.id}).assign({
-                todos: [{
-                    todo_id : newID,
-                    title   : todo,
-                    complete: false,
-                }]
-
+            db.get(`users[${idx}].todos`).push({
+                todo_id : newID,
+                title   : todo,
+                complete: false,
             }).write();
+
+            // db.get('users').find({'id': login_user.id}).assign({
+            //     todos: [{
+            //         todo_id : newID,
+            //         title   : todo,
+            //         complete: false,
+            //     }]
+            //
+            // }).write();
 
             db.get('todos')
                 .push({
@@ -169,8 +173,8 @@ class TodoApp {
         });
     }
 
-    getTodos() {
-        const todos = db.get('todos').value();
+    getTodos(login_user) {
+        const todos = db.get('users').find({'id': login_user.id}).value().todos;
         let index = 1;
         if (todos.length === 0) {
             return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
