@@ -133,7 +133,7 @@ class TodoApp {
     commands can be:
     new:                   used to create a new todo
     get:                   used to retrieve your todos
-    complete + item No.:   used to mark a todo as complete
+    complete + item No.:   used to mark a todo as complete / undo complete
     update + item No.:     used to update the todo title
     help:                  used to print the usage guide
   `;
@@ -162,6 +162,7 @@ class TodoApp {
         if (todos.length === 0) {
             return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
         }
+        console.log(chalk.cyan(`<<<< ${login_user.id}의 TODO LIST >>>>`));
         todos.forEach(todo => {
             let todoText = `${index++}. ${todo.title}`;
             if (todo.complete) {
@@ -192,9 +193,27 @@ class TodoApp {
         }
 
         // update the todo item marked as complete
-        db.set(`users[${idx}].todos[${n-1}].complete`, true).write();
-        const complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
-        console.log(`${complete_todo} is checked as complete`)
+        const complete_state = db.get(`users[${idx}].todos[${n-1}].complete`).value();
+        if (complete_state === true){
+            const q = chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
+            utils.prompt(q).then((answer)=>{
+                if (answer ==='yes'){
+                    db.set(`users[${idx}].todos[${n-1}].complete`, false).write();
+                    const undo_complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
+                    return console.log(chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
+                } else if(answer ==='no'){
+                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
+                } else {
+                    utils.errorLog('올바른 입력값이 아닙니다');
+                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
+                }
+            })
+        } else {
+            db.set(`users[${idx}].todos[${n-1}].complete`, true).write();
+            const complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
+            console.log(chalk.green(`${complete_todo} is checked as complete`));
+        }
+
     }
 
     deleteTodo(itemToDelete,login_user) {
