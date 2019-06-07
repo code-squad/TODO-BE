@@ -153,23 +153,6 @@ class TodoApp {
                 title   : todo,
                 complete: false,
             }).write();
-
-            // db.get('users').find({'id': login_user.id}).assign({
-            //     todos: [{
-            //         todo_id : newID,
-            //         title   : todo,
-            //         complete: false,
-            //     }]
-            //
-            // }).write();
-
-            db.get('todos')
-                .push({
-                    id      : newID,
-                    title   : todo,
-                    complete: false,
-                })
-                .write();
         });
     }
 
@@ -190,7 +173,7 @@ class TodoApp {
         });
     }
 
-    completeTodo(itemToComplete) {
+    completeTodo(itemToComplete,login_user) {
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
@@ -198,16 +181,19 @@ class TodoApp {
             return
         }
 
+        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
+        const idx = db.get('users').value().indexOf(ID_fromDB);
+
         // check if correct length of values has been passed
-        let todosLength = db.get('todos').value().length;
+        let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
             utils.errorLog("invalid number passed for complete command.");
             return
         }
 
         // update the todo item marked as complete
-        db.set(`todos[${n - 1}].complete`, true).write();
-        const complete_todo = db.get(`todos[${n - 1}].title`).value();
+        db.set(`users[${idx}].todos[${n-1}].complete`, true).write();
+        const complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
         console.log(`${complete_todo} is checked as complete`)
     }
 

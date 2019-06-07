@@ -117,12 +117,12 @@
         {
           "todo_id": 8315,
           "title": "coding",
-          "complete": false
+          "complete": true
         },
         {
           "todo_id": 2208,
           "title": "kaka",
-          "complete": false
+          "complete": true
         }
       ]
     },
@@ -136,7 +136,7 @@
         {
           "todo_id": 8851,
           "title": "javascript",
-          "complete": false
+          "complete": true
         }
       ]
     }
