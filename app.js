@@ -36,12 +36,12 @@ const handleMainTask = async (select) => {
         case '1':
             const [userID, userPW] = await executeSignPage('in');
             if (await memberClient.signIn(userID, userPW)) await executeUserPage(userID);
-            else console.log(`The information you have entered does not exist.`);
+            else console.log(`***** The information you have entered does not exist. *****`);
             break;
         case '2':
             const [newID, newPW] = await executeSignPage('up');
-            if (memberClient.signUp(newID, newPW)) console.log(`Completed sign up!`);
-            else console.log(`It is member information already existing.`);
+            if (await memberClient.signUp(newID, newPW)) console.log(`***** Completed sign up! *****`);
+            else console.log(`***** It is member information already existing. *****`);
             break;
         case '3': isExit = true; break;
     }
