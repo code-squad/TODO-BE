@@ -15,4 +15,10 @@ const signIn = async (userID, userPW) => {
     return true;
 }
 
-module.exports = { signIn };
+const signUp = async (newID, newPW) => {
+    send(newID + '#' + newPW);
+    if (!await receive()) return false;
+    return true;
+}
+
+module.exports = { signIn, signUp };
