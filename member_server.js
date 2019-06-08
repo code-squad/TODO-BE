@@ -13,18 +13,12 @@ memberServer.on('connection', (memberClient) => {
     memberClientSocket.push(memberClient);
 
     memberClient.on('data', (data) => {
-        const [checkType, checkID, checkPW] = String(data).split('#');
-        console.log(`${checkType}, ${checkID}, ${checkPW}`);
-        if (checkType === 'SignIn') {
-            // 파일을 불러오기
-            // 탐색을 통해서 ID, PW 조회
-            if (checkID === 'hyodol' && checkPW === '1234') memberClient.write('true');
-            else memberClient.write('false'); 
-        } else if (checkType === 'SignUp') {
-            // 파일을 불러와서 탐색을 통해서 ID 조회
-            // 이미 존재하면 false
-            // 존재하지 않으면 저장..
+        const [type, id, pw] = String(data).split('#');
+        if (type === 'SignIn') {
             memberClient.write('true');
+        } else if (type === 'SignUp') {
+            if (fileManager.save(id, pw)) memberClient.write('true');
+            else memberClient.write('false');
         }
     });
 
