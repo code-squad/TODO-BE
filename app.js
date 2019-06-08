@@ -7,9 +7,6 @@ const db = low(adapter);
 const Utils = require('./utils');
 const net = require('net');
 
-// json 파일 db 데이터 초기화
-db.defaults({users: []}).write();
-
 const inputReadline = rl.createInterface({
     input : process.stdin,
     output: process.stdout,
@@ -17,16 +14,16 @@ const inputReadline = rl.createInterface({
 
 const utils = new Utils(db, inputReadline);
 
-const socket =net.connect(52274,'127.0.0.1', function () {
+const socket = net.connect(52274, '127.0.0.1', function () {
     console.log('Client on');
 });
 
 class TodoApp {
-    constructor(socket){
+    constructor(socket) {
         this.socket = socket
     }
 
-    getUserData(){
+    getUserData() {
         return new Promise(resolve => {
             socket.setEncoding('utf8');
             socket.on('data', function (data) {
@@ -86,10 +83,10 @@ class TodoApp {
                 return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                     console.log(pw);
                     this.socket.write(`login$id_pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
-                    const {login_success, login_user }= await this.getUserData();
+                    const {login_success, login_user_id} = await this.getUserData();
                     this.socket.removeAllListeners();
                     if (login_success) {
-                        resolve(login_user);
+                        resolve(login_user_id);
                     } else {
                         utils.errorLog('입력한 정보가 올바르지 않습니다.');
                         resolve(this.login());
@@ -99,13 +96,13 @@ class TodoApp {
         })
     }
 
-    mainExecutor(login_user) {
+    mainExecutor(login_user_id) {
         inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
         inputReadline.prompt();
         inputReadline.on('line', function (line) {
 
             if (line === "q") inputReadline.close();
-            todoList.checkCommands(line, login_user);
+            todoList.checkCommands(line, login_user_id);
 
         })
 
@@ -115,7 +112,7 @@ class TodoApp {
             });
     }
 
-    checkCommands(userInput, login_user) {
+    checkCommands(userInput, login_user_id) {
         const splitUserInput = userInput.split(' ');
         if (userInput.split(' ').length < 1 || userInput.split(' ').length > 2) {
             console.log("입력값을 확인해주세요");
@@ -130,19 +127,19 @@ class TodoApp {
                 this.usage();
                 break;
             case 'new':
-                this.newTodo(login_user);
+                this.newTodo(login_user_id);
                 break;
             case 'get':
-                this.getTodos(login_user);
+                this.getTodo(login_user_id);
                 break;
             case 'complete':
-                this.completeTodo(commandElement, login_user);
+                this.completeTodo(commandElement, login_user_id);
                 break;
             case 'delete':
-                this.deleteTodo(commandElement, login_user);
+                this.deleteTodo(commandElement, login_user_id);
                 break;
             case 'update':
-                this.updateTodo(commandElement, login_user);
+                this.updateTodo(commandElement, login_user_id);
                 break;
             default:
                 utils.errorLog('invalid command passed');
@@ -165,30 +162,27 @@ class TodoApp {
         console.log(usageText)
     }
 
-    newTodo(login_user) {
+    newTodo(login_user_id) {
         const q = chalk.blue('Type in your todo\n');
-        utils.prompt(q).then(todo => {
-            const newID = Math.floor(Math.random() * 10000) + 1;
-            const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
-            const idx = db.get('users').value().indexOf(ID_fromDB);
-            console.log((db.get(`users[${idx}]`).value()));
 
-            db.get(`users[${idx}].todos`).push({
-                todo_id : newID,
-                title   : todo,
-                complete: false,
-            }).write();
+        utils.prompt(q).then(async todo => {
+            this.socket.write(`newTodo$id$${login_user_id}&${todo}`); // 서버로 id, todo_title 전송
+            const new_todo = await this.getUserData();
+            this.socket.removeAllListeners();
+            console.log(`${new_todo}가 추가 되었습니다.`);
         });
     }
 
-    getTodos(login_user) {
-        const todos = db.get('users').find({'id': login_user.id}).value().todos;
+    async getTodo(login_user_id) {
+        this.socket.write(`getTodo$id$${login_user_id}`); // 서버로 id 전송
+        const todo_list = await this.getUserData();
+        this.socket.removeAllListeners();
         let index = 1;
-        if (todos.length === 0) {
+        if (todo_list.length === 0) {
             return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
         }
-        console.log(chalk.cyan(`<<<< ${login_user.id}의 TODO LIST >>>>`));
-        todos.forEach(todo => {
+        console.log(chalk.cyan(`<<<< ${login_user_id}의 TODO LIST >>>>`));
+        todo_list.forEach(todo => {
             let todoText = `${index++}. ${todo.title}`;
             if (todo.complete) {
                 todoText += ' ✔ ️';
@@ -199,14 +193,14 @@ class TodoApp {
         });
     }
 
-    completeTodo(itemToComplete,login_user) {
+    completeTodo(itemToComplete, login_user_id) {
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
             return utils.errorLog("please provide a valid number for complete command");
         }
 
-        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
+        const ID_fromDB = db.get('users').find({'id': login_user_id}).value();
         const idx = db.get('users').value().indexOf(ID_fromDB);
 
         // check if correct length of values has been passed
@@ -216,15 +210,15 @@ class TodoApp {
         }
 
         // update the todo item marked as complete
-        const complete_state = db.get(`users[${idx}].todos[${n-1}].complete`).value();
-        if (complete_state === true){
+        const complete_state = db.get(`users[${idx}].todos[${n - 1}].complete`).value();
+        if (complete_state === true) {
             const q = chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
-            utils.prompt(q).then((answer)=>{
-                if (answer ==='yes'){
-                    db.set(`users[${idx}].todos[${n-1}].complete`, false).write();
-                    const undo_complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
+            utils.prompt(q).then((answer) => {
+                if (answer === 'yes') {
+                    db.set(`users[${idx}].todos[${n - 1}].complete`, false).write();
+                    const undo_complete_todo = db.get(`users[${idx}].todos[${n - 1}].title`).value();
                     return console.log(chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
-                } else if(answer ==='no'){
+                } else if (answer === 'no') {
                     return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
                 } else {
                     utils.errorLog('올바른 입력값이 아닙니다');
@@ -232,57 +226,57 @@ class TodoApp {
                 }
             })
         } else {
-            db.set(`users[${idx}].todos[${n-1}].complete`, true).write();
-            const complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
+            db.set(`users[${idx}].todos[${n - 1}].complete`, true).write();
+            const complete_todo = db.get(`users[${idx}].todos[${n - 1}].title`).value();
             console.log(chalk.green(`${complete_todo} is checked as complete`));
         }
     }
 
-    deleteTodo(itemToDelete,login_user) {
+    async deleteTodo(itemToDelete, login_user_id) {
         const n = Number(itemToDelete);
         if (isNaN(n)) {
             return utils.errorLog("please provide a valid number for complete command");
         }
 
-        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
-        const idx = db.get('users').value().indexOf(ID_fromDB);
-
         // check if correct length of values has been passed
-        let todosLength = db.get(`users[${idx}].todos`).value().length;
+        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
+        const todosLength = await this.getUserData();
+        console.log(todosLength);
+        this.socket.removeAllListeners();
         if (n > todosLength) {
             return utils.errorLog("invalid number passed for complete command.");
         }
 
         // delete the item
-        const deletedItem = db.get(`users[${idx}].todos[${n-1}].title`).value();
-        const deletedItemID = db.get(`users[${idx}].todos[${n-1}].todo_id`).value();
-        db.get(`users[${idx}].todos`).remove({todo_id: deletedItemID}).write();
-        console.log(`${deletedItem} is deleted`)
+        this.socket.write(`deleteTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+        const deleted_todo = await this.getUserData();
+        this.socket.removeAllListeners();
+        console.log(chalk.red(`${deleted_todo} is deleted`))
     }
 
-    updateTodo(itemToUpdate,login_user) {
+    async updateTodo(itemToUpdate, login_user_id) {
         const n = Number(itemToUpdate);
 
         if (isNaN(n)) {
             return utils.errorLog("please provide a valid number for complete command");
-
         }
 
-        const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
-        const idx = db.get('users').value().indexOf(ID_fromDB);
-
         // check if correct length of values has been passed
-        let todosLength = db.get(`users[${idx}].todos`).value().length;
+        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
+        const todosLength = await this.getUserData();
+        console.log(todosLength);
+        this.socket.removeAllListeners();
         if (n > todosLength) {
             return utils.errorLog("invalid number passed for complete command.");
         }
 
         // update the item
-        const updatedItemTitle = db.get(`users[${idx}].todos[${n - 1}.title]`).value();
         const q = chalk.blue('Type the title to update\n');
-        utils.prompt(q).then(UpdatedTitle => {
-             db.get(`users[${idx}].todos`).find({title: `${updatedItemTitle}`}).assign({title: UpdatedTitle}).write();
-             console.log(chalk.magenta(`Title is updated: ${updatedItemTitle} => ${UpdatedTitle}`));
+        utils.prompt(q).then(async UpdatedTitle => {
+            this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
+            const {previousTitle, updatedTitle } = await this.getUserData();
+            this.socket.removeAllListeners();
+            console.log(chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));
         });
     }
 }
@@ -290,10 +284,10 @@ class TodoApp {
 const todoList = new TodoApp(socket);
 
 async function asyncTest() {
-    const login_user = await todoList.init();
+    const login_user_id = await todoList.init();
     console.log(`------------- 로그인 되었습니다. -------------`);
-    console.log(`<<< ${login_user.id}님, TODO APP에 오신 걸 환경합니다! >>>`);
-    todoList.mainExecutor(login_user);
+    console.log(`<<< ${login_user_id}님, TODO APP에 오신 걸 환경합니다! >>>`);
+    todoList.mainExecutor(login_user_id);
 }
 
 asyncTest();
