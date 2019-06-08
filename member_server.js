@@ -4,11 +4,13 @@ const net = require('net');
 const memberServer = net.createServer();
 const memberClientSocket = [];
 
-memberServer.listen(60000, () => { console.log(`[Member] Server listen on address => ${JSON.stringify(memberServer.address())}`); });
+memberServer.setMaxListeners(15);
+
+memberServer.listen(60000, () => { console.log(`Server listen on address -> ${JSON.stringify(memberServer.address())}`); });
 
 memberServer.on('connection', (memberClient) => {
-    console.log(`[Member] Client local address => ${memberClient.localAddress}, local port => ${memberClient.localPort}`);
-    console.log(`[Member] Client remote address => ${memberClient.remoteAddress}, remote port => ${memberClient.remotePort}`);
+    console.log(`local address -> ${memberClient.localAddress}, local port -> ${memberClient.localPort}`);
+    console.log(`remote address -> ${memberClient.remoteAddress}, remote port -> ${memberClient.remotePort}`);
 
     memberClientSocket.push(memberClient);
 
@@ -16,10 +18,10 @@ memberServer.on('connection', (memberClient) => {
         const [type, id, pw] = String(data).split('#');
         if (type === 'SignIn') {
             fileManager.signIn(id, pw);
-            setTimeout(() => { memberClient.write((fileManager.isMember()) ? 'true' : 'false'); }, 100);
+            setTimeout(() => memberClient.write(fileManager.isMember()), 100);
         } else if (type === 'SignUp') {
-            if (fileManager.signUp(id, pw)) memberClient.write('true');
-            else memberClient.write('false');
+            fileManager.signUp(id, pw);
+            memberClient.write(fileManager.isMember());
         }
     });
 
