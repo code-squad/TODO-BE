@@ -14,14 +14,12 @@ const isPossible = () => {
     });
 }
 
-const signIn = async (userID, userPW) => {
+module.exports.signIn = async (userID, userPW) => {
     confirm(`SignIn#${userID}#${userPW}`);
     return (await isPossible()) ? true : false;
 }
 
-const signUp = async (newID, newPW) => {
+module.exports.signUp = async (newID, newPW) => {
     confirm(`SignUp#${newID}#${newPW}`);
     return (await isPossible()) ? true : false;
 }
-
-module.exports = { signIn, signUp };
