@@ -55,6 +55,16 @@ net.createServer(function (socket) {
                 socket.write(`${JSON.stringify(updated_todo)}`);
                 break;
 
+            case 'completeTodo':
+                const complete_todo = dataHandler.completeTodo(value);
+                socket.write(`${JSON.stringify(complete_todo)}`);
+                break;
+
+            case 'undo_complete_todo':
+                const undo_complete_todo = dataHandler.undo_completeTodo(value);
+                socket.write(`${JSON.stringify(undo_complete_todo)}`);
+                break;
+
             case 'idxOfUser':
                 const idxOfUser = dataHandler.getIdxOfUser(value);
                 socket.write(`${JSON.stringify(idxOfUser)}`);
@@ -64,6 +74,11 @@ net.createServer(function (socket) {
             const todosLength = dataHandler.checkTodoLength(value);
             socket.write(`${JSON.stringify(todosLength)}`);
             break;
+
+            case 'complete_state':
+                const complete_state = dataHandler.getCompleteState(value);
+                socket.write(`${JSON.stringify(complete_state)}`);
+                break;
         }
     })
 }).listen(52274, function () {

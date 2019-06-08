@@ -39,6 +39,22 @@ class Data_handler {
         return {previousTitle, updatedTitle : UpdatedTitle}
     }
 
+    completeTodo(value){
+        const [login_user_id, todo_idx] = value.split('&');
+        const user_idx = this.getIdxOfUser(login_user_id);
+
+        this.db.set(`users[${user_idx}].todos[${todo_idx - 1}].complete`, true).write();
+        return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].title`).value()
+    }
+
+    undo_completeTodo(value){
+        const [login_user_id, todo_idx] = value.split('&');
+        const user_idx = this.getIdxOfUser(login_user_id);
+
+        this.db.set(`users[${user_idx}].todos[${todo_idx - 1}].complete`, false).write();
+        return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].title`).value()
+    }
+
     getIdxOfUser(login_user_id){
         const ID_fromDB = this.db.get('users').find({'id': login_user_id}).value();
         return this.db.get('users').value().indexOf(ID_fromDB)
@@ -47,6 +63,11 @@ class Data_handler {
     checkTodoLength(login_user_id){
         const user_idx = this.getIdxOfUser(login_user_id);
         return this.db.get(`users[${user_idx}].todos`).value().length;
+    }
+    getCompleteState(value){
+        const [login_user_id, todo_idx] = value.split('&');
+        const user_idx = this.getIdxOfUser(login_user_id);
+        return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].complete`).value()
     }
 }
 

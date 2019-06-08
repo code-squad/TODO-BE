@@ -193,30 +193,32 @@ class TodoApp {
         });
     }
 
-    completeTodo(itemToComplete, login_user_id) {
+    async completeTodo(itemToComplete, login_user_id) {
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
             return utils.errorLog("please provide a valid number for complete command");
         }
 
-        const ID_fromDB = db.get('users').find({'id': login_user_id}).value();
-        const idx = db.get('users').value().indexOf(ID_fromDB);
-
-        // check if correct length of values has been passed
-        let todosLength = db.get(`users[${idx}].todos`).value().length;
+        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
+        const todosLength = await this.getUserData();
+        console.log(todosLength);
+        this.socket.removeAllListeners();
         if (n > todosLength) {
             return utils.errorLog("invalid number passed for complete command.");
         }
 
         // update the todo item marked as complete
-        const complete_state = db.get(`users[${idx}].todos[${n - 1}].complete`).value();
+        this.socket.write(`complete_state$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+        const complete_state = await this.getUserData();
+        this.socket.removeAllListeners();
         if (complete_state === true) {
             const q = chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
-            utils.prompt(q).then((answer) => {
+            utils.prompt(q).then(async (answer) => {
                 if (answer === 'yes') {
-                    db.set(`users[${idx}].todos[${n - 1}].complete`, false).write();
-                    const undo_complete_todo = db.get(`users[${idx}].todos[${n - 1}].title`).value();
+                    this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+                    const undo_complete_todo = await this.getUserData();
+                    this.socket.removeAllListeners();
                     return console.log(chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
                 } else if (answer === 'no') {
                     return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
@@ -226,8 +228,9 @@ class TodoApp {
                 }
             })
         } else {
-            db.set(`users[${idx}].todos[${n - 1}].complete`, true).write();
-            const complete_todo = db.get(`users[${idx}].todos[${n - 1}].title`).value();
+            this.socket.write(`completeTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+            const complete_todo = await this.getUserData();
+            this.socket.removeAllListeners();
             console.log(chalk.green(`${complete_todo} is checked as complete`));
         }
     }
@@ -274,7 +277,7 @@ class TodoApp {
         const q = chalk.blue('Type the title to update\n');
         utils.prompt(q).then(async UpdatedTitle => {
             this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
-            const {previousTitle, updatedTitle } = await this.getUserData();
+            const { previousTitle, updatedTitle } = await this.getUserData();
             this.socket.removeAllListeners();
             console.log(chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));
         });
