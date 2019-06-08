@@ -5,7 +5,7 @@ const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 const Utils = require('./utils');
-const User = require('./user_manager');
+const net = require('net');
 
 // json 파일 db 데이터 초기화
 db.defaults({users: []}).write();
@@ -17,10 +17,28 @@ const inputReadline = rl.createInterface({
 
 const utils = new Utils(db, inputReadline);
 
+const socket =net.connect(52274,'127.0.0.1', function () {
+    console.log('Client on');
+});
+
 class TodoApp {
+    constructor(socket){
+        this.socket = socket
+    }
+
+    getUserData(){
+        return new Promise(resolve => {
+            socket.setEncoding('utf8');
+            socket.on('data', function (data) {
+                console.log(JSON.parse(data));
+                resolve(JSON.parse(data));
+            })
+        })
+    }
+
     init() {
         return new Promise(resolve => {
-            inputReadline.question('회원인가요? (yes/no)', answer => {
+            inputReadline.question('회원인가요? (yes/no)', async answer => {
                 if (answer === 'no') {
                     resolve(this.register());
                 } else if (answer === 'yes') {
@@ -35,14 +53,19 @@ class TodoApp {
 
     register() {
         return new Promise(resolve => {
-            inputReadline.question('아이디를 입력하세요', (id) => {
-                if (utils.checkDuplicatedID(id)) {
+            inputReadline.question('아이디를 입력하세요', async (id) => {
+                this.socket.write(`register$id$${id}`); // 서버로 아이디 전송
+                const duplicatedID = await this.getUserData();
+                this.socket.removeAllListeners();
+                if (duplicatedID) {
                     utils.errorLog('이미 사용중인 아이디 입니다.');
                     resolve(this.register());
                 } else {
-                    return inputReadline.question('비밀번호를 입력하세요', (pw) => {
-                        db.get('users').push({'id': id, 'info': {id: id, pw: pw}, todos: []}).write();
-                        if (utils.checkID_PW(id, pw)) {
+                    return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
+                        this.socket.write(`register$pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
+                        const register_success = await this.getUserData();
+                        this.socket.removeAllListeners();
+                        if (register_success) {
                             console.log('------------- 회원가입이 완료됐습니다. -------------');
                             console.log('------------- 로그인 창으로 이동합니다. ------------');
                             resolve(this.login());
@@ -60,11 +83,13 @@ class TodoApp {
         return new Promise(resolve => {
             inputReadline.question('아이디를 입력하세요', (id) => {
                 console.log(id);
-                return inputReadline.question('비밀번호를 입력하세요', (pw) => {
+                return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                     console.log(pw);
-                    if (utils.checkID_PW(id, pw)) {
-                        const user = new User(db, id);
-                        resolve(user);
+                    this.socket.write(`login$id_pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
+                    const {login_success, login_user }= await this.getUserData();
+                    this.socket.removeAllListeners();
+                    if (login_success) {
+                        resolve(login_user);
                     } else {
                         utils.errorLog('입력한 정보가 올바르지 않습니다.');
                         resolve(this.login());
@@ -262,7 +287,7 @@ class TodoApp {
     }
 }
 
-const todoList = new TodoApp();
+const todoList = new TodoApp(socket);
 
 async function asyncTest() {
     const login_user = await todoList.init();
