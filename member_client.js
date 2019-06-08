@@ -1,6 +1,8 @@
 const net = require('net');
 const memberClient = net.createConnection({ host: 'localhost', port:60000 });
 
+memberClient.setMaxListeners(15);
+
 memberClient.on('close', () => { 
     console.log(`The connection with the server has been terminated.`);
     process.exit();
