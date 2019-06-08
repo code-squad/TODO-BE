@@ -1,111 +1,4 @@
 {
-  "todos": [
-    {
-      "id": 2541,
-      "title": "coding2",
-      "complete": false
-    },
-    {
-      "id": 677,
-      "title": "async",
-      "complete": true
-    },
-    {
-      "id": 2477,
-      "title": "javascript",
-      "complete": false
-    },
-    {
-      "id": 8520,
-      "title": "test",
-      "complete": false
-    },
-    {
-      "id": 8251,
-      "title": "test",
-      "complete": false
-    },
-    {
-      "id": 3347,
-      "title": "test",
-      "complete": false
-    },
-    {
-      "id": 8568,
-      "title": "test11",
-      "complete": false
-    },
-    {
-      "id": 8302,
-      "title": "123",
-      "complete": false
-    },
-    {
-      "id": 2197,
-      "title": "321",
-      "complete": false
-    },
-    {
-      "id": 2861,
-      "title": "321",
-      "complete": false
-    },
-    {
-      "id": 9711,
-      "title": "test",
-      "complete": false
-    },
-    {
-      "id": 5115,
-      "title": "test",
-      "complete": false
-    },
-    {
-      "id": 4696,
-      "title": "test123",
-      "complete": false
-    },
-    {
-      "id": 6437,
-      "title": "test1",
-      "complete": false
-    },
-    {
-      "id": 8366,
-      "title": "test123",
-      "complete": false
-    },
-    {
-      "id": 7396,
-      "title": "testtest",
-      "complete": false
-    },
-    {
-      "id": 6797,
-      "title": "gg",
-      "complete": false
-    },
-    {
-      "id": 5057,
-      "title": "gg",
-      "complete": false
-    },
-    {
-      "id": 8315,
-      "title": "coding",
-      "complete": false
-    },
-    {
-      "id": 2208,
-      "title": "kaka",
-      "complete": false
-    },
-    {
-      "id": 8851,
-      "title": "javascript",
-      "complete": false
-    }
-  ],
   "users": [
     {
       "id": "sony",
@@ -116,13 +9,13 @@
       "todos": [
         {
           "todo_id": 8315,
-          "title": "coindg6",
-          "complete": true
+          "title": "java",
+          "complete": false
         },
         {
-          "todo_id": 3248,
-          "title": "javascript",
-          "complete": false
+          "todo_id": 9984,
+          "title": "new todo list",
+          "complete": true
         }
       ]
     },

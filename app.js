@@ -8,7 +8,7 @@ const Utils = require('./utils');
 const User = require('./user_manager');
 
 // json 파일 db 데이터 초기화
-db.defaults({todos: [], users: []}).write();
+db.defaults({users: []}).write();
 
 const inputReadline = rl.createInterface({
     input : process.stdin,
@@ -178,8 +178,7 @@ class TodoApp {
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
-            utils.errorLog("please provide a valid number for complete command");
-            return
+            return utils.errorLog("please provide a valid number for complete command");
         }
 
         const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
@@ -188,8 +187,7 @@ class TodoApp {
         // check if correct length of values has been passed
         let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
-            utils.errorLog("invalid number passed for complete command.");
-            return
+            return utils.errorLog("invalid number passed for complete command.");
         }
 
         // update the todo item marked as complete
@@ -213,14 +211,12 @@ class TodoApp {
             const complete_todo = db.get(`users[${idx}].todos[${n-1}].title`).value();
             console.log(chalk.green(`${complete_todo} is checked as complete`));
         }
-
     }
 
     deleteTodo(itemToDelete,login_user) {
         const n = Number(itemToDelete);
         if (isNaN(n)) {
-            utils.errorLog("please provide a valid number for complete command");
-            return
+            return utils.errorLog("please provide a valid number for complete command");
         }
 
         const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
@@ -229,8 +225,7 @@ class TodoApp {
         // check if correct length of values has been passed
         let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
-            utils.errorLog("invalid number passed for complete command.");
-            return
+            return utils.errorLog("invalid number passed for complete command.");
         }
 
         // delete the item
@@ -244,8 +239,8 @@ class TodoApp {
         const n = Number(itemToUpdate);
 
         if (isNaN(n)) {
-            utils.errorLog("please provide a valid number for complete command");
-            return
+            return utils.errorLog("please provide a valid number for complete command");
+
         }
 
         const ID_fromDB = db.get('users').find({'id': login_user.id}).value();
@@ -254,8 +249,7 @@ class TodoApp {
         // check if correct length of values has been passed
         let todosLength = db.get(`users[${idx}].todos`).value().length;
         if (n > todosLength) {
-            utils.errorLog("invalid number passed for complete command.");
-            return
+            return utils.errorLog("invalid number passed for complete command.");
         }
 
         // update the item
