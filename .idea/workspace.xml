@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e80a2619-bea9-4d0d-953a-f1529b6b9d75" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.json" beforeDir="false" afterPath="$PROJECT_DIR$/db.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/todo_app.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/command.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -31,8 +32,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+            <state relative-caret-position="276">
+              <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/todo.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="23">
+              <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -47,16 +57,16 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/todo_app.js">
+        <entry file="file://$PROJECT_DIR$/client/command.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="184">
-              <caret line="8" column="29" lean-forward="true" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
+              <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/register.js">
+        <entry file="file://$PROJECT_DIR$/client/register.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="138">
               <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
@@ -83,7 +93,7 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/login.js">
+        <entry file="file://$PROJECT_DIR$/client/login.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="207">
               <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
@@ -117,17 +127,20 @@
       <find>login_userID</find>
       <find>getTodo</find>
       <find>length</find>
-      <find>utils</find>
       <find>getUser</find>
       <find>chalk</find>
       <find>inputReadline</find>
       <find>checkID_PW</find>
+      <find>utils</find>
+      <find>todoCommand</find>
     </findStrings>
     <replaceStrings>
       <replace>login_userID</replace>
       <replace>login_user_id</replace>
       <replace>this.chalk</replace>
       <replace>this.inputReadline</replace>
+      <replace>this.utils</replace>
+      <replace>this.todoCommand</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -151,7 +164,9 @@
         <option value="$PROJECT_DIR$/index.js" />
         <option value="$PROJECT_DIR$/login.js" />
         <option value="$PROJECT_DIR$/register.js" />
+        <option value="$PROJECT_DIR$/main.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/client/todo.js" />
       </list>
     </option>
   </component>
@@ -205,8 +220,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/client" />
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/server" />
     </key>
   </component>
@@ -229,17 +244,17 @@
     <configuration name="client.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="client.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/server/server.js" working-dir="$PROJECT_DIR$">
+    <configuration name="command.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/client/command.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
-    <configuration name="todo_app.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/client/todo_app.js" working-dir="$PROJECT_DIR$">
+    <configuration name="server.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="$PROJECT_DIR$/server/server.js" working-dir="$PROJECT_DIR$">
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Node.js.app.js" />
         <item itemvalue="Node.js.server.js" />
-        <item itemvalue="Node.js.todo_app.js" />
+        <item itemvalue="Node.js.command.js" />
         <item itemvalue="Node.js.client.js" />
       </list>
     </recent_temporary>
@@ -255,7 +270,7 @@
       <option name="presentableId" value="Default" />
       <updated>1559804434394</updated>
       <workItem from="1559804435626" duration="57486000" />
-      <workItem from="1560051437618" duration="15169000" />
+      <workItem from="1560051437618" duration="16763000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] Edit getTodos method&#10;&#10;- # 추가 기능 구형&#10;- db에 todo 항목이 없을 경우 에러 메시지 출력&#10;- 완료된 항목 출력시 초록색으로 표시&#10;- 미완료 항목은 노란색으로 표시">
       <created>1559807717205</created>
@@ -285,11 +300,32 @@
       <option name="project" value="LOCAL" />
       <updated>1560063374610</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="[refactor] Create login module &#10;&#10;- app.js에 있는 로그인 로직을 모듈로 분리">
+      <created>1560087167182</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1560087167182</updated>
+    </task>
+    <task id="LOCAL-00006" summary="[refactor] Create register module &#10;&#10;- app.js에 있는 회원가입 로직을 모듈로 분리">
+      <created>1560087187423</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1560087187423</updated>
+    </task>
+    <task id="LOCAL-00007" summary="[refactor] Create register module &#10;&#10;- app.js에 있는 회원가입 로직을 모듈로 분리">
+      <created>1560087309197</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1560087309197</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72655000" />
+    <option name="totallyTimeSpent" value="74249000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -302,7 +338,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="877" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.50065017" side_tool="true" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4993498" visible="true" weight="0.25358167" />
@@ -314,7 +349,7 @@
       <window_info anchor="bottom" id="Docker" order="4" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="5" />
       <window_info anchor="bottom" id="Find" order="6" weight="0.32769832" />
-      <window_info anchor="bottom" id="Run" order="7" sideWeight="0.49928367" weight="0.32769832" />
+      <window_info active="true" anchor="bottom" id="Run" order="7" sideWeight="0.49928367" visible="true" weight="0.32769832" />
       <window_info anchor="bottom" id="Debug" order="8" weight="0.39921975" />
       <window_info anchor="bottom" id="Cvs" order="9" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
@@ -373,7 +408,9 @@
     <MESSAGE value="[feat] Create todo app module &#10;&#10;- todo app 모듈 분리" />
     <MESSAGE value="[refactor] Create checkValidIdxOfItem method in utils&#10;&#10;- todo 모듈 내 세 가지 메서드에서 중복 로직 발견 &#10;- todo 항목의 유효한 인덱스를 체크하는 부분이 중복됨&#10;- utils 모듈의 메서드로 생성" />
     <MESSAGE value="[refactor] Move id password checker method to server &#10;&#10;- 회원가입, 로그인 시 아이디 패스워드 체크하는 로직 서버로 분리&#10;- 서버, 클라이언트 폴더로 분리" />
-    <option name="LAST_COMMIT_MESSAGE" value="[refactor] Move id password checker method to server &#10;&#10;- 회원가입, 로그인 시 아이디 패스워드 체크하는 로직 서버로 분리&#10;- 서버, 클라이언트 폴더로 분리" />
+    <MESSAGE value="[refactor] Create login module &#10;&#10;- app.js에 있는 로그인 로직을 모듈로 분리" />
+    <MESSAGE value="[refactor] Create register module &#10;&#10;- app.js에 있는 회원가입 로직을 모듈로 분리" />
+    <option name="LAST_COMMIT_MESSAGE" value="[refactor] Create register module &#10;&#10;- app.js에 있는 회원가입 로직을 모듈로 분리" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
@@ -438,14 +475,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/todo_app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="8" column="29" lean-forward="true" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/login.js">
+    <entry file="file://$PROJECT_DIR$/client/login.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="207">
           <caret line="9" column="36" selection-start-line="9" selection-start-column="36" selection-end-line="9" selection-end-column="36" />
@@ -459,17 +489,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/register.js">
+    <entry file="file://$PROJECT_DIR$/client/register.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/command.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="22" selection-start-line="8" selection-start-column="22" selection-end-line="8" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/todo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="23">
+          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        <state relative-caret-position="276">
+          <caret line="12" column="30" selection-start-line="12" selection-start-column="30" selection-end-line="12" selection-end-column="30" />
         </state>
       </provider>
     </entry>
