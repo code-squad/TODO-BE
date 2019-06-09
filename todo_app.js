@@ -43,38 +43,37 @@ class TodoApp {
             return this.utils.errorLog("please provide a valid number for complete command");
         }
 
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.utils.getUserData();
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return this.utils.errorLog("invalid number passed for complete command.");
+        // check if correct length of values has been passed
+        const isValid_idx = await this.utils.checkValidIdxOfItem(n, login_user_id);
+        if (isValid_idx) {
+            // update the todo item marked as complete
+            this.socket.write(`complete_state$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+            const complete_state = await this.utils.getUserData();
+            this.socket.removeAllListeners();
+            if (complete_state === true) {
+                const q = this.chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
+                this.utils.prompt(q).then(async (answer) => {
+                    if (answer === 'yes') {
+                        this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+                        const undo_complete_todo = await this.utils.getUserData();
+                        this.socket.removeAllListeners();
+                        return console.log(this.chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
+                    } else if (answer === 'no') {
+                        return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
+                    } else {
+                        this.utils.errorLog('올바른 입력값이 아닙니다');
+                        return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
+                    }
+                })
+            } else {
+                this.socket.write(`completeTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+                const complete_todo = await this.utils.getUserData();
+                this.socket.removeAllListeners();
+                console.log(this.chalk.green(`${complete_todo} is checked as complete`));
+            }
         }
 
-        // update the todo item marked as complete
-        this.socket.write(`complete_state$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-        const complete_state = await this.utils.getUserData();
-        this.socket.removeAllListeners();
-        if (complete_state === true) {
-            const q = this.chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
-            this.utils.prompt(q).then(async (answer) => {
-                if (answer === 'yes') {
-                    this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-                    const undo_complete_todo = await this.utils.getUserData();
-                    this.socket.removeAllListeners();
-                    return console.log(this.chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
-                } else if (answer === 'no') {
-                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
-                } else {
-                    this.utils.errorLog('올바른 입력값이 아닙니다');
-                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
-                }
-            })
-        } else {
-            this.socket.write(`completeTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-            const complete_todo = await this.utils.getUserData();
-            this.socket.removeAllListeners();
-            console.log(this.chalk.green(`${complete_todo} is checked as complete`));
-        }
+
     }
 
     async deleteTodo(itemToDelete, login_user_id) {
@@ -84,18 +83,16 @@ class TodoApp {
         }
 
         // check if correct length of values has been passed
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.utils.getUserData();
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return this.utils.errorLog("invalid number passed for complete command.");
+        const isValid_idx = await this.utils.checkValidIdxOfItem(n, login_user_id);
+
+        if (isValid_idx) {
+            // delete the item
+            this.socket.write(`deleteTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+            const deleted_todo = await this.utils.getUserData();
+            this.socket.removeAllListeners();
+            console.log(this.chalk.red(`${deleted_todo} is deleted`))
         }
 
-        // delete the item
-        this.socket.write(`deleteTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-        const deleted_todo = await this.utils.getUserData();
-        this.socket.removeAllListeners();
-        console.log(this.chalk.red(`${deleted_todo} is deleted`))
     }
 
     async updateTodo(itemToUpdate, login_user_id) {
@@ -105,22 +102,18 @@ class TodoApp {
             return this.utils.errorLog("please provide a valid number for complete command");
         }
 
-        // check if correct length of values has been passed
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.utils.getUserData();
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return this.utils.errorLog("invalid number passed for complete command.");
-        }
+        const isValid_idx = await this.utils.checkValidIdxOfItem(n, login_user_id);
 
-        // update the item
-        const q = this.chalk.blue('Type the title to update\n');
-        this.utils.prompt(q).then(async UpdatedTitle => {
-            this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
-            const {previousTitle, updatedTitle} = await this.utils.getUserData();
-            this.socket.removeAllListeners();
-            console.log(this.chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));
-        });
+        if (isValid_idx) {
+            // update the item
+            const q = this.chalk.blue('Type the title to update\n');
+            this.utils.prompt(q).then(async UpdatedTitle => {
+                this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
+                const {previousTitle, updatedTitle} = await this.utils.getUserData();
+                this.socket.removeAllListeners();
+                console.log(this.chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));
+            });
+        }
     }
 
     // usage represents the help guide
