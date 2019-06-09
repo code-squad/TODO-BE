@@ -1,9 +1,8 @@
-# TODO-BE
-JS 웹 백엔드 Step 8
+# 쿵쿵따 게임 기획서 및 설계서
 
-## 쿵쿵따 게임 기획서
+## 목차
 
-### 목차
+### 기획서
 
 [1. 개요](#1-개요)
 
@@ -13,7 +12,7 @@ JS 웹 백엔드 Step 8
 
 &nbsp;&nbsp;&nbsp;&nbsp;[2.1.1. 로그인](#211-로그인)
 
-&nbsp;&nbsp;&nbsp;&nbsp;[2.1.2. 참여](#212-참여)
+&nbsp;&nbsp;&nbsp;&nbsp;[2.1.2. 대기실 입장](#212-대기실-입장)
 
 &nbsp;&nbsp;&nbsp;&nbsp;[2.1.3. 게임 플레이](#213-게임-플레이)
 
@@ -21,7 +20,7 @@ JS 웹 백엔드 Step 8
 
 &nbsp;&nbsp;[3.1. 게임 규칙](#31-게임-규칙)
 
-[4. UI](#4-UI) 
+&nbsp;&nbsp;[4. UI](#4-UI) 
 
 &nbsp;&nbsp;[4.1. 로그인 화면](#41-로그인-화면)
 
@@ -36,6 +35,28 @@ JS 웹 백엔드 Step 8
 &nbsp;&nbsp;[4.6. 대기실](#46-대기실)
 
 &nbsp;&nbsp;[4.7. 게임 화면](#47-게임-화면)
+
+### 설계서
+
+[1. 구조](#1-구조)
+
+[2. 데이터 관리](#2-데이터-관리)
+
+&nbsp;&nbsp;[2.1. 데이터 저장 방법](#21-데이터-저장-방법)
+
+&nbsp;&nbsp;[2.2. 데이터 별 파일 시스템 구조](#22-데이터-별-파일-시스템-구조)
+
+[3. 통신 메시지 형식](#3-통신-메시지-형식)
+
+&nbsp;&nbsp;[3.1. 사용자 인증 관련](#31-사용자-인증-관련)
+
+&nbsp;&nbsp;[3.2. 로비](#32-로비)
+
+&nbsp;&nbsp;[3.3. 대기실](#33-대기실)
+
+&nbsp;&nbsp;[3.4. 게임 플레이](#34-게임-플레이)
+
+## 기획서
 
 ### 1. 개요
 
@@ -153,3 +174,266 @@ JS 웹 백엔드 Step 8
 5. 나가기 버튼
 게임 도중에는 나갈 수 없으므로 버튼을 클릭해도 아무것도 할 수 없도록 disable 상태로 만든다.
 
+## 설계서
+
+### 1. 요청 흐름
+
+![requestFlow](https://user-images.githubusercontent.com/18232901/59158699-052f8180-8af9-11e9-8654-f8bd459c8a5f.jpg)
+
+
+### 2. 클래스 구조
+
+### 3. 데이터 저장
+
+#### 3.1. 데이터 저장 방법
+
+데이터 저장은 일반 텍스트 파일로 저장한다. 최상위 디렉토리의 이름을 `.db` 라고 하며, 사용되는 영역에 따라 하위 디렉토리를 생성한다.
+
+#### 3.2. 데이터 별 파일 시스템 구조
+
+인증과 관련된 디렉토리는 `.db/auth`에 저장한다. 디렉토리에 저장되는 파일의 이름은 사용자 ID로 하며, 파일의 내용은 패스워드이다.
+
+### 3. 통신 메시지 형식
+
+서버와 클라이언트 간 주고 받을 데이터의 형식은 JSON으로 한다. 
+
+#### 3.1. 사용자 인증 관련
+
+##### 3.1.1. 회원 가입
+
+###### 요청
+
+```json
+{
+  "command": "auth",
+  "subcommand": "join",
+  "data": {
+    "userid": "user id",
+    "password": "password"
+  }
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
+
+**요청 처리 실패** 
+
+```json
+{
+  "result": "fail",
+  "message": "error message"
+}
+```
+
+요청 처리 실패와 관련된 메시지는 항상 위와 같은 형식이다.
+
+##### 3.1.2. 로그인
+
+###### 요청
+
+```json
+{
+  "command": "auth",
+  "subcommand": "login",
+  "data": {
+    "userid": "user id",
+    "password": "password" 
+  }
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success",
+  "data": {
+    "userid": "user name"
+  }
+}
+```
+
+#### 3.2. 로비
+
+##### 3.2.1. 대기실 목록 요청
+
+###### 요청
+
+```json
+{
+  "command": "room",
+  "subcommand": "list"
+}
+```
+
+##### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success",
+  "data": [
+    {
+      "name": "room name",
+      "roomid": "id",
+      "member": "5",
+      "mode": "easy"
+    }, ...
+  ]
+}
+```
+
+##### 3.2.2. 대기실 입장
+
+###### 요청
+
+```json
+{
+  "command": "room",
+  "data": {
+    "subcommand": "join",
+    "roomid": "id",
+    "userid": "user id"
+  }
+}
+```
+
+##### 응답
+
+###### 요청 처리 성공
+
+```json
+{
+  "result": "success",
+  "data": {
+    "roomid": "room id"
+  }
+}
+```
+
+##### 3.2.3. 대기실 생성
+
+###### 요청
+
+```json
+{
+  "command": "room",
+  "subcommand": "create",
+  "data": {
+    "name": "room name",
+    "mode": "hard",
+    "userid": "userid"
+  }
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
+
+#### 3.3. 대기실
+
+##### 3.3.1. 게임 준비
+
+###### 요청
+
+```json
+{
+  "command": "game",
+  "subcommand": "ready"
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
+
+##### 3.3.2. 게임 준비 해제
+
+###### 요청
+
+```json
+{
+  "command": "game",
+  "subcommand": "undoReady"
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
+
+##### 3.3.3. 게임 시작
+
+###### 요청
+
+```json
+{
+  "command": "game",
+  "subcommand": "start"
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
+
+
+
+#### 3.4. 게임 플레이
+
+##### 3.4.1. 단어 제출
+
+###### 요청
+
+```json
+{
+  "command": "game",
+  "subcommand": "submit"
+}
+```
+
+###### 응답
+
+**요청 처리 성공**
+
+```json
+{
+  "result": "success"
+}
+```
