@@ -1,7 +1,7 @@
 {
   "name": "nodejs-todo",
   "version": "0.0.1",
-  "description": "Todoapp server",
+  "description": "Word Chain Game",
   "main": "app.js",
   "scripts": {
     "test": "node test.js"
@@ -12,7 +12,8 @@
   },
   "keywords": [
     "socket programming",
-    "auth"
+    "game",
+    "real time"
   ],
   "author": "Jake",
   "license": "MIT",
