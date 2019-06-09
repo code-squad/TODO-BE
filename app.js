@@ -3,8 +3,8 @@ const chalk = require('chalk');
 const net = require('net');
 const Utils = require('./client/utils');
 const TodoApp = require('./client/todo_app');
-const login = require('./login');
-const register = require('./register');
+const login = require('./client/login');
+const register = require('./client/register');
 
 const inputReadline = rl.createInterface({
     input : process.stdin,
