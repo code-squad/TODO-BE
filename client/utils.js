@@ -1,23 +1,11 @@
 class Utils {
-    constructor(db, inputReadline, socket, chalk) {
-        this.db = db;
+    constructor(inputReadline, socket, chalk) {
         this.inputReadline = inputReadline;
         this.socket = socket;
         this.chalk = chalk;
     }
 
-    checkDuplicatedID(id) {
-        const ID_fromDB = this.db.get('users').find({'id': id}).value();
-        return ID_fromDB !== undefined;
-    }
-
-    checkID_PW(id, pw) {
-        const ID_fromDB = this.db.get('users').find({'id': id}).value();
-        if (ID_fromDB === undefined || ID_fromDB.info.id !== id) return false;
-        else return ID_fromDB.info.pw === pw;
-    }
-
-    async checkValidIdxOfItem(n,login_user_id) {
+    async checkValidIdxOfItem(n, login_user_id) {
         // check if correct length of values has been passed
         this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
         const todosLength = await this.getUserData();

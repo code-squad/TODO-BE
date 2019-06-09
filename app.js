@@ -1,12 +1,8 @@
 const rl = require('readline');
-const low = require('lowdb');
 const chalk = require('chalk');
-const FileSync = require('lowdb/adapters/FileSync');
-const adapter = new FileSync('db.json');
-const db = low(adapter);
-const Utils = require('./utils');
+const Utils = require('./client/utils');
 const net = require('net');
-const TodoApp = require('./todo_app');
+const TodoApp = require('./client/todo_app');
 
 const inputReadline = rl.createInterface({
     input : process.stdin,
@@ -17,17 +13,18 @@ const socket = net.connect(52274, '127.0.0.1', function () {
     console.log('Client on');
 });
 
-const utils = new Utils(db, inputReadline, socket, chalk);
+const utils = new Utils(inputReadline, socket, chalk);
 const todoApp = new TodoApp(socket, utils, chalk);
 
 class App {
-    constructor(socket) {
-        this.socket = socket
+    constructor(socket, inputReadline) {
+        this.socket = socket;
+        this.inputReadline = inputReadline;
     }
 
     init() {
         return new Promise(resolve => {
-            inputReadline.question('회원인가요? (yes/no)', async answer => {
+            this.inputReadline.question('회원인가요? (yes/no)', async answer => {
                 if (answer === 'no') {
                     resolve(this.register());
                 } else if (answer === 'yes') {
@@ -42,7 +39,7 @@ class App {
 
     register() {
         return new Promise(resolve => {
-            inputReadline.question('아이디를 입력하세요', async (id) => {
+            this.inputReadline.question('아이디를 입력하세요', async (id) => {
                 this.socket.write(`register$id$${id}`); // 서버로 아이디 전송
                 const duplicatedID = await utils.getUserData();
                 this.socket.removeAllListeners();
@@ -50,7 +47,7 @@ class App {
                     utils.errorLog('이미 사용중인 아이디 입니다.');
                     resolve(this.register());
                 } else {
-                    return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
+                    return this.inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                         this.socket.write(`register$pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
                         const register_success = await utils.getUserData();
                         this.socket.removeAllListeners();
@@ -70,9 +67,9 @@ class App {
 
     login() {
         return new Promise(resolve => {
-            inputReadline.question('아이디를 입력하세요', (id) => {
+            this.inputReadline.question('아이디를 입력하세요', (id) => {
                 console.log(id);
-                return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
+                return this.inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                     console.log(pw);
                     this.socket.write(`login$id_pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
                     const {login_success, login_user_id} = await utils.getUserData();
@@ -89,11 +86,11 @@ class App {
     }
 
     mainExecutor(login_user_id) {
-        inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
-        inputReadline.prompt();
-        inputReadline.on('line', function (line) {
+        this.inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
+        this.inputReadline.prompt();
+        this.inputReadline.on('line', function (line) {
 
-            if (line === "q") inputReadline.close();
+            if (line === "q") this.inputReadline.close();
             app.checkCommands(line, login_user_id);
 
         })
@@ -108,8 +105,8 @@ class App {
         const splitUserInput = userInput.split(' ');
         if (userInput.split(' ').length < 1 || userInput.split(' ').length > 2) {
             console.log("입력값을 확인해주세요");
-            inputReadline.setPrompt('명령어를 입력하세요(종료하려면 q를 누르세요): ');
-            inputReadline.prompt();
+            this.inputReadline.setPrompt('명령어를 입력하세요(종료하려면 q를 누르세요): ');
+            this.inputReadline.prompt();
             return;
         }
 
@@ -141,7 +138,7 @@ class App {
 
 }
 
-const app = new App(socket);
+const app = new App(socket, inputReadline);
 
 async function asyncTest() {
     const login_user_id = await app.init();

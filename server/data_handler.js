@@ -70,6 +70,19 @@ class DataHandler {
         const user_idx = this.getIdxOfUser(login_user_id);
         return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].complete`).value()
     }
+
+    checkID_PW(login_user_id, login_user_pw) {
+        console.log(login_user_id, login_user_pw);
+        const ID_fromDB = this.db.get('users').find({'id': login_user_id}).value();
+        console.log(ID_fromDB);
+        if (ID_fromDB === undefined || ID_fromDB.info.id !== login_user_id) return false;
+        else return ID_fromDB.info.pw === login_user_pw;
+    }
+
+    checkDuplicatedID(id) {
+        const ID_fromDB = this.db.get('users').find({'id': id}).value();
+        return ID_fromDB !== undefined;
+    }
 }
 
 module.exports = DataHandler;

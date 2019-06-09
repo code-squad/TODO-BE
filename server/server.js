@@ -1,24 +1,16 @@
-const rl = require('readline');
 const net = require('net');
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
-const Utils = require('./utils');
 const UserManager = require('./user_manager');
 const DataHandler = require('./data_handler');
-
-const inputReadline = rl.createInterface({
-    input : process.stdin,
-    output: process.stdout,
-});
 
 // json 파일 db 데이터 초기화
 db.defaults({users: []}).write();
 
-const utils = new Utils(db, inputReadline);
-const userManager = new UserManager(db, utils);
 const dataHandler = new DataHandler(db);
+const userManager = new UserManager(db, dataHandler);
 
 net.createServer(function (socket) {
     socket.setEncoding('utf8');

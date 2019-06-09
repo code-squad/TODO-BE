@@ -1,22 +1,22 @@
 class UserManager {
-    constructor(db, utils) {
+    constructor(db, dataHandler) {
         this.db = db;
-        this.utils = utils;
+        this.dataHandler = dataHandler;
     }
 
     register(keyword, value) {
         if (keyword === 'id') {
-            return !!this.utils.checkDuplicatedID(value);
+            return !!this.dataHandler.checkDuplicatedID(value);
         } else if (keyword === 'pw') {
             const [id, pw] = value.split('&');
             this.db.get('users').push({'id': id, 'info': {id: id, pw: pw}, todos: []}).write();
-            return !!this.utils.checkID_PW(id, pw);
+            return !!this.dataHandler.checkID_PW(id, pw);
         }
     }
 
     login(value) {
         const [id, pw] = value.split('&');
-        if (this.utils.checkID_PW(id, pw)) {
+        if (this.dataHandler.checkID_PW(id, pw)) {
             return {login_success: true, login_user_id: id};
         } else {
             return false
