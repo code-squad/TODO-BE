@@ -4,12 +4,10 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-const input = (args) => {
+module.exports.input = (args) => {
     return new Promise((resolve) => {
         rl.question(`${args}`, (answer) => { resolve(answer) });
     });
 }
 
-const close = async () => rl.close();
-
-module.exports = { input, close };
+module.exports.close = async () => rl.close();
