@@ -40,22 +40,25 @@ const writeCSVFile = async (inputID, inputPW) => {
 module.exports.isMember = () => { return checkMember; }
 
 module.exports.signUp = (inputID, inputPW) => {
+    checkMember = 'true';
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const existID = member.split(',')[0];
-        if (existID === inputID) checkMember = 'false';
-        else {
-            writeCSVFile(inputID, inputPW);
-            checkMember = 'true';
+        console.log(`[signUp] inputID : ${inputID}, existID : ${existID}`);
+        if (existID === inputID) {
+            checkMember = 'false';
             break;
         }
     }
+    if (checkMember === 'true') writeCSVFile(inputID, inputPW);
 }
 
 module.exports.signIn = (inputID, inputPW) => {
+    checkMember = 'false';
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const [existID, existHashPW, salt] = member.split(',');
+        console.log(`[signIn] inputID : ${inputID}, existID : ${existID}`);
         if (existID === inputID) {
             search(inputPW, existHashPW, salt);
             break;
