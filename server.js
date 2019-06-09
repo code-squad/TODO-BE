@@ -71,9 +71,9 @@ net.createServer(function (socket) {
                 break;
 
             case 'todosLength':
-            const todosLength = dataHandler.checkTodoLength(value);
-            socket.write(`${JSON.stringify(todosLength)}`);
-            break;
+                const todosLength = dataHandler.checkTodoLength(value);
+                socket.write(`${JSON.stringify(todosLength)}`);
+                break;
 
             case 'complete_state':
                 const complete_state = dataHandler.getCompleteState(value);

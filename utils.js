@@ -1,9 +1,9 @@
-const chalk = require('chalk');
-
 class Utils {
-    constructor(db, inputReadline){
+    constructor(db, inputReadline, socket, chalk) {
         this.db = db;
         this.inputReadline = inputReadline;
+        this.socket = socket;
+        this.chalk = chalk;
     }
 
     checkDuplicatedID(id) {
@@ -19,7 +19,7 @@ class Utils {
 
     // used to log errors to the console in red color
     errorLog(error) {
-        const eLog = chalk.red(error);
+        const eLog = this.chalk.red(error);
         console.log(eLog)
     }
 
@@ -28,6 +28,16 @@ class Utils {
             this.inputReadline.question(question, answer => {
                 resolve(answer)
             });
+        })
+    }
+
+    getUserData() {
+        return new Promise(resolve => {
+            this.socket.setEncoding('utf8');
+            this.socket.on('data', function (data) {
+                console.log(JSON.parse(data));
+                resolve(JSON.parse(data));
+            })
         })
     }
 }

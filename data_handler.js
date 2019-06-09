@@ -1,14 +1,14 @@
-class Data_handler {
-    constructor(db){
+class DataHandler {
+    constructor(db) {
         this.db = db;
     }
 
-    newTodo(value){
+    newTodo(value) {
         const [login_user_id, todo] = value.split('&');
         const newID = Math.floor(Math.random() * 10000) + 1;
-        const idx = this.getIdxOfUser(login_user_id);
+        const user_idx = this.getIdxOfUser(login_user_id);
 
-        this.db.get(`users[${idx}].todos`).push({
+        this.db.get(`users[${user_idx}].todos`).push({
             todo_id : newID,
             title   : todo,
             complete: false,
@@ -16,11 +16,11 @@ class Data_handler {
         return todo;
     }
 
-    getTodo(login_user_id){
+    getTodo(login_user_id) {
         return this.db.get('users').find({'id': login_user_id}).value().todos;
     }
 
-    deleteTodo(value){
+    deleteTodo(value) {
         const [login_user_id, todo_idx] = value.split('&');
         const user_idx = this.getIdxOfUser(login_user_id);
 
@@ -31,15 +31,15 @@ class Data_handler {
         return deletedItem;
     }
 
-    updateTodo(value){
+    updateTodo(value) {
         const [login_user_id, todo_idx, UpdatedTitle] = value.split('&');
         const user_idx = this.getIdxOfUser(login_user_id);
         const previousTitle = this.db.get(`users[${user_idx}].todos[${todo_idx - 1}.title]`).value();
         this.db.get(`users[${user_idx}].todos`).find({title: `${previousTitle}`}).assign({title: UpdatedTitle}).write();
-        return {previousTitle, updatedTitle : UpdatedTitle}
+        return {previousTitle, updatedTitle: UpdatedTitle}
     }
 
-    completeTodo(value){
+    completeTodo(value) {
         const [login_user_id, todo_idx] = value.split('&');
         const user_idx = this.getIdxOfUser(login_user_id);
 
@@ -47,7 +47,7 @@ class Data_handler {
         return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].title`).value()
     }
 
-    undo_completeTodo(value){
+    undo_completeTodo(value) {
         const [login_user_id, todo_idx] = value.split('&');
         const user_idx = this.getIdxOfUser(login_user_id);
 
@@ -55,20 +55,21 @@ class Data_handler {
         return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].title`).value()
     }
 
-    getIdxOfUser(login_user_id){
+    getIdxOfUser(login_user_id) {
         const ID_fromDB = this.db.get('users').find({'id': login_user_id}).value();
         return this.db.get('users').value().indexOf(ID_fromDB)
     }
 
-    checkTodoLength(login_user_id){
+    checkTodoLength(login_user_id) {
         const user_idx = this.getIdxOfUser(login_user_id);
         return this.db.get(`users[${user_idx}].todos`).value().length;
     }
-    getCompleteState(value){
+
+    getCompleteState(value) {
         const [login_user_id, todo_idx] = value.split('&');
         const user_idx = this.getIdxOfUser(login_user_id);
         return this.db.get(`users[${user_idx}].todos[${todo_idx - 1}].complete`).value()
     }
 }
 
-module.exports = Data_handler;
+module.exports = DataHandler;

@@ -1,36 +1,28 @@
 const rl = require('readline');
-const chalk = require('chalk');
 const low = require('lowdb');
+const chalk = require('chalk');
 const FileSync = require('lowdb/adapters/FileSync');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 const Utils = require('./utils');
 const net = require('net');
+const TodoApp = require('./todo_app');
 
 const inputReadline = rl.createInterface({
     input : process.stdin,
     output: process.stdout,
 });
 
-const utils = new Utils(db, inputReadline);
-
 const socket = net.connect(52274, '127.0.0.1', function () {
     console.log('Client on');
 });
 
-class TodoApp {
+const utils = new Utils(db, inputReadline, socket, chalk);
+const todoApp = new TodoApp(socket, utils, chalk);
+
+class App {
     constructor(socket) {
         this.socket = socket
-    }
-
-    getUserData() {
-        return new Promise(resolve => {
-            socket.setEncoding('utf8');
-            socket.on('data', function (data) {
-                console.log(JSON.parse(data));
-                resolve(JSON.parse(data));
-            })
-        })
     }
 
     init() {
@@ -52,7 +44,7 @@ class TodoApp {
         return new Promise(resolve => {
             inputReadline.question('아이디를 입력하세요', async (id) => {
                 this.socket.write(`register$id$${id}`); // 서버로 아이디 전송
-                const duplicatedID = await this.getUserData();
+                const duplicatedID = await utils.getUserData();
                 this.socket.removeAllListeners();
                 if (duplicatedID) {
                     utils.errorLog('이미 사용중인 아이디 입니다.');
@@ -60,7 +52,7 @@ class TodoApp {
                 } else {
                     return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                         this.socket.write(`register$pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
-                        const register_success = await this.getUserData();
+                        const register_success = await utils.getUserData();
                         this.socket.removeAllListeners();
                         if (register_success) {
                             console.log('------------- 회원가입이 완료됐습니다. -------------');
@@ -83,7 +75,7 @@ class TodoApp {
                 return inputReadline.question('비밀번호를 입력하세요', async (pw) => {
                     console.log(pw);
                     this.socket.write(`login$id_pw$${id}&${pw}`); // 서버로 아이디, 비밀번호 전송
-                    const {login_success, login_user_id} = await this.getUserData();
+                    const {login_success, login_user_id} = await utils.getUserData();
                     this.socket.removeAllListeners();
                     if (login_success) {
                         resolve(login_user_id);
@@ -102,7 +94,7 @@ class TodoApp {
         inputReadline.on('line', function (line) {
 
             if (line === "q") inputReadline.close();
-            todoList.checkCommands(line, login_user_id);
+            app.checkCommands(line, login_user_id);
 
         })
 
@@ -124,173 +116,38 @@ class TodoApp {
         const [command, commandElement] = splitUserInput;
         switch (command) {
             case 'help':
-                this.usage();
+                todoApp.usage();
                 break;
             case 'new':
-                this.newTodo(login_user_id);
+                todoApp.newTodo(login_user_id);
                 break;
             case 'get':
-                this.getTodo(login_user_id);
+                todoApp.getTodo(login_user_id);
                 break;
             case 'complete':
-                this.completeTodo(commandElement, login_user_id);
+                todoApp.completeTodo(commandElement, login_user_id);
                 break;
             case 'delete':
-                this.deleteTodo(commandElement, login_user_id);
+                todoApp.deleteTodo(commandElement, login_user_id);
                 break;
             case 'update':
-                this.updateTodo(commandElement, login_user_id);
+                todoApp.updateTodo(commandElement, login_user_id);
                 break;
             default:
                 utils.errorLog('invalid command passed');
-                this.usage();
+                todoApp.usage();
         }
     }
 
-    // usage represents the help guide
-    usage() {
-        const usageText = `
-    TODO helps you manage you todo tasks.
-    usage: type 'command'
-    commands can be:
-    new:                   used to create a new todo
-    get:                   used to retrieve your todos
-    complete + item No.:   used to mark a todo as complete / undo complete
-    update + item No.:     used to update the todo title
-    help:                  used to print the usage guide
-  `;
-        console.log(usageText)
-    }
-
-    newTodo(login_user_id) {
-        const q = chalk.blue('Type in your todo\n');
-
-        utils.prompt(q).then(async todo => {
-            this.socket.write(`newTodo$id$${login_user_id}&${todo}`); // 서버로 id, todo_title 전송
-            const new_todo = await this.getUserData();
-            this.socket.removeAllListeners();
-            console.log(`${new_todo}가 추가 되었습니다.`);
-        });
-    }
-
-    async getTodo(login_user_id) {
-        this.socket.write(`getTodo$id$${login_user_id}`); // 서버로 id 전송
-        const todo_list = await this.getUserData();
-        this.socket.removeAllListeners();
-        let index = 1;
-        if (todo_list.length === 0) {
-            return utils.errorLog('비어있는 리스트 입니다. 새로운 todo를 추가해주세요')
-        }
-        console.log(chalk.cyan(`<<<< ${login_user_id}의 TODO LIST >>>>`));
-        todo_list.forEach(todo => {
-            let todoText = `${index++}. ${todo.title}`;
-            if (todo.complete) {
-                todoText += ' ✔ ️';
-                console.log(chalk.green(todoText))
-            } else {
-                console.log(chalk.yellow(todoText))
-            }
-        });
-    }
-
-    async completeTodo(itemToComplete, login_user_id) {
-        const n = Number(itemToComplete);
-        // check if the value is a number
-        if (isNaN(n)) {
-            return utils.errorLog("please provide a valid number for complete command");
-        }
-
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.getUserData();
-        console.log(todosLength);
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return utils.errorLog("invalid number passed for complete command.");
-        }
-
-        // update the todo item marked as complete
-        this.socket.write(`complete_state$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-        const complete_state = await this.getUserData();
-        this.socket.removeAllListeners();
-        if (complete_state === true) {
-            const q = chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
-            utils.prompt(q).then(async (answer) => {
-                if (answer === 'yes') {
-                    this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-                    const undo_complete_todo = await this.getUserData();
-                    this.socket.removeAllListeners();
-                    return console.log(chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
-                } else if (answer === 'no') {
-                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
-                } else {
-                    utils.errorLog('올바른 입력값이 아닙니다');
-                    return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
-                }
-            })
-        } else {
-            this.socket.write(`completeTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-            const complete_todo = await this.getUserData();
-            this.socket.removeAllListeners();
-            console.log(chalk.green(`${complete_todo} is checked as complete`));
-        }
-    }
-
-    async deleteTodo(itemToDelete, login_user_id) {
-        const n = Number(itemToDelete);
-        if (isNaN(n)) {
-            return utils.errorLog("please provide a valid number for complete command");
-        }
-
-        // check if correct length of values has been passed
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.getUserData();
-        console.log(todosLength);
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return utils.errorLog("invalid number passed for complete command.");
-        }
-
-        // delete the item
-        this.socket.write(`deleteTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
-        const deleted_todo = await this.getUserData();
-        this.socket.removeAllListeners();
-        console.log(chalk.red(`${deleted_todo} is deleted`))
-    }
-
-    async updateTodo(itemToUpdate, login_user_id) {
-        const n = Number(itemToUpdate);
-
-        if (isNaN(n)) {
-            return utils.errorLog("please provide a valid number for complete command");
-        }
-
-        // check if correct length of values has been passed
-        this.socket.write(`todosLength$id$${login_user_id}`); // 서버로 아이디 전송
-        const todosLength = await this.getUserData();
-        console.log(todosLength);
-        this.socket.removeAllListeners();
-        if (n > todosLength) {
-            return utils.errorLog("invalid number passed for complete command.");
-        }
-
-        // update the item
-        const q = chalk.blue('Type the title to update\n');
-        utils.prompt(q).then(async UpdatedTitle => {
-            this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
-            const { previousTitle, updatedTitle } = await this.getUserData();
-            this.socket.removeAllListeners();
-            console.log(chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));
-        });
-    }
 }
 
-const todoList = new TodoApp(socket);
+const app = new App(socket);
 
 async function asyncTest() {
-    const login_user_id = await todoList.init();
+    const login_user_id = await app.init();
     console.log(`------------- 로그인 되었습니다. -------------`);
     console.log(`<<< ${login_user_id}님, TODO APP에 오신 걸 환경합니다! >>>`);
-    todoList.mainExecutor(login_user_id);
+    app.mainExecutor(login_user_id);
 }
 
 asyncTest();
