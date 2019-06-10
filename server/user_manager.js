@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 class UserManager {
     constructor(db, dataHandler) {
         this.db = db;
@@ -9,14 +11,16 @@ class UserManager {
             return !!this.dataHandler.checkDuplicatedID(value);
         } else if (keyword === 'pw') {
             const [id, pw] = value.split('&');
-            this.db.get('users').push({'id': id, 'info': {id: id, pw: pw}, todos: []}).write();
-            return !!this.dataHandler.checkID_PW(id, pw);
+            const encrypted_pw = crypto.createHash('sha512').update(pw).digest('hex');
+            this.db.get('users').push({'id': id, 'info': {id: id, pw: encrypted_pw}, todos: []}).write();
+            return !!this.dataHandler.checkID_PW(id, encrypted_pw);
         }
     }
 
     login(value) {
         const [id, pw] = value.split('&');
-        if (this.dataHandler.checkID_PW(id, pw)) {
+        const encrypted_pw = crypto.createHash('sha512').update(pw).digest('hex');
+        if (this.dataHandler.checkID_PW(id, encrypted_pw)) {
             return {login_success: true, login_user_id: id};
         } else {
             return false

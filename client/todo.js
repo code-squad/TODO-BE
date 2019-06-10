@@ -27,7 +27,7 @@ class Todo {
     mainExecutor(login_user_id) {
         this.inputReadline.setPrompt('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요): ');
         this.inputReadline.prompt();
-        this.inputReadline.on('line',  (line) => {
+        this.inputReadline.on('line', (line) => {
 
             if (line === "q") this.inputReadline.close();
             this.checkCommands(line, login_user_id);

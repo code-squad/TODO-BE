@@ -36,7 +36,6 @@ class Utils {
         return new Promise(resolve => {
             this.socket.setEncoding('utf8');
             this.socket.on('data', function (data) {
-                console.log(JSON.parse(data));
                 resolve(JSON.parse(data));
             })
         })
