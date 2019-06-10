@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e80a2619-bea9-4d0d-953a-f1529b6b9d75" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.json" beforeDir="false" afterPath="$PROJECT_DIR$/db.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -31,11 +27,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="479">
-              <caret line="23" column="62" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
+            <state relative-caret-position="276">
+              <caret line="12" column="60" lean-forward="true" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -85,12 +81,12 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="345">
-                <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+              <first_editor relative-caret-position="590">
+                <caret line="115" column="8" lean-forward="true" selection-start-line="115" selection-start-column="8" selection-end-line="115" selection-end-column="8" />
               </first_editor>
               <second_editor />
             </state>
@@ -168,9 +164,9 @@
         <option value="$PROJECT_DIR$/client/login.js" />
         <option value="$PROJECT_DIR$/server/data_handler.js" />
         <option value="$PROJECT_DIR$/server/server.js" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/client/todo.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -279,7 +275,7 @@
       <updated>1559804434394</updated>
       <workItem from="1559804435626" duration="57486000" />
       <workItem from="1560051437618" duration="17039000" />
-      <workItem from="1560129430992" duration="14993000" />
+      <workItem from="1560129430992" duration="15576000" />
     </task>
     <task id="LOCAL-00001" summary="[feat] Edit getTodos method&#10;&#10;- # 추가 기능 구형&#10;- db에 todo 항목이 없을 경우 에러 메시지 출력&#10;- 완료된 항목 출력시 초록색으로 표시&#10;- 미완료 항목은 노란색으로 표시">
       <created>1559807717205</created>
@@ -351,11 +347,18 @@
       <option name="project" value="LOCAL" />
       <updated>1560146627841</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="[style] Update README.md&#10;&#10;- Todo 콘솔 앱 소개글 작성&#10;- 게임 시작시 명령어 도움말 표시 기능 추가">
+      <created>1560160627675</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1560160627675</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89518000" />
+    <option name="totallyTimeSpent" value="90101000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -371,7 +374,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" sideWeight="0.50065017" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4993498" visible="true" weight="0.25716332" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" sideWeight="0.4993498" visible="true" weight="0.25716332" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.32769832" />
       <window_info anchor="bottom" id="Event Log" order="1" sideWeight="0.5007163" side_tool="true" weight="0.32769832" />
@@ -444,7 +447,8 @@
     <MESSAGE value="[refactor] Create todo module &#10;&#10;- app.js에 있는 todo 실행 로직을 모듈로 분리" />
     <MESSAGE value="[feat] Encrypt password &#10;&#10;- crypto 모듈 이용해서 비밀번호 암호화" />
     <MESSAGE value="[style] Translate error message from English to Korean&#10;&#10;- 에러 출력 언어를 한국어로 통일&#10;- 코드 포멧 정렬" />
-    <option name="LAST_COMMIT_MESSAGE" value="[style] Translate error message from English to Korean&#10;&#10;- 에러 출력 언어를 한국어로 통일&#10;- 코드 포멧 정렬" />
+    <MESSAGE value="[style] Update README.md&#10;&#10;- Todo 콘솔 앱 소개글 작성&#10;- 게임 시작시 명령어 도움말 표시 기능 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="[style] Update README.md&#10;&#10;- Todo 콘솔 앱 소개글 작성&#10;- 게임 시작시 명령어 도움말 표시 기능 추가" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
@@ -474,16 +478,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="782">
           <caret line="34" column="19" lean-forward="true" selection-start-line="34" selection-start-column="19" selection-end-line="34" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="345">
-            <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-          </first_editor>
-          <second_editor />
         </state>
       </provider>
     </entry>
@@ -531,8 +525,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="479">
-          <caret line="23" column="62" selection-start-line="23" selection-start-column="62" selection-end-line="23" selection-end-column="62" />
+        <state relative-caret-position="276">
+          <caret line="12" column="60" lean-forward="true" selection-start-line="12" selection-start-column="60" selection-end-line="12" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="590">
+            <caret line="115" column="8" lean-forward="true" selection-start-line="115" selection-start-column="8" selection-end-line="115" selection-end-column="8" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>

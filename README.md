@@ -49,10 +49,10 @@
 
 #### Server
 
-- **server**
+- **server.js**
     - 클라이언트에서 보낸 로직 구분 후 **dataHandler**와 **userManager**에 전달
 
-- **dataHandler**
+- **dataHandler.js**
     
     - DB에 접근하는 로직 처리
     
@@ -60,7 +60,7 @@
         
         - 아이디, 패스워드 체크 등
 
-- **userManager**
+- **userManager.js**
     
     - 회원 가입, 로그인 처리
     
@@ -68,19 +68,19 @@
 
 #### Client
 
-- **login**
+- **login.js**
 
     - 서버에 로그인 정보(아이디, 패스워드) 전송
     
     - 서버로부터 로그인 성공/실패 응답 받음
 
-- **register**
+- **register.js**
 
     - 서버에 회원가입 정보(아이디, 패스워드) 전송
     
     - 서버로부터 회원가입 성공/실패 응답 받음
 
-- **todo**
+- **todo.js**
 
     - todo 주요 기능 관리
     
@@ -97,7 +97,7 @@
     - todo 명령어
         - 입력받은 todo 명령어를 command 모듈에서 실행
 
-- **utils**
+- **utils.js**
 
     - 각종 필요한 기능을 지원
         
@@ -105,13 +105,24 @@
         - 에러 메시지 출력
         - 사용자 입력을 받기 위한 프롬프트 창 생성
 
-- **command**
+- **command.js**
     
     - todo 명령어 처리
     
     - 추가, 수정, 삭제, 조회, 도움말
 
-- **db.json**
+### etc
+
+- **app.js**
+
+    - 소켓 생성
+
+    - TodoApp 실행
+    
+        - **todo.js** 모듈 실행
+
+
+- **db.json.js**
     
     - json 파일에 사용자 정보 관리
     
