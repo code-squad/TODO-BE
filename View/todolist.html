@@ -1,0 +1,335 @@
+<DOCTYPE html!>
+
+  <head>
+    <title>To-Do List App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+      integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/gif" href="assests/animated_favicon1.gif">
+    <style>
+      body {
+        min-height: 100%;
+        font-family: 'Indie Flower', cursive;
+        background: #91eae4;
+        /* fallback for old browsers */
+        background: -webkit-linear-gradient(to bottom, #91EAE4, #86A8E7, #7F7FD5);
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, #91EAE4, #86A8E7, #7F7FD5);
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      }
+
+      h1 {
+        background: #86a8e7;
+        color: white;
+        margin: 0;
+        padding: 10px 28px;
+        font-weight: normal;
+      }
+
+      input {
+        background: white;
+        width: 100%;
+        box-sizing: border-box;
+        height: 50px;
+        font-size: 20px;
+        font-weight: 0.5px;
+        padding-left: 25px;
+        border: 3px solid gray;
+        color: gray;
+      }
+
+      input:focus {
+        background: #edf1f5;
+        border: 3px solid #86a8e7;
+        outline: none;
+        color: #86a8e7;
+      }
+
+      span {
+        margin-right: 10px;
+        text-align: center;
+        height: 50px;
+        width: 0;
+        opacity: 0;
+        -webkit-transition: 0.3s;
+        transition: 0.3s linear;
+      }
+
+      i {
+        cursor: pointer;
+      }
+
+      button {
+        background-color: #86a8e7;
+        /* Green */
+        border: none;
+        color: white;
+        padding: 8px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 4px;
+        font-family: Bad Script;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+        cursor: pointer;
+
+      }
+
+      button:hover {
+        background-color: white;
+        color: black;
+        border: 2px solid #86a8e7;
+      }
+
+      #buttons {
+        display: inline-block;
+        text-align: center;
+        margin-left: 30%;
+        position: absolute;
+        bottom: 5px;
+      }
+
+      #todo {
+        margin: 0 auto;
+        box-shadow: 0 0 1em black;
+        max-width: 400px;
+        height: 100%;
+        background: white;
+        position: relative;
+      }
+
+      #overlay {
+        height: 0;
+        width: 100%;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow-x: hidden;
+        transition: 0.5s;
+        -webkit-transition: 0.5s;
+      }
+
+      #overlay .closebtn {
+        position: absolute;
+        top: 15px;
+        right: 40px;
+        font-size: 60px;
+        color: #86a8e7;
+        cursor: pointer;
+      }
+
+      #overlay li {
+        padding: 8px;
+        list-style-type: circle;
+        font-size: 30px;
+        color: #818181;
+        display: block;
+      }
+
+      .todos {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .todos li {
+        background: #f7f7f7;
+        height: 50px;
+        line-height: 50px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+
+      .todos li:nth-child(2n) {
+        background: #edf1f5;
+      }
+
+      .todos li:hover span {
+        width: 50px;
+        opacity: 1.0;
+        margin-left: 5px;
+      }
+
+      .display {
+        display: none;
+        transition: 0.3s linear;
+      }
+
+      .checked {
+        color: gray;
+        text-decoration: line-through;
+      }
+
+      .fa-pencil-alt {
+        float: right;
+        padding-top: 8px;
+      }
+
+      .fa-trash-alt {
+        color: #7f7fd5;
+      }
+
+      .tips {
+        position: relative;
+        top: 20%;
+        width: 100%;
+        text-align: center;
+        margin-top: 25px;
+      }
+
+      /*  if screen size less than 450px, resize tips lists and close btn so they don't overlap */
+      @media screen and (max-height: 450px) {
+        .overlay a {
+          font-size: 20px
+        }
+
+        .overlay .closebtn {
+          font-size: 40px;
+          top: 15px;
+          right: 35px;
+        }
+
+        #todo {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="todo">
+      <h1>My To-Do List<i id="pencil" class="fas fa-pencil-alt"></i> </h1>
+
+      <input type="text" placeholder="Add New Todo">
+
+      <ul class="todos">
+
+        <li id="myLi"><span><i class="fas fa-trash-alt"></i></span>Default</li>
+      </ul>
+
+      <div id="buttons">
+        <button class="save">Save</button>
+        <button class="logout" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <script>
+      let userTodoData = [];
+      let input = document.querySelector("input[type = 'text']");
+      let ul = document.querySelector("ul");
+      let container = document.querySelector("div");
+      let lists = document.querySelectorAll("li");
+      let spans = document.getElementsByTagName("span");
+      let saveBtn = document.querySelector(".save");
+
+      let getURL = document.URL;
+      let splitURL = getURL.split("/");
+      let arrayURL = [];
+      arrayURL = splitURL;
+
+      let arbitrayString = 'getStoredData';
+      ajaxPost(arbitrayString);
+
+
+      function ajaxPost(userTodoData) {
+        let ourRequest = new XMLHttpRequest();
+        ourRequest.open('POST', `/${arrayURL[arrayURL.length - 1]}`, true);
+        ourRequest.onload = function () {
+          if (ourRequest.readyState === 4 && ourRequest.status === 200) {
+            if (JSON.parse(ourRequest.responseText) === true) {
+              alert('Your Todolist has been successfully uploaded');
+              return;
+            } else {
+              for (let i = 0; i < JSON.parse(ourRequest.responseText).length; i++) {
+                document.getElementsByClassName('todos').innerText =
+                  `${addDBdata(JSON.parse(ourRequest.responseText)[i])}`
+              }
+            }
+          }
+        };
+
+        ourRequest.send(JSON.stringify(userTodoData))
+      }
+
+
+      //function to delete todo if delete span is clicked.
+      function deleteTodo() {
+        for (let span of spans) {
+          span.addEventListener("click", function () {
+            span.parentElement.remove();
+            event.stopPropagation();
+          });
+        }
+      }
+
+      //event listener for input to add new todo to the list.
+      input.addEventListener("keypress", function (keyPressed) {
+        if (keyPressed.which === 13) {
+          //creating lists and span when enter is clicked
+          let li = document.createElement("li");
+          let spanElement = document.createElement("span");
+          let icon = document.createElement("i");
+
+          let newTodo = this.value;
+          this.value = " ";
+
+          icon.classList.add('fas', 'fa-trash-alt');
+          spanElement.append(icon);
+          ul.appendChild(li).append(spanElement, newTodo);
+
+          deleteTodo();
+        }
+
+      });
+
+      function addDBdata(data) {
+        let li = document.createElement("li");
+        let spanElement = document.createElement("span");
+        let icon = document.createElement("i");
+
+        icon.classList.add('fas', 'fa-trash-alt');
+        spanElement.append(icon);
+        ul.appendChild(li).append(spanElement, data);
+
+        deleteTodo();
+      }
+
+      //save all todo when save button is clicked
+      saveBtn.addEventListener('click', function () {
+        let ul = document.getElementsByTagName('ul');
+        let li = ul[0].getElementsByTagName('li');
+        userTodoData = [];
+        for (let i = 0; i < li.length; i++) {
+          userTodoData.push(li[i].innerText)
+        }
+
+        userTodoData.shift();
+        ajaxPost(userTodoData);
+      });
+
+      function logout() {
+        let ourRequest = new XMLHttpRequest();
+        ourRequest.open('get', '/', true);
+        ourRequest.onload = function () {
+          if (ourRequest.readyState === 4 && ourRequest.status === 200) {
+
+            window.location.href = "/"
+            return;
+          }
+        }
+
+        ourRequest.send();
+      }
+    </script>
+  </body>
