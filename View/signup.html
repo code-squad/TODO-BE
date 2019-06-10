@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" type='text/css'>
+  <style type="text/css">
+    body {
+      font-family: 'Montserrat', sans-serif;
+      width: 98%;
+      color: white;
+      background: url(http://simpledesktops.com/download/?desktop=600);
+      font-size: 18px;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-color: transparent;
+    }
+
+    .form-style-8 {
+      font-family: 'Montserrat', sans-serif;
+      width: 500px;
+      padding: 30px;
+      background: transparent;
+      margin: 50px auto;
+    }
+
+    .form-style-8 h2 {
+      background: transparent;
+      text-transform: uppercase;
+      font-family: 'Open Sans Condensed', sans-serif;
+      color: #f9f9f9;
+      font-size: 20px;
+      font-weight: 100;
+      padding: 20px;
+      margin: -30px -30px 30px -30px;
+    }
+
+    .form-style-8 input[type="text"],
+    .form-style-8 input[type="date"],
+    .form-style-8 input[type="datetime"],
+    .form-style-8 input[type="email"],
+    .form-style-8 input[type="number"],
+    .form-style-8 input[type="search"],
+    .form-style-8 input[type="time"],
+    .form-style-8 input[type="url"],
+    .form-style-8 input[type="password"],
+    .form-style-8 textarea,
+    .form-style-8 select {
+      box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      outline: none;
+      display: block;
+      width: 100%;
+      padding: 7px;
+      border: none;
+      border-bottom: 1px solid #ddd;
+      background: transparent;
+      margin-bottom: 10px;
+      font: 16px Arial, Helvetica, sans-serif;
+      height: 45px;
+    }
+
+    .form-style-8 textarea {
+      resize: none;
+      overflow: hidden;
+    }
+
+    .form-style-8 input[type="button"],
+    .form-style-8 input[type="submit"] {
+      background-color: transparent;
+      border: 1px solid white;
+      display: inline-block;
+      cursor: pointer;
+      color: white;
+      font-family: 'Open Sans Condensed', sans-serif;
+      font-size: 14px;
+      padding: 8px 18px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    input {
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-style-8" style="text-align: center;">
+    <h2>Create Account</h2>
+    Name:<br>
+    <input type="text" id="name" name="name" placeholder="Name" required>
+    <br>Id:<br>
+    <input type="text" id="id" name="id" placeholder="Id" required>
+    <br>Password:<br>
+    <input type="text" id="password" name="password" placeholder="Password" required>
+    <br>Phone:<br>
+    <input type="text" id="phone" name="phone" placeholder="Phone" required>
+    <br>Email:<br>
+    <input type="text" id="email" name="email" placeholder="Email" required>
+    <br><br>
+    <input type="button" name="button" value="SUBMIT" onclick="checkValidation();">
+  </div>
+
+  <script>
+    function ajaxPost(data) {
+      let ourRequest = new XMLHttpRequest();
+
+      ourRequest.open('POST', '/signup', true);
+      ourRequest.onload = function () {
+        if (ourRequest.readyState === 4 && ourRequest.status == 200) {
+
+          let parseResponse = JSON.parse(ourRequest.responseText);
+          console.log(parseResponse);
+
+          if (parseResponse) {
+            alert('Congradulation on your singup!')
+            window.location.href = "/"
+            return;
+          } else {
+            alert('You have already signed up!, Please Try Again!');
+            document.getElementById("name").value = "";
+            document.getElementById("id").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("phone").value = "";
+            document.getElementById("email").value = "";
+          }
+        }
+      }
+
+      ourRequest.send(JSON.stringify(data));
+    }
+
+
+    function checkValidation() {
+      let name = document.getElementById("name").value;
+      let id = document.getElementById("id").value;
+      let password = document.getElementById("password").value;
+      let phone = document.getElementById("phone").value;
+      let email = document.getElementById("email").value;
+
+      let getName = validateName(name);
+      let getId = validateId(id);
+      let getPassword = validatePassword(password);
+      let getPhone = validatePhone(phone);
+      let getEmail = validateEmail(email);
+
+      if (getName === true && getId === true && getPassword === true && getPhone === true && getEmail === true) {
+        let user = {
+          name: name,
+          id: id,
+          password: password,
+          phone: phone,
+          email: email,
+          todolist: []
+        }
+
+        ajaxPost(user);
+
+      }
+      return false;
+    }
+
+
+    function validateName(name) {
+      if (name.length < 1) {
+        alert("Please Enter a Valid name: more than one character")
+        return false;
+
+      }
+
+      return true;
+    }
+
+    function validateId(id) {
+      if (id.length < 5) {
+        alert("Please Enter a Valid ID: more than five character");
+        document.getElementById("id").value = "";
+        return false;
+      }
+
+      return true;
+    }
+
+
+    function validatePassword(password) {
+      let password_pattern = /^[A-Za-z]\w{7,14}$/;
+
+      if (password.match(password_pattern)) {
+        return true;
+      }
+
+      alert(
+        "Please Enter a Valid Password: Between 6 to 20 characters which contain at least one numeric digit, one uppercase and one lowercase letter"
+      );
+      document.getElementById("password").value = "";
+      return false;
+    }
+
+    function validatePhone(phone) {
+      let phone_pattern = "[0-9]{3}-[0-9]{4}-[0-9]{4}"
+
+      if (phone.match(phone_pattern)) {
+        return true;
+      }
+
+      alert('Please Enter a Valid phone number');
+      document.getElementById("phone").value = "";
+      return false
+    }
+
+    function validateEmail(email) {
+      let atposition = email.indexOf("@");
+      let dotposition = email.indexOf(".");
+      if (atposition < 1 || dotposition < atposition + 2 || dotposition + 2 > email.length) {
+        alert('Please Enter a Valid e-mail address');
+        document.getElementById("email").value = "";
+        return false
+      }
+
+      return true;
+    }
+  </script>
+  <script type="text/javascript">
+    //auto expand textarea
+    function adjust_textarea(h) {
+      h.style.height = "20px";
+      h.style.height = (h.scrollHeight) + "px";
+    }
+  </script>
+</body>
+
+</html>
