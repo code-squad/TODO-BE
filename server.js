@@ -6,14 +6,14 @@ const server = net.createServer((c) => {
   c.on('data', (data) => {
     const str = data.toString();
     console.log(str);
-    c.write(str);
+    //c.write(str);
   });
   
   c.on('end', () => {
     console.log('client disconnected');
   });
   //c.write('hello\r\n');
-  c.pipe(c);
+  c.pipe(c); //connect read and write stream
 });
 server.on('error', (err) => {
   throw err;
