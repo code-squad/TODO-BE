@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet" type="text/css" />
+  <title>TodoList</title>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      width: 98%;
+      background: url(https://cdn-images-1.medium.com/max/1000/1*xyPRyhtDMSQmM0VXV9VVKw.png);
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+
+    #form {
+      border: 5px solid white;
+      border-radius: 5%;
+      background: transparent;
+      width: 300px;
+      text-align: center;
+      margin: 100px auto;
+    }
+
+    #form h1 {
+      color: white;
+    }
+
+    #form input {
+      color: black;
+      padding: 1em;
+      margin: 5px;
+      background: white;
+      border: 2px solid white;
+      border-radius: 3%;
+    }
+
+    #form .text {
+      width: 250px;
+      height: 2px;
+    }
+
+    #form .submit-button {
+      background: transparent;
+      margin: 15px;
+      color: white;
+      width: 40%;
+      padding: 5px;
+      border: 3px solid;
+      border-radius: 7%;
+    }
+
+    #form .signup-button {
+      background: transparent;
+      color: white;
+      width: 40%;
+      padding: 5px;
+      border: 3px solid;
+      border-radius: 7%;
+    }
+  </style>
+</head>
+
+<body>
+  <link href="https://fonts.googleapis.com/css?family=Baloo+Bhai&display=swap" rel="stylesheet" />
+  <div id="form">
+    <h1>TodoList Login</h1>
+    <input class="text" type="text" name="user" placeholder="Username" id="id" />
+    <input class="text" type="password" name="pass" placeholder="Password" id="password" />
+
+    <input type="button" name="submit" value="Login" class="submit-button" onclick="ajaxPost()" />
+    <input type="button" name="button" value="signup" class="signup-button" onclick="convertPage()" />
+  </div>
+</body>
+<script>
+  function ajaxPost() {
+    let id = document.getElementById('id').value;
+    let password = document.getElementById('password').value;
+
+    const loginValidation = {
+      id: id,
+      password: password
+    };
+
+    let ourRequest = new XMLHttpRequest();
+    ourRequest.open('POST', '/', true);
+    ourRequest.onload = function () {
+      if (ourRequest.readyState === 4 && ourRequest.status === 200) {
+
+        let parseResponse = JSON.parse(ourRequest.response)
+
+        if (parseResponse === true) {
+          alert(`Hello, ${id}`);
+          window.location.href = `/${id}`;
+        } else {
+          alert('Please rewrite valid ID and Password!');
+          document.getElementById('id').value = "";
+          document.getElementById('password').value = "";
+          return;
+        }
+      }
+    };
+
+    ourRequest.send(JSON.stringify(loginValidation));
+
+  }
+
+  function convertPage() {
+    window.location.href = '/signup';
+  }
+</script>
+
+</html>
