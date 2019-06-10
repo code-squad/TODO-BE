@@ -6,7 +6,7 @@ class TodoApp {
     }
 
     newTodo(login_user_id) {
-        const q = this.chalk.blue('Type in your todo\n');
+        const q = this.chalk.blue('새로운 할 일 목록을 입력하세요\n');
 
         this.utils.prompt(q).then(async todo => {
             this.socket.write(`newTodo$id$${login_user_id}&${todo}`); // 서버로 id, todo_title 전송
@@ -40,7 +40,7 @@ class TodoApp {
         const n = Number(itemToComplete);
         // check if the value is a number
         if (isNaN(n)) {
-            return this.utils.errorLog("please provide a valid number for complete command");
+            return this.utils.errorLog("숫자가 아닙니다. 올바른 숫자를 입력해주세요");
         }
 
         // check if correct length of values has been passed
@@ -51,13 +51,13 @@ class TodoApp {
             const complete_state = await this.utils.getUserData();
             this.socket.removeAllListeners();
             if (complete_state === true) {
-                const q = this.chalk.blue('Do you want to uncheck this item from completed list?(yes/no)\n');
+                const q = this.chalk.blue('해당 항목은 이미 완료된 상태로 체크되었습니다. 체크 해제 하시겠습니까??(yes/no)\n');
                 this.utils.prompt(q).then(async (answer) => {
                     if (answer === 'yes') {
-                        this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+                        this.socket.write(`undo_complete_todo$id$${login_user_id}&${n}`);
                         const undo_complete_todo = await this.utils.getUserData();
                         this.socket.removeAllListeners();
-                        return console.log(this.chalk.yellow(`${undo_complete_todo} is unchecked from a completed list`));
+                        return console.log(this.chalk.yellow(`${undo_complete_todo} 항목이 미완료 상태로 변경되었습니다. `));
                     } else if (answer === 'no') {
                         return console.log('명령어를 입력하세요(도움말은 help / 종료하려면 q를 누르세요):');
                     } else {
@@ -66,7 +66,7 @@ class TodoApp {
                     }
                 })
             } else {
-                this.socket.write(`completeTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+                this.socket.write(`completeTodo$id$${login_user_id}&${n}`);
                 const complete_todo = await this.utils.getUserData();
                 this.socket.removeAllListeners();
                 console.log(this.chalk.green(`${complete_todo} is checked as complete`));
@@ -79,7 +79,7 @@ class TodoApp {
     async deleteTodo(itemToDelete, login_user_id) {
         const n = Number(itemToDelete);
         if (isNaN(n)) {
-            return this.utils.errorLog("please provide a valid number for complete command");
+            return this.utils.errorLog("숫자가 아닙니다. 올바른 숫자를 입력해주세요");
         }
 
         // check if correct length of values has been passed
@@ -87,7 +87,7 @@ class TodoApp {
 
         if (isValid_idx) {
             // delete the item
-            this.socket.write(`deleteTodo$id$${login_user_id}&${n}`); // 서버로 아이디 전송
+            this.socket.write(`deleteTodo$id$${login_user_id}&${n}`);
             const deleted_todo = await this.utils.getUserData();
             this.socket.removeAllListeners();
             console.log(this.chalk.red(`${deleted_todo} is deleted`))
@@ -99,7 +99,7 @@ class TodoApp {
         const n = Number(itemToUpdate);
 
         if (isNaN(n)) {
-            return this.utils.errorLog("please provide a valid number for complete command");
+            return this.utils.errorLog("숫자가 아닙니다. 올바른 숫자를 입력해주세요");
         }
 
         const isValid_idx = await this.utils.checkValidIdxOfItem(n, login_user_id);
@@ -108,7 +108,7 @@ class TodoApp {
             // update the item
             const q = this.chalk.blue('Type the title to update\n');
             this.utils.prompt(q).then(async UpdatedTitle => {
-                this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`); // 서버로 아이디 전송
+                this.socket.write(`updateTodo$id$${login_user_id}&${n}&${UpdatedTitle}`);
                 const {previousTitle, updatedTitle} = await this.utils.getUserData();
                 this.socket.removeAllListeners();
                 console.log(this.chalk.magenta(`Title is updated: ${previousTitle} => ${updatedTitle}`));

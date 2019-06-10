@@ -12,7 +12,7 @@ class UserManager {
         } else if (keyword === 'pw') {
             const [id, pw] = value.split('&');
             const encrypted_pw = crypto.createHash('sha512').update(pw).digest('hex');
-            this.db.get('users').push({'id': id, 'info': {id: id, pw: encrypted_pw}, todos: []}).write();
+            this.db.get('users').push({id: id, pw: encrypted_pw, todos: []}).write();
             return !!this.dataHandler.checkID_PW(id, encrypted_pw);
         }
     }

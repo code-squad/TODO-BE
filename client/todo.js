@@ -70,7 +70,7 @@ class Todo {
                 this.todoCommand.updateTodo(commandElement, login_user_id);
                 break;
             default:
-                this.utils.errorLog('invalid command passed');
+                this.utils.errorLog('지원하지 않는 명령어 입니다.');
                 this.todoCommand.usage();
         }
     }

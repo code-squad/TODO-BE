@@ -2,10 +2,7 @@
   "users": [
     {
       "id": "sony",
-      "info": {
-        "id": "sony",
-        "pw": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2"
-      },
+      "pw": "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2",
       "todos": [
         {
           "todo_id": 6983,
@@ -36,10 +33,7 @@
     },
     {
       "id": "park",
-      "info": {
-        "id": "park",
-        "pw": "4e8a5bd17f8069facd844ae721d64589d5681e77e5f0b671b5c339128260dfb15fb3fc81e12417ceda664e744b4978830774b346e1c1eed5113997ebeb3ea420"
-      },
+      "pw": "4e8a5bd17f8069facd844ae721d64589d5681e77e5f0b671b5c339128260dfb15fb3fc81e12417ceda664e744b4978830774b346e1c1eed5113997ebeb3ea420",
       "todos": [
         {
           "todo_id": 8126,
@@ -60,10 +54,7 @@
     },
     {
       "id": "totoro",
-      "info": {
-        "id": "totoro",
-        "pw": "99e7d923131b80630d04bd9b401f50b541e9928379a999423882147edbb2f119b74c572a0eb70c813f7bd0d195e3b86aa19d44514de3f61cda429546d7a04b92"
-      },
+      "pw": "99e7d923131b80630d04bd9b401f50b541e9928379a999423882147edbb2f119b74c572a0eb70c813f7bd0d195e3b86aa19d44514de3f61cda429546d7a04b92",
       "todos": [
         {
           "todo_id": 2508,

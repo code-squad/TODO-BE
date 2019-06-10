@@ -11,7 +11,7 @@ class Utils {
         const todosLength = await this.getUserData();
         this.socket.removeAllListeners();
         if (n > todosLength) {
-            this.errorLog("invalid number passed for complete command.");
+            this.errorLog("목록에 없는 번호입니다.");
             return false;
         } else {
             return true;

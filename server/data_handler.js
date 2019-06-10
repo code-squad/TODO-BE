@@ -73,15 +73,15 @@ class DataHandler {
 
     checkID_PW(login_user_id, login_user_pw) {
         console.log(login_user_id, login_user_pw);
-        const ID_fromDB = this.db.get('users').find({'id': login_user_id}).value();
-        console.log(ID_fromDB);
-        if (ID_fromDB === undefined || ID_fromDB.info.id !== login_user_id) return false;
-        else return ID_fromDB.info.pw === login_user_pw;
+        const user_info = this.db.get('users').find({'id': login_user_id}).value();
+        console.log(user_info);
+        if (user_info === undefined || user_info.id !== login_user_id) return false;
+        else return user_info.pw === login_user_pw;
     }
 
     checkDuplicatedID(id) {
-        const ID_fromDB = this.db.get('users').find({'id': id}).value();
-        return ID_fromDB !== undefined;
+        const user_info = this.db.get('users').find({'id': id}).value();
+        return user_info !== undefined;
     }
 }
 
