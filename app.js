@@ -23,6 +23,7 @@ async function initTodoApp() {
     console.log(`------------- 로그인 되었습니다. -------------`);
     console.log(`<<< ${login_user_id}님의 TODO 목록을 불러옵니다. >>>`);
     todo.mainExecutor(login_user_id);
+    todo.todoCommand.usage(); // 게임 시작 시 명령어 도움말 표시
 }
 
 initTodoApp();
