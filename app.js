@@ -1,4 +1,5 @@
 const memberClient = require('./member_client');
+const chatClient = require('./chat_client');
 const utility = require('./utility');
 
 ////////////// Sign //////////////
@@ -9,12 +10,25 @@ const executeSignPage = async (subText) => {
     return [id, pw];
 }
 
+////////////// Chat Room //////////////
+const executeChatRoomPage = async (userID) => {
+    const client = chatClient.getConnection();
+    let isChatRoomExit = false;
+    while(!isChatRoomExit) {
+        const text = await utility.input(``);
+        if (text === 'exit') {
+            isChatRoomExit = true;
+            chatClient.end(client);
+        } else chatClient.write(client, `[ ${userID} ] ${text}`);
+    }
+}
+
 ////////////// User //////////////
-const handleUserTask = async (select) => {
+const handleUserTask = async (select, userID) => {
     let isSignOut = false;
     switch (select) {
         case '1': break;
-        case '2': break;
+        case '2': await executeChatRoomPage(userID); break;
         case '3': isSignOut = true; break;
     }
     return isSignOut;
@@ -22,10 +36,10 @@ const handleUserTask = async (select) => {
 
 const executeUserPage = async (userID) => {
     let select, isSignOut = false;
-    while(!isSignOut) {
+    while (!isSignOut) {
         console.log(`--- [ User ID : ${userID} ] ---`);
         select = await utility.input(`1.Create a chat room\n2.Entry to chat room\n3.Sign out\n>> `);
-        isSignOut = await handleUserTask(select);
+        isSignOut = await handleUserTask(select, userID);
     }
 }
 
@@ -36,7 +50,7 @@ const handleMainTask = async (select) => {
         case '1':
             const [userID, userPW] = await executeSignPage('in');
             if (await memberClient.signIn(userID, userPW)) await executeUserPage(userID);
-            else console.log(`***** The information you have entered does not exist. *****`);
+            else console.log(`***** This member does not exist. *****`);
             break;
         case '2':
             const [newID, newPW] = await executeSignPage('up');
@@ -58,7 +72,7 @@ const executeMainPage = async () => {
 }
 
 ////////////// App //////////////
-(async () => { 
+(async () => {
     await executeMainPage();
     await utility.close();
     process.exit();
