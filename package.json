@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-todo",
+  "version": "0.0.1",
+  "description": "Word Chain Game",
+  "main": "app.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cocahack/nodejs-todo.git"
+  },
+  "keywords": [
+    "socket programming",
+    "game",
+    "real time"
+  ],
+  "author": "Jake",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cocahack/nodejs-todo/issues"
+  },
+  "homepage": "https://github.com/cocahack/nodejs-todo#readme"
+}
