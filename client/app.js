@@ -5,10 +5,6 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 const crypto = require('crypto');
-const hash = crypto.createHash('sha256');
-
-
-
 
 const input = (query) => {
   return new Promise((resolve, reject) => {
@@ -63,18 +59,20 @@ client.on('data', async data => {
           req.method = 'signIn';
         }
         req.name = username;
-        hash.update(password);
-        req.password = hash.digest('hex'); 
+        req.password = crypto.createHash('sha512').update(password).digest('base64')
         await client.write(`${JSON.stringify(req)}`);
         return;
       }
-        
     }
-    console.log(`${data}`);
-    const userinput  = await input('입력 >> ');
-    req.userinput = userinput
-    client.write(`${JSON.stringify(req)}`, () => {
-    });
+    if (res.method === 'loggedIn') {
+      console.log(res.message);
+    }
+    
+    // console.log(`${data}`);
+    // const userinput  = await input('입력 >> ');
+    // req.userinput = userinput
+    // client.write(`${JSON.stringify(req)}`, () => {
+    // });
     return;
   } catch (e) {
     console.log(e)
