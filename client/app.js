@@ -19,7 +19,9 @@ const input = (query) => {
 }
 
 const client = net.connect({port: 5000}, () => {
-  client.write(`{"method" : "init"}`, () => {
+  const req ={}
+  req.method = 'init'
+  client.write(JSON.stringify(req), () => {
 
   });
 });
@@ -32,6 +34,9 @@ client.on('data', async data => {
     if (res.method === 'newClient') {
       let username = '';
       let password = '';
+      if (res.message) {
+        console.log(res.message);
+      }
       console.log('로그인 or 회원가입을 해주세요!');
       console.log('===========================');
       console.log(`로그인하려면 '1'을 입력`);
@@ -57,7 +62,7 @@ client.on('data', async data => {
           }
           req.method = 'signIn';
         }
-        req.username = username;
+        req.name = username;
         hash.update(password);
         req.password = hash.digest('hex'); 
         await client.write(`${JSON.stringify(req)}`);
@@ -65,8 +70,6 @@ client.on('data', async data => {
       }
         
     }
-
-
     console.log(`${data}`);
     const userinput  = await input('입력 >> ');
     req.userinput = userinput

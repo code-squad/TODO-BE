@@ -10,29 +10,42 @@ const server = net.createServer(socket => {
     if (req.method === 'init') {
       res.method = 'newClient'
       socket.write(`${JSON.stringify(res)}`);
-      return
+      return;
     }
+
     if (req.method === 'signIn') {
+      const data = fs.readFileSync(`./data/user.json`)
+      const users = JSON.parse(data);
       const user = {}
-      console.log(req.method);
-      console.log(req.password);
-      console.log(req.username);
-      user.username = req.username;
+      
+      user.name = req.name;
       user.password = req.password;
-      fs.writeFileSync(`./data/${req.username}.json`, JSON.stringify(user));
-      res.method = 'signedIn'
+      
+      const checkValidUsername = users.filter(tmpuser => tmpuser.name === user.name)
+      if (checkValidUsername.length !== 0) {
+        console.log(checkValidUsername)
+        res.method = 'newClient';
+        res.message = '중복된 username입니다.'
+        socket.write(`${JSON.stringify(res)}`);
+        return;
+      }
+      users.push(user)
+      fs.writeFileSync(`./data/user.json`, JSON.stringify(users));
+      res.method = 'signedIn';
       socket.write(`${JSON.stringify(res)}`);
+      return;
     }
+
     if (req.method === 'logIn') {
-      console.log(req.method);
-      console.log(req.password);
-      console.log(req.username);
       
     }
   });
 
   socket.on('close', () => {
+    const index = sockets.indexOf(socket)
+    sockets.splice(index, 1);
     console.log(`${socket.remotePort} client disconnected`);
+    console.log(sockets.map(soc => soc.remotePort));
   });
 });
 
