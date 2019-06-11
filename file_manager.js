@@ -12,7 +12,10 @@ const csvWriter = createCSVWriter({
 
 const readCSVFile = () => { return fs.readFileSync('./member_information.csv', 'utf-8'); }
 
-const search = (inputPW, existHashPW, salt) => {
+const search = async (inputPW, existHashPW, salt) => {
+    return new Promise(() => {
+
+    });
     crypto.pbkdf2(inputPW, salt, 108236, 64, 'sha512', (err, hashPW) => { 
         if (existHashPW === hashPW.toString('base64')) checkMember = 'true';
         else checkMember = 'false';
@@ -37,24 +40,22 @@ const writeCSVFile = async (inputID, inputPW) => {
 }
 
 /////////////// exports ///////////////
-module.exports.isMember = () => { return checkMember; }
-
 module.exports.signUp = (inputID, inputPW) => {
-    checkMember = 'true';
+    let isSignUp = true;
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const existID = member.split(',')[0];
         console.log(`[signUp] inputID : ${inputID}, existID : ${existID}`);
         if (existID === inputID) {
-            checkMember = 'false';
+            isSignUp = false;
             break;
         }
     }
-    if (checkMember === 'true') writeCSVFile(inputID, inputPW);
+    if (isSignUp) writeCSVFile(inputID, inputPW);
+    return isSignUp;
 }
 
 module.exports.signIn = (inputID, inputPW) => {
-    checkMember = 'false';
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const [existID, existHashPW, salt] = member.split(',');
