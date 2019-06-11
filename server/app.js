@@ -5,7 +5,7 @@ const sessions = [];
 
 const server = net.createServer(socket => {
   console.dir(socket.remotePort);
-  socket.on('data', data => {
+  socket.on('data', async data => {
     const req = JSON.parse(data)
     const res = {}
     console.log(req)
@@ -60,8 +60,26 @@ const server = net.createServer(socket => {
         sessions.push(session);
         console.log(sessions);
         res.method = 'loggedIn';
-        res.message = '대기해주세요! 상대가 들어오면 곧 시작합니다!';
+        res.message = '매칭상대를 찾는 중...!';
         socket.write(`${JSON.stringify(res)}`);
+        const inQueue = sessions.filter(ses => ses.status === 'inQueue')
+        if (inQueue.length === 2) {
+          const p1socket = sockets.find(soc => soc.remotePort === inQueue[0].remotePort);
+          const p2socket = sockets.find(soc => soc.remotePort === inQueue[1].remotePort);
+          sessions.map(ses => ses.status = 'inGame');
+          const game = {
+            player1 : inQueue[0],
+            player2 : inQueue[1],
+            p1socket : p1socket,
+            p2socket : p2socket,
+          }
+          res.method = 'getInGame';
+          res.message = '게임을 이제 시작합니다!';
+          console.log(p1socket.remotePort, p2socket.remotePort);
+          p1socket.write(`${JSON.stringify(res)}`);
+          p2socket.write(`${JSON.stringify(res)}`);
+          return;
+        }
         return;
       }
       res.method = 'newClient';

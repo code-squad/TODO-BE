@@ -1,5 +1,7 @@
 const net = require('net');
 const readline = require('readline');
+const ora = require('ora');
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -13,6 +15,7 @@ const input = (query) => {
     })
   })
 }
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
 
 const client = net.connect({port: 5000}, () => {
   const req ={}
@@ -64,15 +67,15 @@ client.on('data', async data => {
         return;
       }
     }
+    const spinner = ora(res.message)
     if (res.method === 'loggedIn') {
+      spinner.start();
+    }
+    if (res.method === 'getInGame') {
+      spinner.stop();
       console.log(res.message);
     }
     
-    // console.log(`${data}`);
-    // const userinput  = await input('입력 >> ');
-    // req.userinput = userinput
-    // client.write(`${JSON.stringify(req)}`, () => {
-    // });
     return;
   } catch (e) {
     console.log(e)
