@@ -18,10 +18,9 @@ memberServer.on('connection', (memberClient) => {
         const [type, id, pw] = String(data).split('#');
         if (type === 'SignIn') {
             fileManager.signIn(id, pw);
-            setTimeout(() => memberClient.write(fileManager.isMember()), 100);
         } else if (type === 'SignUp') {
-            fileManager.signUp(id, pw);
-            memberClient.write(fileManager.isMember());
+            const isSignUp = String(fileManager.signUp(id, pw));
+            memberClient.write(isSignUp);
         }
     });
 
