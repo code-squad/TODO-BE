@@ -26,23 +26,23 @@ Slack, KakaoTalk 대표적인 회사를 비롯하여 실시간 채팅서비스�
 2. 'http' 모듈을 사용하지 않는다.
 
 
+
 ### 5. Use Case 다이어 그램
-
-
-
 ![image-20190531165212354](https://github.com/bestdevhyo1225/image_repository/blob/master/image-20190531165212354.png?raw=true)
 
 
 
 ### 6. 시스템 구조
-
-
-
 ![image-20190531203714826](https://github.com/bestdevhyo1225/image_repository/blob/master/image-20190531215806176.png?raw=true)
 
 
 
-### 7. 구현 모듈
+### 7. 실제 프로그램 흐름도
+![image-20190612171301426](https://github.com/bestdevhyo1225/image_repository/blob/master/image-20190612171301426.png?raw=true)
+
+
+
+### 8. 구현 모듈
 
 #### app.js
 - 사용자 인터페이스 모듈이다.
