@@ -35,7 +35,7 @@ const writeCSVFile = async (inputID, inputPW) => {
         .then(() => { console.log(`The CSV file was written successfully`); });     
 }
 
-signUp = async (inputID, inputPW) => {
+const signUp = async (inputID, inputPW) => {
     let isSignUp = true;
     const members = readCSVFile();
     for (const member of members.split('\n')) {
@@ -50,7 +50,7 @@ signUp = async (inputID, inputPW) => {
     return isSignUp;
 }
 
-signIn = async (inputID, inputPW) => {
+const signIn = async (inputID, inputPW) => {
     let isSignIn = false;
     const members = readCSVFile();
     for (const member of members.split('\n')) {
