@@ -40,8 +40,8 @@ signUp = async (inputID, inputPW) => {
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const existID = member.split(',')[0];
-        console.log(`[signUp] inputID : ${inputID}, existID : ${existID}`);
         if (existID === inputID) {
+            console.log(`[signUp] inputID : ${inputID}, existID : ${existID}`);
             isSignUp = false;
             break;
         }
@@ -55,8 +55,8 @@ signIn = async (inputID, inputPW) => {
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const [existID, existHashPW, salt] = member.split(',');
-        console.log(`[signIn] inputID : ${inputID}, existID : ${existID}`);
         if (existID === inputID) {
+            console.log(`[signIn] inputID : ${inputID}, existID : ${existID}`);
             isSignIn = await search(inputPW, existHashPW, salt);
         }
     }
