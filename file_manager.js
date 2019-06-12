@@ -2,8 +2,6 @@ const createCSVWriter = require('csv-writer').createObjectCsvWriter;
 const crypto = require('crypto');
 const fs = require('fs');
 
-let checkMember = 'false';
-
 const csvWriter = createCSVWriter({ 
     path: './member_information.csv',
     header: [ {id:'id', title:'ID'}, {id:'hashPW', title: 'HASHPW'}, {id:'salt', title: 'SALT'} ],
@@ -12,13 +10,11 @@ const csvWriter = createCSVWriter({
 
 const readCSVFile = () => { return fs.readFileSync('./member_information.csv', 'utf-8'); }
 
-const search = async (inputPW, existHashPW, salt) => {
-    return new Promise(() => {
-
-    });
-    crypto.pbkdf2(inputPW, salt, 108236, 64, 'sha512', (err, hashPW) => { 
-        if (existHashPW === hashPW.toString('base64')) checkMember = 'true';
-        else checkMember = 'false';
+const search = (inputPW, existHashPW, salt) => {
+    return new Promise((resolve) => {
+        crypto.pbkdf2(inputPW, salt, 108236, 64, 'sha512', (err, hashPW) => {
+            resolve((existHashPW === hashPW.toString('base64')) ? true : false); 
+        });
     });
 }
 
@@ -39,8 +35,7 @@ const writeCSVFile = async (inputID, inputPW) => {
         .then(() => { console.log(`The CSV file was written successfully`); });     
 }
 
-/////////////// exports ///////////////
-module.exports.signUp = (inputID, inputPW) => {
+signUp = async (inputID, inputPW) => {
     let isSignUp = true;
     const members = readCSVFile();
     for (const member of members.split('\n')) {
@@ -55,14 +50,21 @@ module.exports.signUp = (inputID, inputPW) => {
     return isSignUp;
 }
 
-module.exports.signIn = (inputID, inputPW) => {
+signIn = async (inputID, inputPW) => {
+    let isSignIn = false;
     const members = readCSVFile();
     for (const member of members.split('\n')) {
         const [existID, existHashPW, salt] = member.split(',');
         console.log(`[signIn] inputID : ${inputID}, existID : ${existID}`);
         if (existID === inputID) {
-            search(inputPW, existHashPW, salt);
-            break;
+            isSignIn = await search(inputPW, existHashPW, salt);
         }
     }
+    return isSignIn;
+}
+
+/////////////// exports ///////////////
+module.exports.sign = async (type, inputID, inputPW) => {
+    if(type === 'SignIn') return await signIn(inputID, inputPW);
+    if(type === 'SignUp') return await signUp(inputID, inputPW);
 }
