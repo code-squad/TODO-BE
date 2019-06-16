@@ -23,6 +23,17 @@ class Util {
         return { randomInt, expires };
     }
 
+    parseCookies(cookie = '') {
+        return cookie
+            .split(';')
+            .map(v => v.split('='))
+            .map(([k, ...vs]) => [k, vs.join('=')])
+            .reduce((acc, [k, v]) => {
+                acc[k.trim()] = decodeURIComponent(v);
+                return acc;
+            }, {});
+    }
+
 }
 
 module.exports = Util;

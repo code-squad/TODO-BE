@@ -9,9 +9,16 @@ const session = {}
 
 const server = http.createServer((req, res) => {
     const pathName = url.parse(req.url).pathname;
+    const cookies = util.parseCookies(req.headers.cookie);
+    const sessionNum = cookies.session;
+    let userID;
+    let userInfo;
+    if (cookies.session) {
+        userID = session[sessionNum].id;
+        userInfo = model.takeUserInfo(userID);
+    }
 
     if (pathName === '/') {
-
         const html = template.loginPage();
         res.end(html);
     }
