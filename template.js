@@ -88,7 +88,7 @@ class Template {
                 <input type="hidden" name="title" value="${worldcups[i][0]}">
                 <input type="image" src="${worldcups[i][1].mainImg}" width="200" height="200" alt="${worldcups[i][0]}">
                 <p>${worldcups[i][0]} 관리하러가기</p>
-                </form>
+                </form><form action="deleteworldcup"><input type="hidden" name="title" value="${worldcups[i][0]}"><input type="submit" value="삭제"></form>
                 `;
                 i = i + 1;
             }

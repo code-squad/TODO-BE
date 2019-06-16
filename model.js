@@ -20,7 +20,12 @@ class Model {
         userInfo[worldcupName] = { "title": worldcupName, "mainImg": mainImg, "players": [] };
         let jsonFile = JSON.stringify(userInfo);
         fs.writeFileSync(`users/${userID}.json`, jsonFile);
-        return userInfo;
+    }
+
+    deleteWorldCup({ userID, userInfo, title }) {
+        delete userInfo[title];
+        let jsonFile = JSON.stringify(userInfo);
+        fs.writeFileSync(`users/${userID}.json`, jsonFile);
     }
 }
 

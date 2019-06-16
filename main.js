@@ -111,6 +111,15 @@ const server = http.createServer((req, res) => {
             }
         }
     }
+    if (pathName === '/deleteworldcup') {
+        const { query } = url.parse(req.url);
+        const { title } = qs.parse(query);
+        model.deleteWorldCup({ userID, userInfo, title });
+        let worldcups = util.getUsersWorldCup(userInfo);
+
+        const html = template.usersWorldCup({ userID, "message": `${title}삭제되었습니다.`, worldcups });
+        res.end(html);
+    }
 })
 
 server.listen(8000);
