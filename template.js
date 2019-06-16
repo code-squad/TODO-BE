@@ -1,6 +1,6 @@
 
 class Template {
-    loginPage() {
+    loginPage(message) {
         return `
         <!DOCTYPE html>
         <html>
@@ -14,6 +14,13 @@ class Template {
                 }
             </style>
             <script>
+                function warning(note) {
+                    if (note !== 'undefined') {
+                        alert(note);
+
+                    }
+                }
+                warning('${message}');
             </script>
         </head>
 
