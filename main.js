@@ -120,6 +120,13 @@ const server = http.createServer((req, res) => {
         const html = template.usersWorldCup({ userID, "message": `${title}삭제되었습니다.`, worldcups });
         res.end(html);
     }
+    if (pathName === '/playermanagement') {
+        const { query } = url.parse(req.url);
+        const { title } = qs.parse(query);
+
+        const html = template.playerManagement({ userID, "worldcup": userInfo[title] });
+        res.end(html);
+    }
 })
 
 server.listen(8000);

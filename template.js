@@ -149,6 +149,88 @@ class Template {
         </html>
         `
     }
+
+    playerManagement({ userID, worldcup, message }) {
+        function makeList(worldcup) {
+            if (worldcup === undefined) return '';
+            var list = '';
+            var i = 0;
+            while (i < worldcup.players.length) {
+                list = list + `
+                <form action="/exitplayer">
+                <img src="${worldcup.players[i].img}" width="100" height="100" alt="${worldcup.players[i].name}">
+                <p>${worldcup.players[i].name}</p>
+                <input type="hidden" name="title" value="${worldcup.title}">
+                <input type="hidden" name="name" value="${worldcup.players[i].name}">
+                <input type="submit" value="퇴장">
+                </form>
+                `;
+                i = i + 1;
+            }
+            return list;
+        }
+        let list = makeList(worldcup)
+        return `
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <title>월드컵관리</title>
+            <script>
+                function warning(note){
+                    if(note !== 'undefined'){
+                        alert(note);
+
+                    }
+                }
+                warning('${message}');
+            </script>
+            <style>
+                form {
+                    display: contents;
+                }
+                p {
+                    display: contents;
+                }
+                h1 {
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+            <h1>${userID}님의 ${worldcup.title}</h1>
+            <img src="${worldcup.mainImg}" width="300" height="300" alt="${worldcup.title}">
+            <form action="/makeworldcup">
+                <input type="submit" value="뒤로가기">
+            </form>
+            <form action="/heldworldcup">
+                <input type="hidden" name="title" value="${worldcup.title}">
+                <input type="submit" value="개최하기">
+            </form>
+            <form action="/registerplayer">    
+            <fieldset>
+                    <legend>register</legend>
+                    <tr>
+                        <td>이름 : </td>
+                        <td><input type="text" name="name" /></td>
+                    </tr>
+                    <tr>
+                        <td>이미지URL : </td>
+                        <td><input type="text" name="imgURL" /></td>
+                    </tr>
+                    <input type="hidden" name="title" value="${worldcup.title}">
+                    <input type="submit" value="등록">
+                </fieldset>
+            </form>
+            ${list}
+
+        </body>
+
+        </html>
+        `
+    }
 }
 
 module.exports = Template;

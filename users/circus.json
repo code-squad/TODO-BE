@@ -1,1 +1,14 @@
-{"id":"circus","pwd":"1234","강아지 월드컵":{"title":"강아지 월드컵","mainImg":"https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260","players":[]}}
+{
+    "id": "circus",
+    "pwd": "1234",
+    "강아지 월드컵": {
+        "title": "강아지 월드컵",
+        "mainImg": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
+        "players": [
+            {
+                "name": "리트리버",
+                "img": "http://cfile215.uf.daum.net/image/14572037505D76231F867E"
+            }
+        ]
+    }
+}
