@@ -81,21 +81,34 @@ const server = http.createServer((req, res) => {
     }
 
     if (pathName === '/usersworldcup') {
-        const html = template.usersWorldCup({ userID });
+        const worldcups = util.getUsersWorldCup(userInfo);
+        const html = template.usersWorldCup({ userID, worldcups });
         res.end(html);
     }
 
     if (pathName === '/createworldcup') {
         const { query } = url.parse(req.url);
         const { worldcupName, mainImg } = qs.parse(query);
+        let worldcups = util.getUsersWorldCup(userInfo);
 
         if (worldcupName === '') {
-            const html = template.usersWorldCup({ userID, "message": '월드컵 이름을 정해주세요.' });
+            const html = template.usersWorldCup({ userID, "message": '월드컵 이름을 정해주세요.', worldcups });
             res.end(html);
         }
         else if (mainImg === '') {
-            const html = template.usersWorldCup({ userID, "message": '메인이미지를 넣어주세요.' });
+            const html = template.usersWorldCup({ userID, "message": '메인이미지를 넣어주세요.', worldcups });
             res.end(html);
+        } else {
+            if (model.isFileExist({ folder: 'worldcup', file: worldcupName, type: 'json' })) {
+                const html = template.usersWorldCup({ userID, "message": `${worldcupName}는 이미 개최되었습니다.`, worldcups });
+                res.end(html);
+            } else {
+                model.createWorldCup({ userID, userInfo, worldcupName, mainImg })
+                userInfo = model.takeUserInfo(userID);
+                worldcups = util.getUsersWorldCup(userInfo);
+                const html = template.usersWorldCup({ userID, "message": `${worldcupName}이 만들어졌습니다. 선수들을 등록해보세요!`, worldcups });
+                res.end(html);
+            }
         }
     }
 })

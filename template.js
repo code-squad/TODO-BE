@@ -77,7 +77,25 @@ class Template {
         `
     }
 
-    usersWorldCup({ userID, message }) {
+    usersWorldCup({ userID, message, worldcups }) {
+        function makeList(worldcups) {
+            if (worldcups === undefined) return '';
+            var list = '';
+            var i = 0;
+            while (i < worldcups.length) {
+                list = list + `
+                <form action ="/playermanagement">
+                <input type="hidden" name="title" value="${worldcups[i][0]}">
+                <input type="image" src="${worldcups[i][1].mainImg}" width="200" height="200" alt="${worldcups[i][0]}">
+                <p>${worldcups[i][0]} 관리하러가기</p>
+                </form>
+                `;
+                i = i + 1;
+            }
+            return list;
+        }
+
+        let list = makeList(worldcups)
         return `
         <!DOCTYPE html>
         <html>
@@ -124,6 +142,7 @@ class Template {
                     <input type="submit" value="만들기">
                 </fieldset>
             </form>
+            ${list}
 
         </body>
 

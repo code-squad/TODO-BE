@@ -15,6 +15,13 @@ class Model {
     takeUserInfo(userID) {
         return JSON.parse(fs.readFileSync(`users/${userID}.json`).toString());
     }
+
+    createWorldCup({ userID, userInfo, worldcupName, mainImg }) {
+        userInfo[worldcupName] = { "title": worldcupName, "mainImg": mainImg, "players": [] };
+        let jsonFile = JSON.stringify(userInfo);
+        fs.writeFileSync(`users/${userID}.json`, jsonFile);
+        return userInfo;
+    }
 }
 
 module.exports = Model;

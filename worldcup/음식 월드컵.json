@@ -1,0 +1,166 @@
+{
+    "title": "음식 월드컵",
+    "mainImg": "http://pncg.co.kr/upload/menu/11427450788.png",
+    "players": [
+        {
+            "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Dolsot-bibimbap.jpg/220px-Dolsot-bibimbap.jpg",
+            "name": "비빔밥"
+        },
+        {
+            "img": "http://img.danawa.com/images/descFiles/4/675/3674587_1531363163672.jpeg",
+            "name": "대게찜"
+        },
+        {
+            "img": "http://food.chosun.com/site/data/img_dir/2013/07/04/2013070401865_0.jpg",
+            "name": "보쌈"
+        },
+        {
+            "img": "http://recipe1.ezmember.co.kr/cache/recipe/2016/07/25/7542a9c2499c0c76634f65706c3b52081.jpg",
+            "name": "까르보나"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/2248E936567809770F",
+            "name": "치즈케잌"
+        },
+        {
+            "img": "https://cbmpress.com/calgary/wp-content/uploads/sites/4/2017/07/chicken.jpg",
+            "name": "치킨"
+        },
+        {
+            "img": "http://recipe1.ezmember.co.kr/cache/recipe/2015/08/26/90435005daa86b045b7f7cada85f306a1.jpg",
+            "name": "닭꼬치"
+        },
+        {
+            "img": "http://mblogthumb3.phinf.naver.net/20160317_58/iojam_1458221540547lcIU2_JPEG/s1.jpg?type=w2",
+            "name": "초코케잌"
+        },
+        {
+            "img": "https://post-phinf.pstatic.net/MjAxNzA0MDdfMTEz/MDAxNDkxNTI4ODgyNjM0.aQTXtYNzUSAau2hFi70B2ydtSh_kSzjHJicpShzr5vog.nhEPKgxWaSHopsH0GQtXc1e22-ZWcJEVVydGkWSA-L0g.PNG/20170407_103150.png?type=w1200",
+            "name": "바지락칼국수"
+        },
+        {
+            "img": "https://img.siksinhot.com/place/1490558634680902.jpg?w=440&h=440&c=Y",
+            "name": "치즈닭갈비"
+        },
+        {
+            "img": "https://scontent.cdninstagram.com/vp/ce5062620c84741cfc75eb6673ec4379/5D83251E/t51.2885-15/e35/s480x480/60749822_349791412394021_770786875031912066_n.jpg?_nc_ht=scontent-lga3-1.cdninstagram.com",
+            "name": "떡순튀"
+        },
+        {
+            "img": "http://recipe1.ezmember.co.kr/cache/recipe/2018/05/26/1954b23ba3ee5d04e71960e2a722aa871.jpg",
+            "name": "볶음밥"
+        },
+        {
+            "img": "http://www.fsnews.co.kr/news/photo/201105/4416_3190_2746.jpg",
+            "name": "깐풍기"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/020C7F4051BEC5EC2D",
+            "name": "곱창"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/1664D04B4FEB447F2E",
+            "name": "조개구이"
+        },
+        {
+            "img": "http://travel.chosun.com/site/data/img_dir/2011/07/11/2011071101128_0.jpg",
+            "name": "국밥"
+        },
+        {
+            "img": "https://post-phinf.pstatic.net/MjAxNzA0MDZfODIg/MDAxNDkxNDY5ODI3MjI1.SosQ3rn_alRmvIJ5mC9KM_cpFJCMQb4_2K3lCNa8z70g.MnVUP2EsktLqCfQ81ZiSD4oJ9vuQbxKUGHM6Y9UXtAYg.JPEG/%EC%97%B0%EB%82%A8%EB%8F%99%EA%BF%94%EB%B0%94%EB%A1%9C%EC%9A%B0%EB%A7%9B%EC%A7%911_%285%29.jpg?type=w1200",
+            "name": "꿔바로우"
+        },
+        {
+            "img": "http://img.hani.co.kr/imgdb/resize/2017/0709/149948783091_20170709.JPG",
+            "name": "수제햄버거"
+        },
+        {
+            "img": "http://ojsfile.ohmynews.com/STD_IMG_FILE/2016/1214/IE002069160_STD.jpg",
+            "name": "짜장면"
+        },
+        {
+            "img": "https://www.visitjeju.net/upload_data/contents/mobile/151062298810311.jpg",
+            "name": "짬뽕"
+        },
+        {
+            "img": "https://post-phinf.pstatic.net/MjAxNzA0MDRfMTcg/MDAxNDkxMjgxMzE4ODA4.uTDDq5t35bMnnOiBDwdfRwQste0_inCvoGuHKfuaz9Ug.zPnMUy5kzXHOM2bGFW-WpAq30syxu8pUhkhO1p4SUPQg.JPEG/%EB%8B%AC%EC%9D%B8%EC%88%98%EC%A0%9C%ED%95%9C%EB%B0%A9%EC%A1%B1%EB%B0%9C6.JPG?type=w1200",
+            "name": "족발"
+        },
+        {
+            "img": "https://pds.joins.com//news/component/htmlphoto_mmdata/201802/07/12621b47-8458-4025-9c77-e6930ac4c3ab.jpg",
+            "name": "만두"
+        },
+        {
+            "img": "https://img.siksinhot.com/place/1518933672749205.jpg?w=440&h=440&c=Y",
+            "name": "마라탕"
+        },
+        {
+            "img": "http://admin.cjrecipe.com/images/theKitchen/PHON/0000002359/0000009976/0000002359.jpg",
+            "name": "파스타"
+        },
+        {
+            "img": "https://cbmpress.com/calgary/wp-content/uploads/sites/4/2019/03/Pizza.png",
+            "name": "피자"
+        },
+        {
+            "img": "https://rimage.gnst.jp/livejapan.com/public/article/detail/a/00/00/a0000859/img/ko/a0000859_parts_5885b74337aad.jpg?20190404172159",
+            "name": "일본라멘"
+        },
+        {
+            "img": "https://file.mk.co.kr/meet/neds/2017/09/image_readtop_2017_587233_15042337473013492.jpg",
+            "name": "라면"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/25737039573AF33314",
+            "name": "산낙지"
+        },
+        {
+            "img": "https://pds.joins.com//news/component/htmlphoto_mmdata/201710/11/fc5305ca-da46-43f5-85b8-db7d783d44a0.jpg",
+            "name": "베트남쌀국수"
+        },
+        {
+            "img": "https://cphoto.asiae.co.kr/listimglink/1/2014022610112867156_1.jpg",
+            "name": "삼겹살"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/220D973358758F8A0E",
+            "name": "회"
+        },
+        {
+            "img": "https://t1.daumcdn.net/cfile/tistory/185A4C434D86861635",
+            "name": "부대찌개"
+        },
+        {
+            "img": "http://lambstory.com/wp-content/uploads/2017/03/25519259666_1f37d00c2a_b-1024x768.jpg",
+            "name": "샤브샤브"
+        },
+        {
+            "img": "http://image.newdaily.co.kr/site/data/img/2015/06/12/2015061210035_0.jpg",
+            "name": "양꼬치"
+        },
+        {
+            "img": "https://s-i.huffpost.com/gen/4780228/thumbs/o-STEAK-570.jpg?7",
+            "name": "스테이크"
+        },
+        {
+            "img": "http://saehanbif.com/wp-content/uploads/2015/10/sh_17030904.jpg",
+            "name": "순두부찌개"
+        },
+        {
+            "img": "http://www.365food.com/upload/mini/nago/teouk.gif",
+            "name": "초밥"
+        },
+        {
+            "img": "https://i1.wp.com/starkaraokeuiuc.net/wp-content/uploads/2017/09/K-11.jpg?fit=639%2C409",
+            "name": "탕수육"
+        },
+        {
+            "img": "https://www.osp.osaka-info.jp/upload/facility_shop/58/58.jpg",
+            "name": "돈가스"
+        },
+        {
+            "img": "https://post-phinf.pstatic.net/MjAxNzEwMTFfMjA5/MDAxNTA3NzE0NzUzNjIx.wiec-3oOgcYlWWXtpb8Fe6SCGaT691uhH8W5ilZ2RQog.oPAPb2WDubnWZBFJTNdiHcnbt1VE_-qJgVrsJB9lMaAg.JPEG/01.jpg?type=w1200",
+            "name": "대하 소금구이"
+        }
+    ]
+}

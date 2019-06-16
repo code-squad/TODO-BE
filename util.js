@@ -38,6 +38,9 @@ class Util {
             }, {});
     }
 
+    getUsersWorldCup(userInfo) {
+        return Object.entries(userInfo).filter(x => x[0] !== 'id' && x[0] !== 'pwd');
+    }
 }
 
 module.exports = Util;
