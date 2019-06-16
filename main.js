@@ -2,7 +2,7 @@ const http = require('http');
 const Template = require('./template');
 
 const server = http.createServer((req, res) => {
-    const html = template.home();
+    const html = template.loginPage();
     res.end(html);
 })
 
