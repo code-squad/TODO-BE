@@ -79,6 +79,12 @@ const server = http.createServer((req, res) => {
         });
         res.end();
     }
+
+    if (pathName === '/usersworldcup') {
+        const html = template.usersWorldCup({ userID });
+        res.end(html);
+    }
+
 })
 
 server.listen(8000);

@@ -69,8 +69,62 @@ class Template {
         <body>
             <h1>이상형 월드컵</h1>
             <p>${userID}님 어서오세요</p>
-            <form action="/logout" ><input type="submit" value="로그아웃"></form><form action="/makeworldcup" ><input type="submit" value="나만의 월드컵 만들기"></form>
+            <form action="/logout" ><input type="submit" value="로그아웃"></form><form action="/usersworldcup" ><input type="submit" value="나만의 월드컵 만들기"></form>
             <h1>마음에드는 월드컵에 참가해보세요!</h1>
+        </body>
+
+        </html>
+        `
+    }
+
+    usersWorldCup({ userID, message }) {
+        return `
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <title>나만의 월드컵만들기</title>
+            <style>
+                form {
+                    display: contents;
+                }
+                
+                h1 {
+                    text-align: center;
+                }
+            </style>
+            <script>
+                function warning(note){
+                    if(note !== 'undefined'){
+                        alert(note);    
+
+                    }
+                }
+                warning('${message}');
+            </script>
+        </head>
+
+        <body>
+            <h1>${userID}님만의 월드컵을 만드세요</h1>
+            <form action="/home">
+                <input type="submit" value="홈으로">
+            </form>
+            <form action="/createworldcup">
+                <fieldset>
+                    <legend>creater</legend>
+                    <tr>
+                        <td>월드컵이름 : </td>
+                        <td><input type="text" name="worldcupName"></td>
+                    </tr>
+                    <tr>
+                        <td>메인이미지URL : </td>
+                        <td><input type="text" name="mainImg"></td>
+                    </tr>
+                    <input type="submit" value="만들기">
+                </fieldset>
+            </form>
+
         </body>
 
         </html>
