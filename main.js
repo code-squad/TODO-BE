@@ -13,9 +13,11 @@ const server = http.createServer((req, res) => {
     const sessionNum = cookies.session;
     let userID;
     let userInfo;
+    let userSession;
     if (cookies.session) {
         userID = session[sessionNum].id;
         userInfo = model.takeUserInfo(userID);
+        userSession = session[sessionNum];
     }
 
     if (pathName === '/') {
@@ -162,6 +164,16 @@ const server = http.createServer((req, res) => {
         }
     }
 
+    if (pathName === '/participation') {
+        const { query } = url.parse(req.url);
+        const { title } = qs.parse(query);
+
+        const { players } = model.getAllPlayers(title);
+        util.setGame({ sessionNum, players });
+        const [player1, player2] = session[sessionNum].waitList.splice(0, 2);
+        const html = template.participateWorldCup({ player1, player2, rounds: session[sessionNum].rounds });
+        res.end(html);
+    }
 })
 
 server.listen(8000);

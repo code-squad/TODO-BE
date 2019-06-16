@@ -96,6 +96,48 @@ class Template {
         `
     }
 
+    participateWorldCup({ player1, player2, rounds }) {
+        return `
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <title>worldcup</title>
+            <style>
+                form {
+                    display: contents;
+                }
+                div {
+                    display: contents;
+                }
+                h1 {
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+            <h1>${rounds}강</h1>
+            <form action="/foodworldcup">
+            <input type="hidden" name="name" value="${player1.name}">
+            <input type="hidden" name="img" value="${player1.img}">
+            <input type="image" src="${player1.img}" width="500" height="500" alt="${player1.name}">
+            <div>${player1.name}</div>
+            </form>
+
+            <form action="/foodworldcup">
+            <input type="hidden" name="name" value="${player2.name}">
+            <input type="hidden" name="img" value="${player2.img}">
+            <input type="image" src="${player2.img}" width="500" height="500" alt="${player2.name}">
+            <div>${player2.name}</div>
+            </form>
+        </body>
+
+        </html>
+        `
+    }
+
     usersWorldCup({ userID, message, worldcups }) {
         function makeList(worldcups) {
             if (worldcups === undefined) return '';

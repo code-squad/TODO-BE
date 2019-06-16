@@ -53,6 +53,10 @@ class Model {
             return JSON.parse(fs.readFileSync(`worldcup/${worldcup}`).toString());
         });
     }
+
+    getAllPlayers(title) {
+        return JSON.parse(fs.readFileSync(`worldcup/${title}.json`).toString())
+    }
 }
 
 module.exports = Model;

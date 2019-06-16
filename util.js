@@ -41,6 +41,26 @@ class Util {
     getUsersWorldCup(userInfo) {
         return Object.entries(userInfo).filter(x => x[0] !== 'id' && x[0] !== 'pwd');
     }
+
+    setGame({ sessionNum, players }) {
+        this.session[sessionNum].rounds = 16;
+        const mixedPlayers = this.mix(players, this.session[sessionNum].rounds);
+        const selectedPlayers = this.selectPlayers({ players: mixedPlayers, rounds: 16 });
+        this.session[sessionNum].waitList = [...selectedPlayers];
+    }
+
+    mix(players, rounds) {
+        var count = 0;
+        while (count < rounds) {
+            players.sort(function () { return Math.random() - 0.5 });
+            count += 1;
+        }
+        return players;
+    }
+
+    selectPlayers({ players, rounds }) {
+        return players.splice(0, rounds);
+    }
 }
 
 module.exports = Util;
