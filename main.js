@@ -1,7 +1,9 @@
 const http = require('http');
+const Template = require('./template');
 
 const server = http.createServer((req, res) => {
-    console.log('hello world')
+    const html = template.home();
+    res.end(html);
 })
 
 server.listen(8000);
@@ -11,3 +13,5 @@ server.on('listening', () => {
 server.on('error', (error) => {
     console.error(error);
 });
+
+const template = new Template();
