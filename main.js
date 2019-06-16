@@ -137,6 +137,16 @@ const server = http.createServer((req, res) => {
         const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 등록!` });
         res.end(html);
     }
+
+    if (pathName === '/exitplayer') {
+        const { query } = url.parse(req.url);
+        const { title, name } = qs.parse(query);
+
+        model.exitPlayer({ userID, userInfo, title, name });
+        userInfo = model.takeUserInfo(userID);
+        const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 퇴장!` });
+        res.end(html);
+    }
 })
 
 server.listen(8000);

@@ -34,6 +34,13 @@ class Model {
 
         fs.writeFileSync(`users/${userID}.json`, jsonFile);
     }
+
+    exitPlayer({ userID, userInfo, title, name }) {
+        userInfo[title].players = userInfo[title].players.filter(x => x.name !== name);
+        let jsonFile = JSON.stringify(userInfo);
+
+        fs.writeFileSync(`users/${userID}.json`, jsonFile);
+    }
 }
 
 module.exports = Model;
