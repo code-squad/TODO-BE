@@ -61,6 +61,32 @@ class Util {
     selectPlayers({ players, rounds }) {
         return players.splice(0, rounds);
     }
+
+    wasLastRound(sessionNum) {
+        if (this.session[sessionNum].waitList.length === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    wasFinalRound(sessionNum) {
+        if (this.session[sessionNum].selectedList.length === 1) {
+            this.session[sessionNum].selectedList.shift();
+            return true;
+        }
+        return false;
+    }
+
+    resetGame({ sessionNum }) {
+        this.session[sessionNum].rounds /= 2;
+        const mixedPlayers = this.mix(this.session[sessionNum].selectedList, this.session[sessionNum].rounds);
+        this.session[sessionNum].waitList.push(...mixedPlayers);
+        this.session[sessionNum].selectedList = [];
+    }
+
+    goToWaitingRoom({ name, img, sessionNum }) {
+        this.session[sessionNum].selectedList.push({ name, img });
+    }
 }
 
 module.exports = Util;

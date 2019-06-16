@@ -13,11 +13,9 @@ const server = http.createServer((req, res) => {
     const sessionNum = cookies.session;
     let userID;
     let userInfo;
-    let userSession;
     if (cookies.session) {
         userID = session[sessionNum].id;
         userInfo = model.takeUserInfo(userID);
-        userSession = session[sessionNum];
     }
 
     if (pathName === '/') {
@@ -173,6 +171,27 @@ const server = http.createServer((req, res) => {
         const [player1, player2] = session[sessionNum].waitList.splice(0, 2);
         const html = template.participateWorldCup({ player1, player2, rounds: session[sessionNum].rounds });
         res.end(html);
+    }
+
+    if (pathName === '/worldcup') {
+        const { query } = url.parse(req.url);
+        const { name, img } = qs.parse(query);
+        util.goToWaitingRoom({ name, img, sessionNum });
+        if (util.wasLastRound(sessionNum)) {
+            if (util.wasFinalRound(sessionNum)) {
+                const html = template.champion({ name, img });
+                res.end(html);
+            } else {
+                util.resetGame({ sessionNum });
+                const [player1, player2] = session[sessionNum].waitList.splice(0, 2);
+                const html = template.participateWorldCup({ player1, player2, rounds: session[sessionNum].rounds });
+                res.end(html);
+            }
+        } else {
+            const [player1, player2] = session[sessionNum].waitList.splice(0, 2);
+            const html = template.participateWorldCup({ player1, player2, rounds: session[sessionNum].rounds });
+            res.end(html);
+        }
     }
 })
 

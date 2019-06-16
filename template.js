@@ -119,18 +119,52 @@ class Template {
 
         <body>
             <h1>${rounds}강</h1>
-            <form action="/foodworldcup">
+            <form action="/worldcup">
             <input type="hidden" name="name" value="${player1.name}">
             <input type="hidden" name="img" value="${player1.img}">
             <input type="image" src="${player1.img}" width="500" height="500" alt="${player1.name}">
             <div>${player1.name}</div>
             </form>
 
-            <form action="/foodworldcup">
+            <form action="/worldcup">
             <input type="hidden" name="name" value="${player2.name}">
             <input type="hidden" name="img" value="${player2.img}">
             <input type="image" src="${player2.img}" width="500" height="500" alt="${player2.name}">
             <div>${player2.name}</div>
+            </form>
+        </body>
+
+        </html>
+        `
+    }
+
+    champion({ name, img }) {
+        return `
+        <!DOCTYPE html>
+        <html>
+
+        <head>
+            <meta charset="UTF-8">
+            <title>worldcup</title>
+            <style>
+                h1 {
+                    text-align: center;
+                }
+                img{
+                    text-align: center;
+                }
+                p {
+                    text-align: center;
+                }
+            </style>
+        </head>
+
+        <body>
+            <h1>우승!</h1>
+            <img src='${img}'>
+            <p>${name}</p>
+            <form action="/home">
+                <input type="submit" value="홈으로">
             </form>
         </body>
 
