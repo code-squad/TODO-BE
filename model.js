@@ -11,6 +11,10 @@ class Model {
             if (err) throw err;
         });
     }
+
+    takeUserInfo(userID) {
+        return JSON.parse(fs.readFileSync(`users/${userID}.json`).toString());
+    }
 }
 
 module.exports = Model;

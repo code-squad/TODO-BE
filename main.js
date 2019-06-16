@@ -3,16 +3,20 @@ const url = require('url');
 const qs = require('querystring');
 const Template = require('./template');
 const Model = require('./model');
+const Util = require('./util');
+
+const session = {}
 
 const server = http.createServer((req, res) => {
     const pathName = url.parse(req.url).pathname;
 
     if (pathName === '/') {
+
         const html = template.loginPage();
         res.end(html);
     }
     if (pathName === '/home') {
-        const html = template.home();
+        const html = template.home({ userID });
         res.end(html);
     }
     if (pathName === '/signup') {
@@ -36,6 +40,29 @@ const server = http.createServer((req, res) => {
             }
         }
     }
+
+    if (pathName === '/login') {
+        const { query } = url.parse(req.url);
+        const { id, pwd } = qs.parse(query);
+
+        if (model.isFileExist({ folder: 'users', file: id, type: 'json' })) {
+            const userInfo = model.takeUserInfo(id);
+            if (pwd === userInfo.pwd) {
+                const { randomInt, expires } = util.makeSession(id);
+                res.writeHead(302, {
+                    Location: '/home',
+                    'Set-Cookie': `session=${randomInt}; Expires=${expires.toUTCString()}; HttpOnly; Path=/`,
+                });
+                res.end();
+            } else {
+                const html = template.loginPage('비밀번호가 틀렸습니다.');
+                res.end(html);
+            }
+        } else {
+            const html = template.loginPage(`${id}는 없는 아이디입니다.`);
+            res.end(html);
+        }
+    }
 })
 
 server.listen(8000);
@@ -48,3 +75,4 @@ server.on('error', (error) => {
 
 const template = new Template();
 const model = new Model();
+const util = new Util({ session });
