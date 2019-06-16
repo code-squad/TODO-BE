@@ -147,6 +147,19 @@ const server = http.createServer((req, res) => {
         const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 퇴장!` });
         res.end(html);
     }
+    if (pathName === '/heldworldcup') {
+        const { query } = url.parse(req.url);
+        const { title } = qs.parse(query);
+
+        if (userInfo[title].players.length < 16) {
+            const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `선수는 최소 16명이상이어야 합니다.` });
+            res.end(html);
+        } else {
+            model.heldWorldCup({ userInfo, title });
+            const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${title} 개최!` });
+            res.end(html);
+        }
+    }
 })
 
 server.listen(8000);

@@ -41,6 +41,11 @@ class Model {
 
         fs.writeFileSync(`users/${userID}.json`, jsonFile);
     }
+
+    heldWorldCup({ userInfo, title }) {
+        let jsonFile = JSON.stringify(userInfo[title]);
+        fs.writeFileSync(`worldcup/${title}.json`, jsonFile);
+    }
 }
 
 module.exports = Model;

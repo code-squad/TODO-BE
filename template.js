@@ -202,7 +202,7 @@ class Template {
         <body>
             <h1>${userID}님의 ${worldcup.title}</h1>
             <img src="${worldcup.mainImg}" width="300" height="300" alt="${worldcup.title}">
-            <form action="/makeworldcup">
+            <form action="/usersworldcup">
                 <input type="submit" value="뒤로가기">
             </form>
             <form action="/heldworldcup">
