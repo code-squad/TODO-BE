@@ -85,6 +85,19 @@ const server = http.createServer((req, res) => {
         res.end(html);
     }
 
+    if (pathName === '/createworldcup') {
+        const { query } = url.parse(req.url);
+        const { worldcupName, mainImg } = qs.parse(query);
+
+        if (worldcupName === '') {
+            const html = template.usersWorldCup({ userID, "message": '월드컵 이름을 정해주세요.' });
+            res.end(html);
+        }
+        else if (mainImg === '') {
+            const html = template.usersWorldCup({ userID, "message": '메인이미지를 넣어주세요.' });
+            res.end(html);
+        }
+    }
 })
 
 server.listen(8000);
