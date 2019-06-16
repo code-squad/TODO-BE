@@ -46,6 +46,13 @@ class Model {
         let jsonFile = JSON.stringify(userInfo[title]);
         fs.writeFileSync(`worldcup/${title}.json`, jsonFile);
     }
+
+    getHeldWorldCup() {
+        const heldWorldCup = fs.readdirSync('worldcup');
+        return heldWorldCup.map(worldcup => {
+            return JSON.parse(fs.readFileSync(`worldcup/${worldcup}`).toString());
+        });
+    }
 }
 
 module.exports = Model;

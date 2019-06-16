@@ -50,7 +50,25 @@ class Template {
         `
     }
 
-    home({ userID }) {
+    home({ userID, worldcups }) {
+        function makeList(worldcups) {
+            if (worldcups === undefined) return '';
+            var list = '';
+            var i = 0;
+            while (i < worldcups.length) {
+                list = list + `
+                <form action ="/participation">
+                <input type="hidden" name="title" value="${worldcups[i].title}">
+                <input type="image" src="${worldcups[i].mainImg}" width="200" height="200" alt="${worldcups[i].title}">
+                <p>${worldcups[i].title} 참가하기</p>
+                </form>
+                `;
+                i = i + 1;
+            }
+            return list;
+        }
+
+        let list = makeList(worldcups);
         return `
         <!DOCTYPE html>
         <html>
@@ -71,6 +89,7 @@ class Template {
             <p>${userID}님 어서오세요</p>
             <form action="/logout" ><input type="submit" value="로그아웃"></form><form action="/usersworldcup" ><input type="submit" value="나만의 월드컵 만들기"></form>
             <h1>마음에드는 월드컵에 참가해보세요!</h1>
+            ${list}
         </body>
 
         </html>
@@ -104,10 +123,6 @@ class Template {
             <meta charset="UTF-8">
             <title>나만의 월드컵만들기</title>
             <style>
-                form {
-                    display: contents;
-                }
-                
                 h1 {
                     text-align: center;
                 }

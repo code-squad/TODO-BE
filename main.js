@@ -23,7 +23,8 @@ const server = http.createServer((req, res) => {
         res.end(html);
     }
     if (pathName === '/home') {
-        const html = template.home({ userID });
+        const worldcups = model.getHeldWorldCup();
+        const html = template.home({ userID, worldcups });
         res.end(html);
     }
     if (pathName === '/signup') {
@@ -160,6 +161,7 @@ const server = http.createServer((req, res) => {
             res.end(html);
         }
     }
+
 })
 
 server.listen(8000);
