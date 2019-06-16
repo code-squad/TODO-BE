@@ -1,9 +1,18 @@
 const http = require('http');
+const url = require('url');
 const Template = require('./template');
 
 const server = http.createServer((req, res) => {
-    const html = template.loginPage();
-    res.end(html);
+    const pathName = url.parse(req.url).pathname;
+
+    if (pathName === '/') {
+        const html = template.loginPage();
+        res.end(html);
+    }
+    if (pathName === '/home') {
+        const html = template.home();
+        res.end(html);
+    }
 })
 
 server.listen(8000);

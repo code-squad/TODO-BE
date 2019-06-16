@@ -60,7 +60,10 @@ class Template {
         </head>
 
         <body>
-            <h1>hello world!</h1>
+            <h1>이상형 월드컵</h1>
+            <p>circus님 어서오세요</p>
+            <form action="/logout" ><input type="submit" value="로그아웃"></form><form action="/makeworldcup" ><input type="submit" value="나만의 월드컵 만들기"></form>
+            <h1>마음에드는 월드컵에 참가해보세요!</h1>
         </body>
 
         </html>
