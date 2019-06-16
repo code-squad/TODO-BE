@@ -70,6 +70,15 @@ const server = http.createServer((req, res) => {
             res.end(html);
         }
     }
+
+    if (pathName === '/logout') {
+        util.deleteSession(sessionNum);
+        res.writeHead(302, {
+            Location: '/',
+            'Set-Cookie': `session=; Expires=; HttpOnly; Path=/`,
+        });
+        res.end();
+    }
 })
 
 server.listen(8000);

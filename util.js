@@ -23,6 +23,10 @@ class Util {
         return { randomInt, expires };
     }
 
+    deleteSession(sessionNum) {
+        delete this.session[sessionNum];
+    }
+
     parseCookies(cookie = '') {
         return cookie
             .split(';')
