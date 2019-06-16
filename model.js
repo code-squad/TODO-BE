@@ -27,6 +27,13 @@ class Model {
         let jsonFile = JSON.stringify(userInfo);
         fs.writeFileSync(`users/${userID}.json`, jsonFile);
     }
+
+    registerPlayer({ userID, userInfo, title, name, imgURL }) {
+        userInfo[title].players.push({ "name": name, "img": imgURL });
+        let jsonFile = JSON.stringify(userInfo);
+
+        fs.writeFileSync(`users/${userID}.json`, jsonFile);
+    }
 }
 
 module.exports = Model;

@@ -1,14 +1,1 @@
-{
-    "id": "circus",
-    "pwd": "1234",
-    "강아지 월드컵": {
-        "title": "강아지 월드컵",
-        "mainImg": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
-        "players": [
-            {
-                "name": "리트리버",
-                "img": "http://cfile215.uf.daum.net/image/14572037505D76231F867E"
-            }
-        ]
-    }
-}
+{"id":"circus","pwd":"1234","강아지 월드컵":{"title":"강아지 월드컵","mainImg":"https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260","players":[{"name":"리트리버","img":"http://cfile215.uf.daum.net/image/14572037505D76231F867E"},{"name":"진돗개","img":"https://scontent.cdninstagram.com/vp/6684817bcd933b79fd07d169825d3497/5D941E85/t51.2885-15/e35/s480x480/43985556_171650707112742_3090770693672915724_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com"},{"name":"말티즈","img":"https://scontent-atl3-1.cdninstagram.com/vp/456ac3173b20e406cd8539ac704f7259/5D5F26ED/t51.2885-15/e35/57411818_155578062141439_5071690195991534218_n.jpg?_nc_ht=scontent-atl3-1.cdninstagram.com"}]}}

@@ -127,6 +127,16 @@ const server = http.createServer((req, res) => {
         const html = template.playerManagement({ userID, "worldcup": userInfo[title] });
         res.end(html);
     }
+
+    if (pathName === '/registerplayer') {
+        const { query } = url.parse(req.url);
+        const { title, name, imgURL } = qs.parse(query);
+
+        model.registerPlayer({ userID, userInfo, title, name, imgURL });
+        userInfo = model.takeUserInfo(userID);
+        const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 등록!` });
+        res.end(html);
+    }
 })
 
 server.listen(8000);
