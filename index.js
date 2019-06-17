@@ -93,6 +93,14 @@ function addDragEvent(item) {
     item.addEventListener('drop', (event) => {
         event.preventDefault();
         event.target.style['border-bottom'] = '';
-        event.target.parentNode.insertBefore(draggingTarget, event.target.nextElementSibling);
+        const listArea = event.target.parentNode;
+        const status = listArea.parentNode.id;
+        listArea.insertBefore(draggingTarget, event.target.nextElementSibling);
+        updateStatus(draggingTarget, status);
     });
+}
+
+function updateStatus(item, status) {
+    console.log(item);
+    console.log(status);
 }
