@@ -4,6 +4,8 @@ const AuthManager = require('./auth.js');
 
 const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
 
+let spinner;
+
 const client = net.connect({port: 5000}, () => {
   const req ={}
   req.method = 'init'
@@ -12,18 +14,18 @@ const client = net.connect({port: 5000}, () => {
 
 const authManager = new AuthManager();
 
+
 client.on('data', async data => {
   try{
     const res = await JSON.parse(data);
     let req = {}
-
     if (res.method === 'newClient') {
       req = await authManager.userIn(res);
       client.write(`${JSON.stringify(req)}`);
       return;
     }
-    const spinner = ora(res.message)
     if (res.method === 'loggedIn') {
+      spinner = ora(res.message);
       spinner.start();
     }
     if (res.method === 'getInGame') {

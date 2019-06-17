@@ -18,6 +18,7 @@ class AuthManager {
     let req = {};
     let username = '';
     let password = '';
+    let passwordConfirm = '';
     if (res.message) {
       console.log(res.message);
     }
@@ -31,14 +32,11 @@ class AuthManager {
       if(selection !== '1' && selection !== '2'){
         continue;
       }
+      username = await input('username >> ');
+      password = await input('password >> ');
       if (selection === '1') {
-        username = await input('username >> ');
-        password = await input('password >> ');
         req.method = 'logIn';
-        
       } else {
-        username = await input('username >> ');
-        password = await input('password >> ');
         passwordConfirm = await input('password confirm >> ');
         if (password !== passwordConfirm) {
           console.log('비밀번호 확인이 일치하지 않습니다.');
