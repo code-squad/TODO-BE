@@ -2,7 +2,7 @@
   "name": "nodejs-todo",
   "version": "1.0.0",
   "description": "todo application",
-  "main": "main.js",
+  "main": "./main.js",
   "scripts": {
     "start": "electron ."
   },
@@ -12,10 +12,7 @@
   },
   "author": "ingleby",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gminiy/nodejs-todo/issues"
-  },
-  "homepage": "https://github.com/gminiy/nodejs-todo#readme",
+
   "devDependencies": {
     "electron": "^5.0.4"
   }
