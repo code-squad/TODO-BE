@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-todo",
+  "version": "1.0.0",
+  "description": "todo application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gminiy/nodejs-todo.git"
+  },
+  "author": "ingleby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gminiy/nodejs-todo/issues"
+  },
+  "homepage": "https://github.com/gminiy/nodejs-todo#readme",
+  "devDependencies": {
+    "electron": "^5.0.4"
+  }
+}
