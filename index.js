@@ -1,6 +1,7 @@
 const user = require('./login-user').user;
 const items = require('./item-list')[user];
 const addController = require('./add-controller');
+const updateController = require('./update-controller');
 
 const addForm = `
     <div class="writing-item-box">
@@ -16,8 +17,14 @@ let draggingTarget = null;
 for (item of items)  {
     const listBoxNode = document.querySelector(`#${item.status}`);
     const listArea = listBoxNode.querySelector('.list-area');
-    addItem(listArea, item.name, false);
-} 
+    const itemDiv= document.createElement('div');
+    itemDiv.setAttribute('class', 'item');
+    itemDiv.setAttribute('id', item.id);
+    itemDiv.setAttribute('draggable', true);
+    itemDiv.innerHTML = `${item.name}`;
+    addDragEvent(itemDiv);
+    listArea.appendChild(itemDiv);
+}
 
 for (openAddFormLink of openAddFormLinks) {
     openAddFormLink.addEventListener('click', (event) => {
@@ -46,7 +53,7 @@ function addItem(listArea, name, isAddByButton) {
     item.innerHTML = `${name}`;
     addDragEvent(item);
     listArea.appendChild(item);
-    if(isAddByButton) addController.add(user, [name, status, idOfItem]);
+    addController.add(user, [name, status, idOfItem]);
 }
 
 function closeAddForm(event) {
@@ -101,6 +108,5 @@ function addDragEvent(item) {
 }
 
 function updateStatus(item, status) {
-    console.log(item);
-    console.log(status);
+    updateController.update(user, item, status);
 }
