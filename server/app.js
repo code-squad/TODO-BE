@@ -49,8 +49,9 @@ const server = net.createServer(socket => {
             p2socket,
           );
           games.push(game);
-          console.dir(game);
-
+          console.dir(game.p1, game.p2);
+          
+          game.init();
           res.method = 'getInGame';
           res.message = '게임을 이제 시작합니다!';
           p1socket.write(`${JSON.stringify(res)}`);
