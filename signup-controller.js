@@ -1,6 +1,7 @@
+const model = require('./model');
 const signupController = {
-    signup(id, password) {
-        console.log(id, password);
+    saveUser(id, password) {
+        model.updateMemberList(id, password);
     }
 }
 
