@@ -6,4 +6,3 @@ signupButton.addEventListener('click', () => {
     const password = document.querySelector('#password-box').value;
     signupController.saveUser(id, password);
 });
-
