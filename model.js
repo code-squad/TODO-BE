@@ -20,6 +20,17 @@ const model = {
             }
             console.log("login-user was updated");
         });
+    },
+
+    updateItemList(id, items) {
+        const itemList = require('./item-list');
+        itemList[id] = items;
+        fs.writeFile('./item-list.json', JSON.stringify(itemList), (err) => {
+            if (err) {
+                console.error(err);
+            }
+            console.log("item-list was updated");
+        });
     }
 }
 

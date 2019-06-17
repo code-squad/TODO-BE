@@ -7,6 +7,7 @@ const signupController = {
             return false;
         }
         model.updateMemberList(id, password);
+        model.updateItemList(id, {});
         return true;
     }
 }
