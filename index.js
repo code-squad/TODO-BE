@@ -1,3 +1,6 @@
+const user = require('./login-user').user;
+const items = require('./item-list')[user];
+
 const addForm = `
     <div class="writing-item-box">
         <textarea placeholder="Enter a title for your new item"></textarea>
@@ -8,6 +11,15 @@ const addForm = `
     </div>`;
 const openAddFormLinks = document.getElementsByClassName('open-add-form-link');
 let draggingTarget = null;
+
+for (item of items)  {
+    const listBoxNode = document.querySelector(`#${item.status}`);
+    const listArea = listBoxNode.querySelector('.list-area');
+    addItem(listArea, item.name);
+} 
+
+
+
 
 for (openAddFormLink of openAddFormLinks) {
     openAddFormLink.addEventListener('click', (event) => {
@@ -26,6 +38,17 @@ function generateRandomId() {
     return Date.now();
 }
 
+function addItem(parentNode, name) {
+    const item = document.createElement('div');
+    const idOfItem = generateRandomId();
+    item.setAttribute('class', 'item');
+    item.setAttribute('id', idOfItem);
+    item.setAttribute('draggable', true);
+    item.innerHTML = `${name}`;
+    addDragEvent(item);
+    parentNode.appendChild(item);
+}
+
 function closeAddForm(event) {
     const addButtonFormNode = event.target.parentNode;
     const addFormNode = addButtonFormNode.parentNode;
@@ -33,16 +56,6 @@ function closeAddForm(event) {
     const openAddFormLink = listBoxNode.getElementsByClassName('open-add-form-link')[0];
     listBoxNode.removeChild(addFormNode);
     openAddFormLink.style.display = 'inherit';
-}
-
-function addItem(parentNode, name) {
-    const item = document.createElement('div');
-    item.setAttribute('class', 'item');
-    item.setAttribute('id', generateRandomId());
-    item.setAttribute('draggable', true);
-    item.innerHTML = `${name}`;
-    addDragEvent(item);
-    parentNode.appendChild(item);
 }
 
 function addItemByAddButton(event) {
