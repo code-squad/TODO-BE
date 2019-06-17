@@ -19,18 +19,28 @@ client.on('data', async data => {
   try{
     const res = await JSON.parse(data);
     let req = {}
-    if (res.method === 'newClient') {
-      req = await authManager.userIn(res);
-      client.write(`${JSON.stringify(req)}`);
-      return;
-    }
-    if (res.method === 'loggedIn') {
-      spinner = ora(res.message);
-      spinner.start();
-    }
-    if (res.method === 'getInGame') {
-      spinner.stop();
-      console.log(res.message);
+    switch(res.method) {
+      case 'init':
+        console.log('=======================Indian Poker=======================')
+      case 'newClient':
+        req = await authManager.userIn(res);
+        client.write(`${JSON.stringify(req)}`);
+        break;
+      case 'loggedIn':
+        spinner = ora(res.message);
+        spinner.start();
+        break;
+      case 'getInGame':
+        spinner.stop();
+        console.log(res.message);
+        break;
+      case 'inGame':
+        console.log(res.message);
+        break;
+      default:
+        console.log('Unhandled method');
+        console.log(res.method);
+        break;
     }
     return;
   } catch (e) {
