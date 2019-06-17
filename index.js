@@ -23,6 +23,7 @@ for (item of items)  {
     itemDiv.setAttribute('draggable', true);
     itemDiv.innerHTML = `${item.name}`;
     addDragEvent(itemDiv);
+    addDeleteEvent(itemDiv);
     listArea.appendChild(itemDiv);
 }
 
@@ -52,6 +53,7 @@ function addItem(listArea, name, isAddByButton) {
     item.setAttribute('draggable', true);
     item.innerHTML = `${name}`;
     addDragEvent(item);
+    addDeleteEvent(item);
     listArea.appendChild(item);
     addController.add(user, [name, status, idOfItem]);
 }
@@ -109,4 +111,10 @@ function addDragEvent(item) {
 
 function updateStatus(item, status) {
     updateController.update(user, item, status);
+}
+
+function addDeleteEvent(item) {
+    item.addEventListener('dblclick', (event) => {
+        console.log(event.target);
+    });
 }
