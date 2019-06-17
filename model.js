@@ -10,6 +10,16 @@ const model = {
             }
             console.log("memberList was updated");
         });
+    },
+
+    updateLoginUser(id) {
+        const objUser = {'user': id};
+        fs.writeFile('./login-user.json', JSON.stringify(objUser), (err) => {
+            if (err) {
+                console.error(err);
+            }
+            console.log("login-user was updated");
+        });
     }
 }
 
