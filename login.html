@@ -13,6 +13,7 @@
             flex-direction: column;
             height: 100vh;
             width: 100vw;
+            font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans, Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
         }
         .login-box {
             display: flex;
@@ -26,10 +27,14 @@
             width: 200px;
             height: 20px;
         }
+        .head {
+            font-size: 100px;
+        }
 
     </style>
 </head>
 <body>
+    <div class="head">T o D o</div>
     <div class="login-box">
         <div style= "display:flex; justify-content: space-between">
             <label>ID</label>
@@ -37,7 +42,7 @@
         </div>
         <div style= "display:flex; justify-content: space-between">
             <label>Password</label>
-            <input type="text" class="input-box" id="password-box" placeholder="Enter ID"></input>
+            <input type="text" class="input-box" id="password-box" placeholder="Enter Password"></input>
         </div>
         <div style="margin: 10px;">
             <button type="button" id="login-button">Log In</button>
