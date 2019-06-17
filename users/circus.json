@@ -1,0 +1,92 @@
+{
+    "id": "circus",
+    "pwd": "1234",
+    "강아지 월드컵": {
+        "title": "강아지 월드컵",
+        "mainImg": "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260",
+        "players": [
+            {
+                "name": "리트리버",
+                "img": "http://cfile215.uf.daum.net/image/14572037505D76231F867E"
+            },
+            {
+                "name": "진돗개",
+                "img": "https://scontent.cdninstagram.com/vp/6684817bcd933b79fd07d169825d3497/5D941E85/t51.2885-15/e35/s480x480/43985556_171650707112742_3090770693672915724_n.jpg?_nc_ht=scontent-sea1-1.cdninstagram.com"
+            },
+            {
+                "name": "말티즈",
+                "img": "https://scontent-atl3-1.cdninstagram.com/vp/456ac3173b20e406cd8539ac704f7259/5D5F26ED/t51.2885-15/e35/57411818_155578062141439_5071690195991534218_n.jpg?_nc_ht=scontent-atl3-1.cdninstagram.com"
+            },
+            {
+                "name": "포메리안",
+                "img": "https://seoul-p-studio.bunjang.net/product/70182735_1_1496391639_w640.jpg"
+            },
+            {
+                "name": "치와와",
+                "img": "https://i.ytimg.com/vi/tgVFXgY9Lqk/maxresdefault.jpg"
+            },
+            {
+                "name": "미니핀",
+                "img": "http://www.wooripuppy.co.kr/data/file/puppy1/3076522003_q1wGBhO4_027Ud017svcxv2jc27jmoei_cyw523.jpg"
+            },
+            {
+                "name": "파피용",
+                "img": "https://scontent-lhr3-1.cdninstagram.com/vp/91cf923502b7260cd0f2328f1f3ee817/5D62E251/t51.2885-15/e35/54513098_1303746516467536_5818733941056226263_n.jpg?_nc_ht=scontent-lhr3-1.cdninstagram.com&se=7&ig_cache_key=MjAxNjcwNDQ2OTY0NDI1NDcyMw%3D%3D.2"
+            },
+            {
+                "name": "푸들",
+                "img": "https://scontent-lga3-1.cdninstagram.com/vp/2f64a052c28fc0510b22fb546b581b39/5D7CC5F6/t51.2885-15/e35/61174832_144802996680946_3605050037941757109_n.jpg?_nc_ht=scontent-lga3-1.cdninstagram.com"
+            },
+            {
+                "name": "닥스훈트",
+                "img": "https://t1.daumcdn.net/cfile/tistory/233E464258A6B6730D"
+            },
+            {
+                "name": "요크셔테리어",
+                "img": "https://previews.123rf.com/images/photopotam/photopotam1602/photopotam160200104/51634157-%ED%99%94%EC%9D%B4%ED%8A%B8-%EC%9A%94%ED%81%AC%EC%85%94-%ED%85%8C%EB%A6%AC%EC%96%B4%EC%9D%98-%ED%95%9C-%EA%B0%95%EC%95%84%EC%A7%80.jpg"
+            },
+            {
+                "name": "비숑 프리제",
+                "img": "http://cfile219.uf.daum.net/image/0269154F514E77BD1280DA"
+            },
+            {
+                "name": "슈나우저",
+                "img": "http://www.radiokorea.com/data/file/c_talk_pet/958081009_H2e9oGXm_1336798457682.jpg"
+            },
+            {
+                "name": "페키니즈",
+                "img": "http://cfile211.uf.daum.net/image/247F15465264E94D1E96A6"
+            },
+            {
+                "name": "볼로네즈",
+                "img": "http://petinlife.com/web/upload/NNEditor/20170509/shutterstock_66424762_shop1_193037.jpg"
+            },
+            {
+                "name": "불독",
+                "img": "https://images.mypetlife.co.kr/wp-content/uploads/2017/11/05005048/NaverBlog_20160504_004426_11-1.jpg"
+            },
+            {
+                "name": "보더콜리",
+                "img": "https://seoul-p-studio.bunjang.net/product/69851727_1_1495611573_w640.jpg"
+            }
+        ]
+    },
+    "고양이 월드컵": {
+        "title": "고양이 월드컵",
+        "mainImg": "http://topclass.chosun.com/news_img/1807/1807_008.jpg",
+        "players": [
+            {
+                "name": "코숏(치즈)",
+                "img": "https://scontent.cdninstagram.com/vp/9419a47a93c6d4ce01f28f77d7d96eb9/5D96341F/t51.2885-15/e35/c0.135.1080.1080a/s480x480/49715074_114825602953653_7819992860901709822_n.jpg?_nc_ht=scontent-ort2-2.cdninstagram.com"
+            },
+            {
+                "name": "러시안 블루",
+                "img": "http://www.mypetnews.net/news/photo/201512/1402_780_4130.jpg"
+            },
+            {
+                "name": "샴 고양이",
+                "img": "https://t1.daumcdn.net/cfile/tistory/277CB63852983EB223"
+            }
+        ]
+    }
+}
