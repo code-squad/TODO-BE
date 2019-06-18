@@ -6,6 +6,8 @@ const sockets = [];
 const session = new SessionManager();
 const games = [];
 
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
+
 const server = net.createServer(socket => {
   console.dir(socket.remotePort);
   socket.on('data', async data => {
@@ -55,15 +57,24 @@ const server = net.createServer(socket => {
           p1socket.write(`${JSON.stringify(res)}`);
           p2socket.write(`${JSON.stringify(res)}`);
           game.init();
-          const { p1res, p2res } = game.startRound();
+          await sleep(1000);
+          const { p1res, p2res } = await game.startRound();
+
           p1socket.write(`${JSON.stringify(p1res)}`);
           p2socket.write(`${JSON.stringify(p2res)}`);
-          
+
           console.log(game.cards[0], game.cards[1]);
           return;
         }
         return;
+      case 'inGame':
+        process.emit('inGame', req);
+        return;
     }
+  });
+
+  process.on('inGame', req => {
+    
   });
 
   socket.on('close', () => {

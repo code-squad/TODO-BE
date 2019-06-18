@@ -2,7 +2,6 @@ const net = require('net');
 const ora = require('ora');
 const AuthManager = require('./auth.js');
 
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
 
 let spinner;
 
@@ -35,7 +34,8 @@ client.on('data', async data => {
         console.log(res.message);
         break;
       case 'inGame':
-        console.log(res.message);
+        const action = res.action;
+        process.emit('inGame', action, res);
         break;
       default:
         console.log('Unhandled method');
@@ -47,6 +47,23 @@ client.on('data', async data => {
     console.log(e)
   }
 });
+
+process.on('inGame', (action, res) => {
+  switch(action){
+    case 'newRound':
+      const { roundNo, school, myCoin, showCards } = res;
+      console.log(res);
+      console.log(`====================================================`);
+      console.log(`Round ${ roundNo } 시작합니다!`);
+      console.log(`상대의 카드는 ${ showCards } 입니다.`);
+      console.log(`현재 판돈은 ${school}이고, 잔여 coin은 ${myCoin}입니다.`);
+      console.log(`====================================================`);
+      return;
+    case 'yourTurn':
+      
+      return;
+  }
+})
 
 client.on('end', () => {
   console.log('연결이 끊어졌습니다.');

@@ -31,38 +31,46 @@ class Game {
     this.cards[0].shuffle();
     this.cards[1].shuffle();
     const res = {
-      method = 'inGame',
-      message = '카드들을 섞었습니다!',
+      method : 'inGame',
+      message : '카드들을 섞었습니다!',
     }
     return res;
   }
-  startRound() {
+  async startRound() {
     this.roundNumb += 1;
-    this.turn = takeTurn();
+    this.turn = this.takeTurn();
     this.pickCards = [
-      this.cards[PLAYER_1].pop(), 
-      this.cards[PLAYER_2].pop()
+      this.cards[PLAYER_1].set.pop(), 
+      this.cards[PLAYER_2].set.pop()
     ];
+    this.coins[PLAYER_1] -= 1;
+    this.coins[PLAYER_2] -= 1;
+
+    this.school += 2;
     const res = {
       method: 'inGame',
       action: 'newRound',
       roundNo: this.roundNumb,
+      gameId : this.id,
+      school : this.school,
     }
-    const p1Res = Object.assign(res, {
+    const p1Res = Object.assign({
       showCards: this.pickCards[PLAYER_2],
-    });
-    const p2Res = Object.assign(res, {
+      myCoin : this.coins[PLAYER_1],
+    }, res);
+    const p2Res = Object.assign({
       showCards: this.pickCards[PLAYER_1],
-    });
+      myCoin : this.coins[PLAYER_1],
+    }, res);
     return { p1res: p1Res, p2res: p2Res };
   }
   playRound() {
-    this.turn = takeTurn();
+    this.turn = this.takeTurn();
     const opponent = this.turn === PLAYER_1 ? PLAYER_2 : PLAYER_1;
     const sendRes = {
       soc : this.socs[this.turn],
       method: 'inGame',
-      action: 'newRound',
+      action: 'yourTurn',
       showCard: pickCards[opponent],
     }
   }
