@@ -18,7 +18,6 @@ passwordBox.addEventListener('keypress', (e) => {
     }
 })
 
-
 function login() {
     const id = idBox.value;
     const password = passwordBox.value;
