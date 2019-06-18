@@ -3,6 +3,7 @@ const items = require('./item-list')[user];
 const addController = require('./add-controller');
 const updateController = require('./update-controller');
 const deleteController = require('./delete-controller');
+const loginController = require('./login-controller');
 
 const addForm = `
     <div class="writing-item-box">
@@ -40,6 +41,12 @@ for (openAddFormLink of openAddFormLinks) {
         textArea.focus();
     });
 }
+
+const logoutButton = document.getElementById('logout-button');
+logoutButton.addEventListener('click', ()=> {
+    loginController.logout();
+    window.location.href = './login.html';
+});
 
 function generateRandomId() {
     return Date.now();

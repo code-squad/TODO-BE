@@ -22,6 +22,15 @@ const model = {
         });
     },
 
+    deleteLoginUser(id) {
+        fs.writeFile('./login-user.json', {}, (err) => {
+            if (err) {
+                console.error(err);
+            }
+            console.log("login-user was deleted");
+        });
+    },
+
     updateItemList(id, items) {
         const itemList = require('./item-list');
         itemList[id] = items;

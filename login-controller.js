@@ -8,6 +8,10 @@ const loginController = {
             return true;
         }
         return false;
+    },
+
+    logout() {
+        model.deleteLoginUser();
     }
 }
 
