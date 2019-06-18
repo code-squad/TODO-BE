@@ -8,7 +8,6 @@ const model = {
             if (err) {
                 console.error(err);
             }
-            console.log("memberList was updated");
         });
     },
 
@@ -18,16 +17,14 @@ const model = {
             if (err) {
                 console.error(err);
             }
-            console.log("login-user was updated");
         });
     },
 
     deleteLoginUser(id) {
-        fs.writeFile('./login-user.json', {}, (err) => {
+        fs.writeFile('./login-user.json', '{}', (err) => {
             if (err) {
                 console.error(err);
             }
-            console.log("login-user was deleted");
         });
     },
 
@@ -38,7 +35,6 @@ const model = {
             if (err) {
                 console.error(err);
             }
-            console.log("item-list was updated");
         });
     }
 }
