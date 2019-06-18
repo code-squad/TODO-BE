@@ -18,16 +18,16 @@ const server = http.createServer((req, res) => {
         userInfo = model.takeUserInfo(userID);
     }
 
-    if (pathName === '/') {
+    if (util.isSamePathName(pathName, '/')) {
         const html = template.loginPage();
         res.end(html);
     }
-    if (pathName === '/home') {
+    if (util.isSamePathName(pathName, '/home')) {
         const worldcups = model.getHeldWorldCup();
         const html = template.home({ userID, worldcups });
         res.end(html);
     }
-    if (pathName === '/signup') {
+    if (util.isSamePathName(pathName, '/signup')) {
         const { query } = url.parse(req.url);
         const { id, pwd } = qs.parse(query);
 
@@ -48,8 +48,7 @@ const server = http.createServer((req, res) => {
             }
         }
     }
-
-    if (pathName === '/login') {
+    if (util.isSamePathName(pathName, '/login')) {
         const { query } = url.parse(req.url);
         const { id, pwd } = qs.parse(query);
 
@@ -71,8 +70,7 @@ const server = http.createServer((req, res) => {
             res.end(html);
         }
     }
-
-    if (pathName === '/logout') {
+    if (util.isSamePathName(pathName, '/logout')) {
         util.deleteSession(sessionNum);
         res.writeHead(302, {
             Location: '/',
@@ -80,14 +78,12 @@ const server = http.createServer((req, res) => {
         });
         res.end();
     }
-
-    if (pathName === '/usersworldcup') {
+    if (util.isSamePathName(pathName, '/usersworldcup')) {
         const worldcups = util.getUsersWorldCup(userInfo);
         const html = template.usersWorldCup({ userID, worldcups });
         res.end(html);
     }
-
-    if (pathName === '/createworldcup') {
+    if (util.isSamePathName(pathName, '/createworldcup')) {
         const { query } = url.parse(req.url);
         const { worldcupName, mainImg } = qs.parse(query);
         let worldcups = util.getUsersWorldCup(userInfo);
@@ -112,7 +108,7 @@ const server = http.createServer((req, res) => {
             }
         }
     }
-    if (pathName === '/deleteworldcup') {
+    if (util.isSamePathName(pathName, '/deleteworldcup')) {
         const { query } = url.parse(req.url);
         const { title } = qs.parse(query);
         model.deleteWorldCup({ userID, userInfo, title });
@@ -121,15 +117,14 @@ const server = http.createServer((req, res) => {
         const html = template.usersWorldCup({ userID, "message": `${title}삭제되었습니다.`, worldcups });
         res.end(html);
     }
-    if (pathName === '/playermanagement') {
+    if (util.isSamePathName(pathName, '/playermanagement')) {
         const { query } = url.parse(req.url);
         const { title } = qs.parse(query);
 
         const html = template.playerManagement({ userID, "worldcup": userInfo[title] });
         res.end(html);
     }
-
-    if (pathName === '/registerplayer') {
+    if (util.isSamePathName(pathName, '/registerplayer')) {
         const { query } = url.parse(req.url);
         const { title, name, imgURL } = qs.parse(query);
 
@@ -138,8 +133,7 @@ const server = http.createServer((req, res) => {
         const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 등록!` });
         res.end(html);
     }
-
-    if (pathName === '/exitplayer') {
+    if (util.isSamePathName(pathName, '/exitplayer')) {
         const { query } = url.parse(req.url);
         const { title, name } = qs.parse(query);
 
@@ -148,7 +142,7 @@ const server = http.createServer((req, res) => {
         const html = template.playerManagement({ "id": userID, "worldcup": userInfo[title], "message": `${name} 퇴장!` });
         res.end(html);
     }
-    if (pathName === '/heldworldcup') {
+    if (util.isSamePathName(pathName, '/heldworldcup')) {
         const { query } = url.parse(req.url);
         const { title } = qs.parse(query);
 
@@ -161,8 +155,7 @@ const server = http.createServer((req, res) => {
             res.end(html);
         }
     }
-
-    if (pathName === '/participation') {
+    if (util.isSamePathName(pathName, '/participation')) {
         const { query } = url.parse(req.url);
         const { title } = qs.parse(query);
 
@@ -172,8 +165,7 @@ const server = http.createServer((req, res) => {
         const html = template.participateWorldCup({ player1, player2, rounds: session[sessionNum].rounds });
         res.end(html);
     }
-
-    if (pathName === '/worldcup') {
+    if (util.isSamePathName(pathName, '/worldcup')) {
         const { query } = url.parse(req.url);
         const { name, img } = qs.parse(query);
         util.goToWaitingRoom({ name, img, sessionNum });
