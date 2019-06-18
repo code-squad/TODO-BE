@@ -2,6 +2,7 @@ const user = require('./login-user').user;
 const items = require('./item-list')[user];
 const addController = require('./add-controller');
 const updateController = require('./update-controller');
+const deleteController = require('./delete-controller');
 
 const addForm = `
     <div class="writing-item-box">
@@ -115,6 +116,7 @@ function updateStatus(item, status) {
 
 function addDeleteEvent(item) {
     item.addEventListener('dblclick', (event) => {
-        console.log(event.target);
+        event.target.parentNode.removeChild(event.target);
+        deleteController.delete(user, item);
     });
 }
