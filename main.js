@@ -13,8 +13,6 @@ function createWindow () {
 
   win.loadFile('./login.html')
 
-  win.webContents.openDevTools()
-
   win.on('closed', () => {
     win = null
   })
