@@ -15,7 +15,11 @@ const addForm = `
     </div>`;
 const openAddFormLinks = document.getElementsByClassName('open-add-form-link');
 let draggingTarget = null;
+const defaultItems = document.getElementsByClassName('default-item');
 
+for (defaultItem of defaultItems) {
+    addDragEvent(defaultItem);
+}
 for (item of items)  {
     const listBoxNode = document.querySelector(`#${item.status}`);
     const listArea = listBoxNode.querySelector('.list-area');
