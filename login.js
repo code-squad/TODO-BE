@@ -25,5 +25,5 @@ function login() {
         window.location.href = './index.html';
         return;
     }
-    alert("로그인 실패");
+    alert("회원 정보가 일치하지 않습니다.");
 }
