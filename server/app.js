@@ -49,13 +49,17 @@ const server = net.createServer(socket => {
             p2socket,
           );
           games.push(game);
-          console.dir(game.p1, game.p2);
-          
-          game.init();
+          console.dir(game.players[0], game.players[1]);
           res.method = 'getInGame';
           res.message = '게임을 이제 시작합니다!';
           p1socket.write(`${JSON.stringify(res)}`);
           p2socket.write(`${JSON.stringify(res)}`);
+          game.init();
+          const { p1res, p2res } = game.startRound();
+          p1socket.write(`${JSON.stringify(p1res)}`);
+          p2socket.write(`${JSON.stringify(p2res)}`);
+          
+          console.log(game.cards[0], game.cards[1]);
           return;
         }
         return;
