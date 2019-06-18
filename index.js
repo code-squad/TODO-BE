@@ -20,6 +20,7 @@ const defaultItems = document.getElementsByClassName('default-item');
 for (defaultItem of defaultItems) {
     addDragEvent(defaultItem);
 }
+
 for (item of items)  {
     const listBoxNode = document.querySelector(`#${item.status}`);
     const listArea = listBoxNode.querySelector('.list-area');
@@ -68,6 +69,20 @@ function addItem(listArea, name, isAddByButton) {
     addDeleteEvent(item);
     listArea.appendChild(item);
     addController.add(user, [name, status, idOfItem]);
+}
+
+function closeAllAddForm(event) {
+    if(event.target === document.body || event.target === document.querySelector('#list-box-wrapper')) {
+        const addFormNodes = document.getElementsByClassName('add-form');
+        let listBoxNode = undefined;
+        let openAddFormLink = undefined;
+        while (addFormNodes.length) {
+            listBoxNode = addFormNodes[0].parentNode;
+            openAddFormLink = listBoxNode.getElementsByClassName('open-add-form-link')[0];
+            listBoxNode.removeChild(addFormNodes[0]);
+            openAddFormLink.style.display = 'inherit';
+        }
+    }
 }
 
 function closeAddForm(event) {
