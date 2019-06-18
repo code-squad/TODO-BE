@@ -60,11 +60,13 @@ process.on('inGame', (action, res) => {
       console.log(`====================================================`);
       return;
     case 'yourTurn':
-      
+
       return;
   }
 })
 
 client.on('end', () => {
   console.log('연결이 끊어졌습니다.');
+  console.log('client를 종료합니다.');
+  process.exit();
 });
