@@ -3,7 +3,9 @@ const loginButton = document.getElementById('login-button');
 const passwordBox = document.getElementById('password-box');
 const idBox = document.getElementById('id-box');
 const loginController = require('./login-controller');
+const model = require('./model');
 
+model.initJSONFiles();
 idBox.focus();
 signupButton.addEventListener('click', () => {
     window.location.href = './signup.html';

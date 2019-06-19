@@ -1,5 +1,5 @@
-const user = require('./login-user').user;
-const items = require('./item-list')[user];
+const model = require('./model');
+
 const addController = require('./add-controller');
 const updateController = require('./update-controller');
 const deleteController = require('./delete-controller');
@@ -15,12 +15,14 @@ const addForm = `
     </div>`;
 const openAddFormLinks = document.getElementsByClassName('open-add-form-link');
 let draggingTarget = null;
-const defaultItems = document.getElementsByClassName('default-item');
+// const defaultItems = document.getElementsByClassName('default-item');
 
-for (defaultItem of defaultItems) {
-    addDragEvent(defaultItem);
-}
+// for (defaultItem of defaultItems) {
+//     addDragEvent(defaultItem);
+// }
 
+const user = model.readLoginUser().user;
+const items = model.readItemList()[user];
 for (item of items)  {
     const listBoxNode = document.querySelector(`#${item.status}`);
     const listArea = listBoxNode.querySelector('.list-area');
