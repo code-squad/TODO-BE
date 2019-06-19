@@ -87,6 +87,10 @@ class Util {
     goToWaitingRoom({ name, img, sessionNum }) {
         this.session[sessionNum].selectedList.push({ name, img });
     }
+
+    isSamePathName(pathName, pathName2) {
+        return pathName === `${pathName2}` ? true : false;
+    }
 }
 
 module.exports = Util;
