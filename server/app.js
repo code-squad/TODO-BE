@@ -64,6 +64,10 @@ const server = net.createServer(socket => {
           p2socket.write(`${JSON.stringify(p2res)}`);
 
           console.log(game.cards[0], game.cards[1]);
+          await sleep(1000);
+
+          const { playerSocket, sendRes } = game.playRound();
+          playerSocket.write(`${JSON.stringify(sendRes)}`);
           return;
         }
         return;
@@ -74,6 +78,11 @@ const server = net.createServer(socket => {
   });
 
   process.on('inGame', req => {
+    // client의 action 처리
+    // 1. fold
+    // 2. raise
+    // 3. call
+    // 4. allIn
     
   });
 

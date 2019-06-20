@@ -1,17 +1,6 @@
 const crypto = require('crypto');
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const input = require('./userInput');
 
-const input = (query) => {
-  return new Promise((resolve, reject) => {
-    rl.question(query, (answer) => {
-      resolve(answer)
-    })
-  })
-}
 
 class AuthManager {
   async userIn (res) {

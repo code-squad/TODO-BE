@@ -26,6 +26,7 @@ class Game {
     this.turn = PLAYER_1;
     this.pickCards = [];
     this.roundNumb = 0;
+    this.coinToCall = 0;
   }
   init() {
     this.cards[0].shuffle();
@@ -67,12 +68,15 @@ class Game {
   playRound() {
     this.turn = this.takeTurn();
     const opponent = this.turn === PLAYER_1 ? PLAYER_2 : PLAYER_1;
-    const sendRes = {
-      soc : this.socs[this.turn],
+    const playerSocket = this.socs[this.turn];
+    const sendRes = {  
       method: 'inGame',
       action: 'yourTurn',
-      showCard: pickCards[opponent],
+      coinToCall: this.coinToCall,
+      school: this.school,
+      myCoin : this.coins[this.turn],
     }
+    return { playerSocket, sendRes };
   }
   takeTurn() {
     return this.turn === PLAYER_2 ? PLAYER_1 : PLAYER_2;
