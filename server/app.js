@@ -89,13 +89,16 @@ const server = net.createServer(socket => {
     }
   });
   socket.on('close', () => {
-    const socIdx = sockets.indexOf(socket)
+    const socIdx = sockets.indexOf(socket);
+    const gameIdx = games.findIndex(tmpGame => socket in tmpGame.socs);
+    games.splice(gameIdx, 1);
     sockets.splice(socIdx, 1);
     session.delete(socket.remotePort);
 
     console.log(`${socket.remotePort} client disconnected`);
     console.log(session.list);
     console.log(sockets.map(soc => soc.remotePort));
+    console.log('games', games);
   });
 });
 gameEmitter.on('inGame', async req => {
@@ -111,9 +114,12 @@ gameEmitter.on('inGame', async req => {
       
       await sleep(1000);
 
-      const { p1res, p2res } = await game.startRound();
+      var { p1res, p2res } = await game.startRound();
       await socWrite(game.socs[PLAYER_1], p1res);
       await socWrite(game.socs[PLAYER_2], p2res);
+      if (games.findIndex(tmpGame => socket in tmpGame.socs) === -1) {
+        return;
+      }
       
       await sleep(1000);
       var { socket, sendRes } = await game.yourTurn();
@@ -135,6 +141,16 @@ gameEmitter.on('inGame', async req => {
       await socWrite(game.socs[PLAYER_2], p2end);
       
       await sleep(1000);
+
+      var { p1res, p2res } = await game.startRound();
+      await socWrite(game.socs[PLAYER_1], p1res);
+      await socWrite(game.socs[PLAYER_2], p2res);
+      if (games.findIndex(tmpGame => socket in tmpGame.socs) === -1) {
+        return;
+      }
+
+      await sleep(1000);
+
       var { socket, sendRes } = await game.yourTurn();
       await socWrite(socket, sendRes);
 

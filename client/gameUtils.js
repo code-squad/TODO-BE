@@ -12,14 +12,9 @@ class Game {
           return reqData;
 
         case '2':
-          if (coinToCall > myCoin) {
-            console.log('올인합니다.');
-            reqData.action = 'allIn';
-            return reqData;
-          }
           const raiseCoinInput = await input('얼마를 raise하시겠습니까? >> ');
           const raiseCoin = Number(raiseCoinInput);
-          if (!Number.isInteger(raiseCoin)){
+          if (!Number.isInteger(raiseCoin) || raiseCoin === 0){
             console.log('숫자를 입력해주세요.');
             continue;
           }

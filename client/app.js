@@ -40,6 +40,12 @@ client.on('data', async data => {
         const action = res.action;
         process.emit('inGame', action, res);
         break;
+      case 'gameOver':
+        const { message} = res;
+        console.log(message);
+        console.log('빠이빠이');
+        process.exit();
+        return;
       default:
         console.log('Unhandled method');
         console.log(res.method);
@@ -91,7 +97,7 @@ process.on('inGame', async (action, res) => {
       var { message } = res;
       console.log(message);
       return;
-      
+
     default:
       console.log('unhandled action====');
       console.log(action, res);

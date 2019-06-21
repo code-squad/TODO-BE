@@ -2,6 +2,7 @@ const INITIAL_COIN_AMOUNT = 30;
 const UNSHUFFLED_CARDS = [1,2,3,4,5,6,7,8,9,10];
 const PLAYER_1 = 0;
 const PLAYER_2 = 1;
+const DRAW = 2;
 
 class Card {
   constructor() {
@@ -39,8 +40,8 @@ class Game {
   }
   async startRound() {
     if (this.roundNumb === 10 || this.coins[PLAYER_1] === 0 || this.coins[PLAYER_2] === 0) {
-      this.gameOver();
-      return;
+      const { p1Res, p2Res } = await this.gameOver();
+      return { p1res: p1Res, p2res: p2Res };
     }
     this.roundNumb += 1;
     this.pickCards = [
@@ -125,6 +126,7 @@ class Game {
     const opponent = this.turn === PLAYER_1 ? PLAYER_2 : PLAYER_1;
     let message = '';
     let winner = 0;
+    let p1end, p2end = {};
     if (this.coins[this.turn] < this.coinToCall){
       this.school += this.coins[this.turn];
       this.coins[this.turn] = 0;
@@ -138,36 +140,72 @@ class Game {
       this.coins[this.turn] += this.school;
       this.school = 0;
       winner = this.turn;  
-      message = '무승부입니다! 판돈은 다음 라운드에 누적됩니다.';
     } else if (this.pickCards[this.turn] < this.pickCards[opponent]){
       this.coins[opponent] += this.school;
       this.school = 0;
       winner = opponent;
-      message = '무승부입니다! 판돈은 다음 라운드에 누적됩니다.';
     } else {
-      message = '무승부입니다! 판돈은 다음 라운드에 누적됩니다.';
+      p1end = {
+        method: 'inGame',
+        action: 'endRound',
+        message: '무승부입니다! 판돈은 다음 라운드에 누적됩니다.',
+      }
+      p2end = p1end;
+      return { p1end, p2end };
     }
-    const p1end = {
+    let myCard = this.pickCards[PLAYER_1];
+    let oppCard = this.pickCards[PLAYER_2];
+    p1end = {
       method: 'inGame',
       action: 'endRound',
-      myCard : this.pickCards[PLAYER_1],
-      oppenentCard: this.pickCards[PLAYER_2],
       message: winner === PLAYER_1 ?
-        `당신이 이겼습니다!` : `상대가 이겼습니다!`,
+        `내 카드 : ${myCard}, 상대 카드 : ${oppCard} || 당신이 이겼습니다!` 
+        : `내 카드 : ${myCard}, 상대 카드 : ${oppCard} || 상대가 이겼습니다!`,
     };
-    const p2end = {
+    myCard = this.pickCards[PLAYER_2];
+    oppCard = this.pickCards[PLAYER_1];
+    p2end = {
       method: 'inGame',
       action: 'endRound',
-      myCard : this.pickCards[PLAYER_2],
-      oppenentCard: this.pickCards[PLAYER_1],
       message: winner === PLAYER_1 ?
-        `상대가 이겼습니다!` : `당신이 이겼습니다!`,
+      `내 카드 : ${myCard}, 상대 카드 : ${oppCard} || 상대가 이겼습니다!`
+      : `내 카드 : ${myCard}, 상대 카드 : ${oppCard} || 당신이 이겼습니다!`,
     };
     return { p1end, p2end };
   }
 
   async gameOver() {
+    let winner = 0;
+    let p1message = '';
+    let p2message = '';
+    if (this.coins[PLAYER_1] > this.coins[PLAYER_2]) {
+      winner = PLAYER_1;
+    } else if (this.coins[PLAYER_1] < this.coins[PLAYER_2]) {
+      winner = PLAYER_2;
+    } else {
+      winner = DRAW;
+    }
+    const res = {
+      method: 'gameOver',
+    }
+    if (winner ===  PLAYER_1) {
+      p1message = '게임의 승자는 당신입니다!'
+      p2message = '게임의 패자는 당신입니다!';
+    } else if (winner === PLAYER_2) {
+      p1message = '게임의 패자는 당신입니다!';
+      p2message = '게임의 승자는 당신입니다!';
+    } else {
+      p1message = '게임을 비겼습니다!';
+      p2message = p1message;
+    }
+    const p1Res = Object.assign({
+      message: p1message
+    }, res);
+    const p2Res = Object.assign({
+      message: p2message
+    }, res);
 
+    return { p1Res, p2Res };
   }
 }
 
