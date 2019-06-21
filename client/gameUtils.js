@@ -36,11 +36,6 @@ class Game {
             console.log('지금은 call할 수 없습니다.');
             continue;
           }
-          if (coinToCall > myCoin) {
-            console.log('올인합니다.');
-            reqData.action = 'allIn';
-            return reqData;
-          }
           console.log('Call 합니다.');
           reqData.action = 'call';
           return reqData;

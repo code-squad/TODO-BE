@@ -2,6 +2,17 @@ const net = require('net');
 const UserManager = require('./user.js');
 const SessionManager = require('./session.js');
 const Game = require('./game.js');
+const EventEmitter = require('events');
+const util = require('util');
+
+function GameEmitter() {
+  EventEmitter.call(this);
+}
+util.inherits(GameEmitter, EventEmitter);
+const gameEmitter = new GameEmitter();
+
+const PLAYER_1 = 0;
+const PLAYER_2 = 1;
 const sockets = [];
 const session = new SessionManager();
 const games = [];
@@ -18,11 +29,11 @@ const server = net.createServer(socket => {
     switch (req.method) {
       case 'init':
         res.method = 'newClient'
-        socket.write(`${JSON.stringify(res)}`);
+        socWrite(socket, res);
         return;
       case 'signIn':
         res = await userManager.signIn(req);
-        socket.write(`${JSON.stringify(res)}`);
+        socWrite(socket, res);
         return;
       case 'logIn':
         const user = await userManager.logIn(req);
@@ -30,14 +41,14 @@ const server = net.createServer(socket => {
           console.log(user, session.checkInvalidUser(user.name))
           res.method = 'newClient';
           res.message = '유효하지 않은 logIn입니다.';
-          socket.write(`${JSON.stringify(res)}`);
+          socWrite(socket, res);
           return;
         }
         session.create(socket.remotePort, user.name);
         console.log(session.list);
         res.method = 'loggedIn';
         res.message = '매칭상대를 찾는 중...!';
-        socket.write(`${JSON.stringify(res)}`);
+        socWrite(socket, res);
 
         const queueingUsers = session.getQueueingUsers();
         if (queueingUsers.length === 2) {
@@ -54,38 +65,29 @@ const server = net.createServer(socket => {
           console.dir(game.players[0], game.players[1]);
           res.method = 'getInGame';
           res.message = '게임을 이제 시작합니다!';
-          p1socket.write(`${JSON.stringify(res)}`);
-          p2socket.write(`${JSON.stringify(res)}`);
+          socWrite(p1socket, res);
+          socWrite(p2socket, res);
           game.init();
           await sleep(1000);
           const { p1res, p2res } = await game.startRound();
 
-          p1socket.write(`${JSON.stringify(p1res)}`);
-          p2socket.write(`${JSON.stringify(p2res)}`);
+          await socWrite(p1socket, p1res);
+          await socWrite(p2socket, p2res);
 
           console.log(game.cards[0], game.cards[1]);
           await sleep(1000);
 
-          const { playerSocket, sendRes } = game.playRound();
-          playerSocket.write(`${JSON.stringify(sendRes)}`);
+          const { socket, sendRes } = game.yourTurn();
+          socket.write(`${JSON.stringify(sendRes)}`);
           return;
         }
         return;
       case 'inGame':
-        process.emit('inGame', req);
+        console.log('before emit', req);
+        gameEmitter.emit('inGame', req);
         return;
     }
   });
-
-  process.on('inGame', req => {
-    // client의 action 처리
-    // 1. fold
-    // 2. raise
-    // 3. call
-    // 4. allIn
-    
-  });
-
   socket.on('close', () => {
     const socIdx = sockets.indexOf(socket)
     sockets.splice(socIdx, 1);
@@ -95,6 +97,53 @@ const server = net.createServer(socket => {
     console.log(session.list);
     console.log(sockets.map(soc => soc.remotePort));
   });
+});
+gameEmitter.on('inGame', async req => {
+  const { action, gameId } = req;
+  console.log('after emit', req);
+  const game = await games.find(tmpGame => tmpGame.id === gameId);
+  
+  switch(action) {
+    case 'fold':
+      var { p1end, p2end } = await game.fold();
+      await socWrite(game.socs[PLAYER_1], p1end);
+      await socWrite(game.socs[PLAYER_2], p2end);
+      
+      await sleep(1000);
+
+      const { p1res, p2res } = await game.startRound();
+      await socWrite(game.socs[PLAYER_1], p1res);
+      await socWrite(game.socs[PLAYER_2], p2res);
+      
+      await sleep(1000);
+      var { socket, sendRes } = await game.yourTurn();
+      await socWrite(socket, sendRes);
+      return;
+    case 'raise':
+      const throwCoin = req.throwCoin;
+      const { p1msg, p2msg } = await game.raise(throwCoin);
+      await socWrite(game.socs[PLAYER_1], p1msg);
+      await socWrite(game.socs[PLAYER_2], p2msg);
+      await sleep(1000);
+      var { socket, sendRes } = await game.yourTurn();
+      await socWrite(socket, sendRes);
+      return;
+
+    case 'call':
+      var { p1end, p2end } = await game.call();
+      await socWrite(game.socs[PLAYER_1], p1end);
+      await socWrite(game.socs[PLAYER_2], p2end);
+      
+      await sleep(1000);
+      var { socket, sendRes } = await game.yourTurn();
+      await socWrite(socket, sendRes);
+
+      return;
+    
+    default:
+      console.log('Unhandled action in inGame method');
+      console.log(req);
+  }
 });
 
 server.on('connection', socket => {
@@ -108,3 +157,7 @@ server.on('error', err => {
 server.listen(5000, () => {
   console.log('opened server on', server.address());
 });
+
+const socWrite = async (soc, res) => {
+  await soc.write(`${JSON.stringify(res)}`);
+};

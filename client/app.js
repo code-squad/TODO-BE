@@ -19,6 +19,7 @@ const authManager = new AuthManager();
 client.on('data', async data => {
   try{
     const res = await JSON.parse(data);
+    console.log(res);
     let req = {}
     switch(res.method) {
       case 'init':
@@ -46,7 +47,8 @@ client.on('data', async data => {
     }
     return;
   } catch (e) {
-    console.log(e)
+    console.log(e);
+    console.dir(toString(data));
   }
 });
 
@@ -61,22 +63,35 @@ process.on('inGame', async (action, res) => {
       console.log(`현재 판돈은 ${school}이고, 잔여 coin은 ${myCoin}입니다.`);
       console.log(`====================================================`);
       return;
+
     case 'yourTurn':
-      var { school, myCoin, coinToCall } = res;
-      console.log(`현재 판돈 : ${school}`);
-      console.log(`보유 코인 : ${myCoin}`);
-      console.log(`call에 필요한 coin : ${coinToCall}`);
+      var { school, myCoin, coinToCall, gameId } = res;
       console.log(`fold는 '1'입력`);
       console.log(`raise는 '2'입력`);
-      if (school === 2){
+      if (school !== 2){
         console.log(`call은 '3'입력`);
+        console.log(`현재 판돈 : ${school} || 보유 코인 : ${myCoin} || call에 필요한 coin : ${coinToCall}`);
+      } else {
+        console.log(`현재 판돈 : ${school} || 보유 코인 : ${myCoin}`);
       }
+
       req.gameId = gameId;
       let reqData = await game.myTurn(school, myCoin, coinToCall);
-      Object.assign(req, reqData);
+      req = Object.assign(req, reqData);
+      console.log(req);
       client.write(`${JSON.stringify(req)}`);
       return;
 
+    case 'endRound':
+      var { message } = res;
+      console.log(message);
+      return;
+    
+    case 'alert':
+      var { message } = res;
+      console.log(message);
+      return;
+      
     default:
       console.log('unhandled action====');
       console.log(action, res);
