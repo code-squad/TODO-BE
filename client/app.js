@@ -19,7 +19,6 @@ const authManager = new AuthManager();
 client.on('data', async data => {
   try{
     const res = await JSON.parse(data);
-    console.log(res);
     let req = {}
     switch(res.method) {
       case 'init':
@@ -84,7 +83,6 @@ process.on('inGame', async (action, res) => {
       req.gameId = gameId;
       let reqData = await game.myTurn(school, myCoin, coinToCall);
       req = Object.assign(req, reqData);
-      console.log(req);
       client.write(`${JSON.stringify(req)}`);
       return;
 

@@ -114,13 +114,12 @@ gameEmitter.on('inGame', async req => {
       
       await sleep(1000);
 
-      var { p1res, p2res } = await game.startRound();
+      var { p1res, p2res, isOver } = await game.startRound();
       await socWrite(game.socs[PLAYER_1], p1res);
       await socWrite(game.socs[PLAYER_2], p2res);
-      if (games.findIndex(tmpGame => socket in tmpGame.socs) === -1) {
+      if (isOver === true) {
         return;
       }
-      
       await sleep(1000);
       var { socket, sendRes } = await game.yourTurn();
       await socWrite(socket, sendRes);
@@ -142,13 +141,12 @@ gameEmitter.on('inGame', async req => {
       
       await sleep(1000);
 
-      var { p1res, p2res } = await game.startRound();
+      var { p1res, p2res, isOver } = await game.startRound();
       await socWrite(game.socs[PLAYER_1], p1res);
       await socWrite(game.socs[PLAYER_2], p2res);
-      if (games.findIndex(tmpGame => socket in tmpGame.socs) === -1) {
+      if (isOver === true) {
         return;
       }
-
       await sleep(1000);
 
       var { socket, sendRes } = await game.yourTurn();

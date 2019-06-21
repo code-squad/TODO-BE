@@ -41,7 +41,7 @@ class Game {
   async startRound() {
     if (this.roundNumb === 10 || this.coins[PLAYER_1] === 0 || this.coins[PLAYER_2] === 0) {
       const { p1Res, p2Res } = await this.gameOver();
-      return { p1res: p1Res, p2res: p2Res };
+      return { p1res: p1Res, p2res: p2Res, isOver: true };
     }
     this.roundNumb += 1;
     this.pickCards = [
@@ -67,7 +67,7 @@ class Game {
       showCards: this.pickCards[PLAYER_1],
       myCoin : this.coins[PLAYER_2],
     }, res);
-    return { p1res: p1Res, p2res: p2Res };
+    return { p1res: p1Res, p2res: p2Res, isOver: false };
   }
   yourTurn() {
     this.turn = this.takeTurn();
