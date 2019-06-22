@@ -71,8 +71,8 @@ const server = net.createServer(socket => {
           await sleep(1000);
           const { p1res, p2res } = await game.startRound();
 
-          await socWrite(p1socket, p1res);
-          await socWrite(p2socket, p2res);
+          socWrite(p1socket, p1res);
+          socWrite(p2socket, p2res);
 
           console.log(game.cards[0], game.cards[1]);
           await sleep(1000);
@@ -109,14 +109,14 @@ gameEmitter.on('inGame', async req => {
   switch(action) {
     case 'fold':
       var { p1end, p2end } = await game.fold();
-      await socWrite(game.socs[PLAYER_1], p1end);
-      await socWrite(game.socs[PLAYER_2], p2end);
+      socWrite(game.socs[PLAYER_1], p1end);
+      socWrite(game.socs[PLAYER_2], p2end);
       
       await sleep(1000);
 
       var { p1res, p2res, isOver } = await game.startRound();
-      await socWrite(game.socs[PLAYER_1], p1res);
-      await socWrite(game.socs[PLAYER_2], p2res);
+      socWrite(game.socs[PLAYER_1], p1res);
+      socWrite(game.socs[PLAYER_2], p2res);
       if (isOver === true) {
         return;
       }
@@ -127,30 +127,30 @@ gameEmitter.on('inGame', async req => {
     case 'raise':
       const throwCoin = req.throwCoin;
       const { p1msg, p2msg } = await game.raise(throwCoin);
-      await socWrite(game.socs[PLAYER_1], p1msg);
-      await socWrite(game.socs[PLAYER_2], p2msg);
+      socWrite(game.socs[PLAYER_1], p1msg);
+      socWrite(game.socs[PLAYER_2], p2msg);
       await sleep(1000);
       var { socket, sendRes } = await game.yourTurn();
-      await socWrite(socket, sendRes);
+      socWrite(socket, sendRes);
       return;
 
     case 'call':
       var { p1end, p2end } = await game.call();
-      await socWrite(game.socs[PLAYER_1], p1end);
-      await socWrite(game.socs[PLAYER_2], p2end);
+      socWrite(game.socs[PLAYER_1], p1end);
+      socWrite(game.socs[PLAYER_2], p2end);
       
       await sleep(1000);
 
       var { p1res, p2res, isOver } = await game.startRound();
-      await socWrite(game.socs[PLAYER_1], p1res);
-      await socWrite(game.socs[PLAYER_2], p2res);
+      socWrite(game.socs[PLAYER_1], p1res);
+      socWrite(game.socs[PLAYER_2], p2res);
       if (isOver === true) {
         return;
       }
       await sleep(1000);
 
       var { socket, sendRes } = await game.yourTurn();
-      await socWrite(socket, sendRes);
+      socWrite(socket, sendRes);
 
       return;
     
@@ -172,6 +172,6 @@ server.listen(5000, () => {
   console.log('opened server on', server.address());
 });
 
-const socWrite = async (soc, res) => {
-  await soc.write(`${JSON.stringify(res)}`);
+const socWrite = (soc, res) => {
+  soc.write(`${JSON.stringify(res)}`);
 };
