@@ -9,7 +9,7 @@ class UserManager {
     
     user.name = req.name;
     user.password = req.password;
-    console.log('wtf is going on?')
+    
     const checkValidUsername = users.filter(tmpuser => tmpuser.name === user.name);
     if (checkValidUsername.length !== 0) {
       console.log(checkValidUsername)

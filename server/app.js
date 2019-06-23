@@ -25,7 +25,7 @@ const server = net.createServer(socket => {
     const userManager = new UserManager();
     const req = JSON.parse(data)
     let res = {}
-    console.log(req)
+    console.log('User Request : ', req)
     switch (req.method) {
       case 'init':
         res.method = 'newClient'
@@ -38,14 +38,13 @@ const server = net.createServer(socket => {
       case 'logIn':
         const user = await userManager.logIn(req);
         if (!user || session.checkInvalidUser(user.name)) {
-          console.log(user, session.checkInvalidUser(user.name))
           res.method = 'newClient';
           res.message = '유효하지 않은 logIn입니다.';
           socWrite(socket, res);
           return;
         }
         session.create(socket.remotePort, user.name);
-        console.log(session.list);
+        console.log('Session List : ', session.list);
         res.method = 'loggedIn';
         res.message = '매칭상대를 찾는 중...!';
         socWrite(socket, res);
@@ -68,13 +67,12 @@ const server = net.createServer(socket => {
           socWrite(p1socket, res);
           socWrite(p2socket, res);
           game.init();
+
           await sleep(1000);
           const { p1res, p2res } = await game.startRound();
-
           socWrite(p1socket, p1res);
           socWrite(p2socket, p2res);
 
-          console.log(game.cards[0], game.cards[1]);
           await sleep(1000);
 
           const { socket, sendRes } = game.yourTurn();
@@ -83,11 +81,12 @@ const server = net.createServer(socket => {
         }
         return;
       case 'inGame':
-        console.log('before emit', req);
+        console.log('inGame EMIT : ', req);
         gameEmitter.emit('inGame', req);
         return;
     }
   });
+
   socket.on('close', () => {
     const socIdx = sockets.indexOf(socket);
     const gameIdx = games.findIndex(tmpGame => socket in tmpGame.socs);
@@ -96,14 +95,13 @@ const server = net.createServer(socket => {
     session.delete(socket.remotePort);
 
     console.log(`${socket.remotePort} client disconnected`);
-    console.log(session.list);
     console.log(sockets.map(soc => soc.remotePort));
-    console.log('games', games);
+    console.log('GAME LIST : ', games);
   });
 });
+
 gameEmitter.on('inGame', async req => {
   const { action, gameId } = req;
-  console.log('after emit', req);
   const game = await games.find(tmpGame => tmpGame.id === gameId);
   
   switch(action) {
@@ -155,8 +153,8 @@ gameEmitter.on('inGame', async req => {
       return;
     
     default:
-      console.log('Unhandled action in inGame method');
-      console.log(req);
+      console.log(`Unhandled action in "inGame" method`);
+      console.log('UNHANDLED REQUEST : ', req);
   }
 });
 
