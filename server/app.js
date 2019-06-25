@@ -1,35 +1,175 @@
 const net = require('net');
-const sockets = []
+const UserManager = require('./user.js');
+const SessionManager = require('./session.js');
+const Game = require('./game.js');
+const EventEmitter = require('events');
+const util = require('util');
+
+function GameEmitter() {
+  EventEmitter.call(this);
+}
+util.inherits(GameEmitter, EventEmitter);
+const gameEmitter = new GameEmitter();
+
+const PLAYER_1 = 0;
+const PLAYER_2 = 1;
+const sockets = [];
+const session = new SessionManager();
+const games = [];
+
+const sleep = msec => new Promise(resolve => setTimeout(resolve, msec))
+
 const server = net.createServer(socket => {
   console.dir(socket.remotePort);
-  socket.on('data', data => {
-    const request = JSON.parse(data)
-    const response = {}
-    console.log(request)
-    if (!request.user) {
-      response.loggedIn = false
-      socket.write(`${JSON.stringify(response)}`);
-      return
+  socket.on('data', async data => {
+    const userManager = new UserManager();
+    const req = JSON.parse(data)
+    let res = {}
+    console.log('User Request : ', req)
+    switch (req.method) {
+      case 'init':
+        res.method = 'newClient'
+        socWrite(socket, res);
+        return;
+      case 'signIn':
+        res = await userManager.signIn(req);
+        socWrite(socket, res);
+        return;
+      case 'logIn':
+        const user = await userManager.logIn(req);
+        if (!user || session.checkInvalidUser(user.name)) {
+          res.method = 'newClient';
+          res.message = '유효하지 않은 logIn입니다.';
+          socWrite(socket, res);
+          return;
+        }
+        session.create(socket.remotePort, user.name);
+        console.log('Session List : ', session.list);
+        res.method = 'loggedIn';
+        res.message = '매칭상대를 찾는 중...!';
+        socWrite(socket, res);
+
+        const queueingUsers = session.getQueueingUsers();
+        if (queueingUsers.length === 2) {
+          session.list.map(ses => ses.status = 'inGame');
+          const p1socket = sockets.find(soc => soc.remotePort === queueingUsers[0].remotePort);
+          const p2socket = sockets.find(soc => soc.remotePort === queueingUsers[1].remotePort);
+          const game = new Game(
+            queueingUsers[0],
+            queueingUsers[1], 
+            p1socket, 
+            p2socket,
+          );
+          games.push(game);
+          console.dir(game.players[0], game.players[1]);
+          res.method = 'getInGame';
+          res.message = '게임을 이제 시작합니다!';
+          socWrite(p1socket, res);
+          socWrite(p2socket, res);
+          game.init();
+
+          await sleep(1000);
+          const { p1res, p2res } = await game.startRound();
+          socWrite(p1socket, p1res);
+          socWrite(p2socket, p2res);
+
+          await sleep(1000);
+
+          const { socket, sendRes } = game.yourTurn();
+          socket.write(`${JSON.stringify(sendRes)}`);
+          return;
+        }
+        return;
+      case 'inGame':
+        console.log('inGame EMIT : ', req);
+        gameEmitter.emit('inGame', req);
+        return;
     }
   });
 
   socket.on('close', () => {
+    const socIdx = sockets.indexOf(socket);
+    const gameIdx = games.findIndex(tmpGame => socket in tmpGame.socs);
+    games.splice(gameIdx, 1);
+    sockets.splice(socIdx, 1);
+    session.delete(socket.remotePort);
+
     console.log(`${socket.remotePort} client disconnected`);
+    console.log(sockets.map(soc => soc.remotePort));
+    console.log('GAME LIST : ', games);
   });
 });
 
+gameEmitter.on('inGame', async req => {
+  const { action, gameId } = req;
+  const game = await games.find(tmpGame => tmpGame.id === gameId);
+  
+  switch(action) {
+    case 'fold':
+      var { p1end, p2end } = await game.fold();
+      socWrite(game.socs[PLAYER_1], p1end);
+      socWrite(game.socs[PLAYER_2], p2end);
+      
+      await sleep(1000);
+
+      var { p1res, p2res, isOver } = await game.startRound();
+      socWrite(game.socs[PLAYER_1], p1res);
+      socWrite(game.socs[PLAYER_2], p2res);
+      if (isOver === true) {
+        return;
+      }
+      await sleep(1000);
+      var { socket, sendRes } = await game.yourTurn();
+      await socWrite(socket, sendRes);
+      return;
+    case 'raise':
+      const throwCoin = req.throwCoin;
+      const { p1msg, p2msg } = await game.raise(throwCoin);
+      socWrite(game.socs[PLAYER_1], p1msg);
+      socWrite(game.socs[PLAYER_2], p2msg);
+      await sleep(1000);
+      var { socket, sendRes } = await game.yourTurn();
+      socWrite(socket, sendRes);
+      return;
+
+    case 'call':
+      var { p1end, p2end } = await game.call();
+      socWrite(game.socs[PLAYER_1], p1end);
+      socWrite(game.socs[PLAYER_2], p2end);
+      
+      await sleep(1000);
+
+      var { p1res, p2res, isOver } = await game.startRound();
+      socWrite(game.socs[PLAYER_1], p1res);
+      socWrite(game.socs[PLAYER_2], p2res);
+      if (isOver === true) {
+        return;
+      }
+      await sleep(1000);
+
+      var { socket, sendRes } = await game.yourTurn();
+      socWrite(socket, sendRes);
+
+      return;
+    
+    default:
+      console.log(`Unhandled action in "inGame" method`);
+      console.log('UNHANDLED REQUEST : ', req);
+  }
+});
+
 server.on('connection', socket => {
-  const response = {}
-  response.loggedIn = false
   sockets.push(socket);
-  console.log(JSON.stringify(response));
-  socket.write(`${JSON.stringify(response)}`)
-})
+});
 
 server.on('error', err => {
   console.log('err : ' + err);
-})
+});
 
 server.listen(5000, () => {
   console.log('opened server on', server.address());
 });
+
+const socWrite = (soc, res) => {
+  soc.write(`${JSON.stringify(res)}`);
+};
